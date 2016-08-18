@@ -10,6 +10,7 @@ import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
+import br.edu.ifpi.evento.exceptions.InstituicaoException;
 
 public class Evento {
 	private Long id;
@@ -19,6 +20,7 @@ public class Evento {
 	private TipoEvento tipoEvento;
 	private List<Inscricao> inscricoes = new ArrayList<Inscricao>();
 	private List<Cupom> Cupons = new ArrayList<Cupom>();
+	private List<Instituicao> instituicoes = new ArrayList<>();
 	private Calendar dataInicio;
 	private Calendar dataFim;
 	private StatusEvento status;
@@ -36,9 +38,6 @@ public class Evento {
 
 	public void verificarDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
 		Calendar now = new GregorianCalendar();
-//		System.out.println("data inicio: " + dataInicio.getTimeInMillis());
-//		System.out.println("data de hoje " + now.getTimeInMillis());
-//		System.out.println(dataInicio.getTimeInMillis()- now.getTimeInMillis());
 
 		if (dataInicio.getTimeInMillis()- now.getTimeInMillis() <0 ) {
 			throw new DataMenorQueAtualException();
@@ -51,6 +50,14 @@ public class Evento {
 		}
 		
 		atividades.add(atividade);
+	}
+	
+	public void adicionarInstituicao(Instituicao instituicao) throws InstituicaoException{
+		if (instituicoes.contains(instituicao)) {
+			throw new InstituicaoException();
+		}
+		
+		instituicoes.add(instituicao);
 	}
 
 	public void adicionarIncricao(Inscricao inscricao) {
