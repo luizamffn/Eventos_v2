@@ -28,6 +28,7 @@ public class Evento {
 		verificarDataInicio(dataInicio);
 		this.id = id;
 		this.nome = nome;
+		this.status = StatusEvento.CADASTRADO;
 		this.tipoEvento = tipoEvento;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;

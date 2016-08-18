@@ -14,6 +14,7 @@ import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 public class Inscricao {
 	private Long id;
 	private Calendar dataPagamento;
+	private Pagamento pagamento;
 	private boolean paga;
 	private double valorTotal = 0;
 	private Evento evento;
@@ -27,12 +28,12 @@ public class Inscricao {
 		this.evento.adicionarIncricao(this);
 	}
 
-	public void pagarInscricao(double valor) throws PagamentoInferiorException {
-		if (valor < valorTotal) {
+	public void pagarInscricao(Pagamento pagamento) throws PagamentoInferiorException {
+		if (pagamento.getValorRecebido() < valorTotal) {
 			throw new PagamentoInferiorException();
 		}
-
 		paga = true;
+		this.pagamento = pagamento; 
 	}
 
 	public void adicionarAtividade(Atividade atividade)
