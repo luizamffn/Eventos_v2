@@ -1,6 +1,6 @@
 package br.edu.ifpi.evento.teste;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -8,10 +8,10 @@ import java.util.GregorianCalendar;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.edu.ifpi.evento.cupom.Palestras_50;
 import br.edu.ifpi.evento.enums.TipoAtividade;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.modelo.Atividade;
-import br.edu.ifpi.evento.modelo.Cupom;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Pagamento;
@@ -21,7 +21,7 @@ public class IncricaoTest {
 	Calendar dataFinal;
 	Evento evento;
 	Inscricao inscricao;
-	Cupom cupom;
+	Calendar validadePalestra = Calendar.getInstance();
 	Pagamento pagamento;
 
 	@Before
@@ -30,6 +30,7 @@ public class IncricaoTest {
 		dataFinal = Calendar.getInstance();
 		dataInicial.set(2016, 9, 12, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
+		validadePalestra.set(2016, 9, 12, 20, 44);
 		evento = new Evento((long) 1,"teste1", TipoEvento.CONGRESSO, dataInicial, dataFinal);
 		Atividade atividade = new Atividade(Long.valueOf(1), 20.0, "java pra web",evento, TipoAtividade.PALESTRA);
 		evento.adicionarAtividade(atividade);
@@ -37,8 +38,8 @@ public class IncricaoTest {
 		inscricao = new Inscricao(evento);
 		inscricao.adicionarAtividade(evento.getAtividades().get(0));
 		
-		cupom = new Cupom("3453PFZ", 0.5 , true);
-		inscricao.adicionarCupom(cupom);
+		Palestras_50 palestras_50 = new Palestras_50(true, validadePalestra);
+		inscricao.adicionarCupom(palestras_50);
 	}
 	
 	@Test
@@ -51,7 +52,7 @@ public class IncricaoTest {
 	
 	@Test
 	public void valor_da_inscricao_eh_o_total_dos_seus_itens() {
-		assertEquals(20.0, inscricao.getValorTotal(),0.0);
+		assertEquals(10.0, inscricao.getValorTotal(),0.0);
 	}
 	
 	@Test
@@ -76,7 +77,7 @@ public class IncricaoTest {
 	
 	@Test(expected = Exception.class)
 	public void inscricoes_com_pagamentos_inferiores_ao_valor_a_pagar_devem_ser_invalidos() throws Exception {
-		pagamento = new Pagamento(inscricao, 19.0);
+		pagamento = new Pagamento(inscricao, 9.0);
 		inscricao.pagarInscricao(pagamento);
 	}
 	
@@ -108,7 +109,7 @@ public class IncricaoTest {
 	
 	@Test(expected = Exception.class)
 	public void incricao_paga_nao_deve_aceitar_novos_itens() throws Exception {
-		pagamento = new Pagamento(inscricao, 20.0);
+		pagamento = new Pagamento(inscricao, 10.0);
 		inscricao.pagarInscricao(pagamento);
 		inscricao.adicionarAtividade(evento.getAtividades().get(0));
 	}

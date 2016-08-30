@@ -45,4 +45,8 @@ public class Atividade {
 		return true;
 	}
 
+	public TipoAtividade getTipoAtividade() {
+		return tipoAtividade;
+	}
+
 }

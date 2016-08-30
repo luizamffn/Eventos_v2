@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;

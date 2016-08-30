@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.CupomException;
@@ -13,7 +14,6 @@ import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 
 public class Inscricao {
 	private Long id;
-	private Calendar dataPagamento;
 	private Pagamento pagamento;
 	private boolean paga;
 	private double valorTotal = 0;
@@ -29,7 +29,7 @@ public class Inscricao {
 	}
 
 	public void pagarInscricao(Pagamento pagamento) throws PagamentoInferiorException {
-		if (pagamento.getValorRecebido() < valorTotal) {
+		if (pagamento.getValorRecebido() < getValorTotal()) {
 			throw new PagamentoInferiorException();
 		}
 		paga = true;
@@ -43,7 +43,6 @@ public class Inscricao {
 		}
 
 		verificarSeAtividadeEstaNoEvento(atividade);
-		calcularValorTotal();
 	}
 
 	private void verificarSeAtividadeEstaNoEvento(Atividade atividade)
@@ -72,8 +71,8 @@ public class Inscricao {
 
 	private double AplicarDescontoNaInscricao() {
 		for (Cupom cupom : cupons) {
-			if (cupom.isAtivo()) {
-				desconto += valorTotal * cupom.getPorcentagemDoDesconto();
+			if (cupom.isAtivo() == true) {
+				desconto += cupom.getDesconto(this);
 			}
 		}
 		return valorTotal -= desconto;
@@ -88,7 +87,7 @@ public class Inscricao {
 	}
 
 	public double getValorTotal() {
-		return valorTotal;
+		return calcularValorTotal();
 	}
 
 	public boolean isPaga() {
