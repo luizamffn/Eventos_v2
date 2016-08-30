@@ -9,6 +9,7 @@ import java.util.List;
 import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 
@@ -26,8 +27,9 @@ public class Evento {
 	private StatusEvento status;
 
 	public Evento(Long id,String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim)
-			throws DataMenorQueAtualException {
+			throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
 		verificarDataInicio(dataInicio);
+		verificarDataFim(dataInicio, dataFim);
 		this.id = id;
 		this.nome = nome;
 		this.status = StatusEvento.CADASTRADO;
@@ -41,6 +43,12 @@ public class Evento {
 
 		if (dataInicio.getTimeInMillis()- now.getTimeInMillis() <0 ) {
 			throw new DataMenorQueAtualException();
+		}
+	}
+	
+	public void verificarDataFim(Calendar dataInicio, Calendar dataFim) throws DataFimMenorQueDataInicioException{
+		if (dataFim.getTimeInMillis()- dataInicio.getTimeInMillis() <0 ) {
+			throw new DataFimMenorQueDataInicioException();
 		}
 	}
 
