@@ -12,6 +12,7 @@ import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
+import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 
 public class Evento {
@@ -23,6 +24,7 @@ public class Evento {
 	private List<Inscricao> inscricoes = new ArrayList<Inscricao>();
 	private List<Cupom> Cupons = new ArrayList<Cupom>();
 	private List<Instituicao> instituicoes = new ArrayList<>();
+	private List<Evento> eventosSatelites = new ArrayList<>();
 	private Calendar dataInicio;
 	private Calendar dataFim;
 	private StatusEvento status;
@@ -71,6 +73,13 @@ public class Evento {
 
 	public void adicionarIncricao(Inscricao inscricao) {
 		inscricoes.add(inscricao);
+	}
+	
+	public void adicionarEventoSatelite(Evento eventoSatelite) throws EventoSateliteException{
+		if (eventosSatelites.contains(eventoSatelite)) {
+			throw new EventoSateliteException();
+		}
+		eventosSatelites.add(eventoSatelite);
 	}
 
 	public boolean isAtivo() {
