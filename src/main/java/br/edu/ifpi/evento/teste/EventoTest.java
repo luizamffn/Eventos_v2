@@ -51,15 +51,22 @@ public class EventoTest {
 		assertEquals(0, evento.getAtividades().size());
 	}
 	
-	@Test
-	public void deve_criar_UmEvento_ComNome_EDescricao_NaoPublicado() {
-		fail("Not yet implemented");
-	}
+//	@Test
+//	public void deve_criar_UmEvento_ComNome_EDescricao_NaoPublicado() {
+//		fail("Not yet implemented");
+//	}
 	
 	@Test
 	public void deve_aceitar_eventos_com_data_hoje_ou_futura() throws Exception{
 		dataInicial.set(2016, 9, 18, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
 		evento = new Evento((long) 4,"teste", TipoEvento.CONGRESSO, dataInicial, dataFinal);
+	}
+	
+	@Test(expected = Exception.class)
+	public void nao_deve_aceitar_eventos_data_fim_menor_que_data_inicio() throws Exception {
+		dataInicial.set(2016, 9, 12, 20, 44, 11);
+		dataFinal.set(2016, 4, 12, 22, 00);
+		evento = new Evento((long) 1,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal);
 	}
 }

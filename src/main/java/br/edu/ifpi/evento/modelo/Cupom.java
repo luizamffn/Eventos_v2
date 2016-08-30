@@ -1,10 +1,12 @@
 package br.edu.ifpi.evento.modelo;
 
+import java.util.Date;
+
 public class Cupom {
 	private String codigo;
 	private double porcentagemDoDesconto;
 	private boolean ativo;
-	
+	private Date validade;
 	
 	public Cupom(String codigo, double porcentagemDoDesconto, boolean ativo) {
 		super();
@@ -13,24 +15,12 @@ public class Cupom {
 		this.ativo = ativo;
 	}
 	
-	public String getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
 	public double getPorcentagemDoDesconto() {
 		return porcentagemDoDesconto;
 	}
-	public void setPorcentagemDoDesconto(double porcentagemDoDesconto) {
-		this.porcentagemDoDesconto = porcentagemDoDesconto;
-	}
+	
 	public boolean isAtivo() {
 		return ativo;
 	}
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
-	}
-	
-	
+
 }
