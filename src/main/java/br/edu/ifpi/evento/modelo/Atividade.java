@@ -1,5 +1,7 @@
 package br.edu.ifpi.evento.modelo;
 
+import java.util.Calendar;
+
 import br.edu.ifpi.evento.enums.TipoAtividade;
 
 public class Atividade {
@@ -8,6 +10,9 @@ public class Atividade {
 	private String nome;
 	private Evento evento;
 	private TipoAtividade tipoAtividade;
+	private EspacoFisico espacoFisico;
+	private Calendar hoharioInicio;
+	private Calendar hoharioTermino;
 	
 	public Atividade(Long id, double valor, String nome, Evento evento, TipoAtividade tipoAtividade) {
 		this.id = id;
@@ -18,6 +23,10 @@ public class Atividade {
 	
 	public double getValor() {
 		return valor;
+	}
+	
+	public TipoAtividade getTipoAtividade() {
+		return tipoAtividade;
 	}
 	
 	@Override
@@ -43,10 +52,6 @@ public class Atividade {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public TipoAtividade getTipoAtividade() {
-		return tipoAtividade;
 	}
 
 }

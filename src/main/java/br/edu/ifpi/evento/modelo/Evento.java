@@ -28,6 +28,7 @@ public class Evento {
 	private Calendar dataInicio;
 	private Calendar dataFim;
 	private StatusEvento status;
+	private EspacoFisico espacoFisico;
 
 	public Evento(Long id,String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim)
 			throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {

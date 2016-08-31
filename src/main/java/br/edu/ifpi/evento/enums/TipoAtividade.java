@@ -3,7 +3,10 @@ package br.edu.ifpi.evento.enums;
 public enum TipoAtividade {
 	PALESTRA			("PALESTRA"),
 	MINICURSO			("MINICURSO"),
-	MESA_REDONDA		("MESA REDONDA");
+	MESA_REDONDA		("MESA REDONDA"),
+	INTERVALO			("INTERVALO"),
+	CREDENCIAMENTO		("CREDENCIAMENTO"),
+	COFFEEBREAK			("COFFEEBREAK");
 	
 	private String descricao;
 
