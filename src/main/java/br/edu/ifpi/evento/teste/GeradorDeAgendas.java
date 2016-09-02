@@ -12,7 +12,7 @@ import br.edu.ifpi.evento.modelo.Atividade;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 
-public class AgendaTest {
+public class GeradorDeAgendas {
 	
 	public static void main(String[] args) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
 		GregorianCalendar dataInicial = new GregorianCalendar();
