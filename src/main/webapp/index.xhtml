@@ -6,26 +6,20 @@
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Insert title here</title>
+	<h:outputStylesheet name="css/screen.css" />
 </h:head>
 <body>
 	<h:form>
 		<p:growl id="growl" life="2000" />
+		<h:panelGrid style="width:100%; text-align:center;">
 
-		<p:panelGrid columns="2">
+			<h:outputText value="Eventos" style="font-weight:bold; font-size:40px;" />
+			<h:link value="Cadastrar Evento" style="float:right" outcome="cadastrarEvento.xhtml"/>			
+			
+			<h:outputText value="Eventos disponiveis"  style="font-size:20px;"/>
 
-			<h:outputText value="Nome" />
-			<p:inputText />
-			<h:outputText value="Idade" />
-			<p:inputText />
+		</h:panelGrid>
 
-			<p:outputLabel value="Data Nascimento:" />
-			<p:calendar id="mask" value="#{calendarView.date9}"
-				pattern="dd-MM-yyyy" mask="true" />
-		</p:panelGrid>
-
-		<p:commandButton value="Enviar" update="growl"
-			actionListener="#{buttonView.buttonAction}"
-			styleClass="ui-priority-primary" />
 	</h:form>
 </body>
 </html>

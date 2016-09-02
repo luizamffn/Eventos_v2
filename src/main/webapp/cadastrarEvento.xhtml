@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Cadastrar Evento</title>
+	<h:outputStylesheet name="css/screen.css" />
+</h:head>
+<body>
+	<h:form>
+		<p:growl id="growl" life="2000" />
+
+		<p:fieldset legend="Dados do Evento" toggleable="true"
+			toggleSpeed="500">
+			<h:panelGrid columns="2" style="width:100%;">
+				<h:outputText value="Nome:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="Tipo do Evento:" style="float:right" />
+				<p:inputText />
+				<p:outputLabel value="Data inicio:" style="float:right" />
+				<p:calendar value="#{calendarView.date9}" pattern="dd-MM-yyyy"
+					mask="true" readonly="true" />
+
+				<p:outputLabel value="Data Fim:" style="float:right" />
+				<p:calendar value="#{calendarView.date9}" pattern="dd-MM-yyyy"
+					mask="true" readonly="true" />
+			</h:panelGrid>
+		</p:fieldset>
+
+		<p:spacer height="10" />
+
+		<p:fieldset legend="Espaco do Evento" toggleable="true"
+			toggleSpeed="500" collapsed="true">
+			<h:panelGrid columns="2" style="width:100%;text-aling:center">
+				<h:outputText value="Tipo do espaço:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="CEP:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="Bairro:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="Número:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="Complemento:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="UF:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="Município:" style="float:right" />
+				<p:inputText style="width:100%;" />
+
+			</h:panelGrid>
+		</p:fieldset>
+
+		<p:spacer height="10" />
+
+		<p:fieldset legend="Adicionar Atividades" toggleable="true"
+			toggleSpeed="500" collapsed="true">
+			<h:panelGrid columns="2" style="width:100%;text-aling:center">
+				<h:outputText value="Nome:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="Tipo:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<h:outputText value="Valor:" style="float:right" />
+				<p:inputText style="width:100%;" />
+				<p:outputLabel value="Data inicio:" style="float:right" />
+				<p:calendar value="#{calendarView.date9}" pattern="dd-MM-yyyy"
+					mask="true" readonly="true" />
+
+				<p:outputLabel value="Data Fim:" style="float:right" />
+				<p:calendar value="#{calendarView.date9}" pattern="dd-MM-yyyy"
+					mask="true" readonly="true" />
+			</h:panelGrid>
+		</p:fieldset>
+
+		<p:spacer height="10" />
+
+		<h:panelGrid columns="1" style="width:100%; text-align:center;">
+			<p:commandButton value="Cadastrar" />
+		</h:panelGrid>
+
+	</h:form>
+</body>
+</html>

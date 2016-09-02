@@ -21,6 +21,7 @@ public class Inscricao {
 	private double desconto = 0;
 	private List<Cupom> cupons = new ArrayList<>();
 
+	private Pessoa pessoa;
 	private List<Atividade> atividades = new ArrayList<>();
 
 	public Inscricao(Evento evento) {

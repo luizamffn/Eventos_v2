@@ -3,6 +3,8 @@ package br.edu.ifpi.evento.modelo;
 import java.util.Calendar;
 
 import br.edu.ifpi.evento.enums.TipoAtividade;
+import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
+import br.edu.ifpi.evento.util.Validacoes;
 
 public class Atividade {
 	private Long id;
@@ -21,12 +23,44 @@ public class Atividade {
 		this.tipoAtividade = tipoAtividade;
 	}
 	
+	public Atividade(Long id, double valor, String nome, Evento evento, TipoAtividade tipoAtividade,
+			EspacoFisico espacoFisico, Calendar hoharioInicio, Calendar hoharioTermino) throws DataFimMenorQueDataInicioException {
+		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
+		this.id = id;
+		this.valor = valor;
+		this.nome = nome;
+		this.evento = evento;
+		adicionarEspacoFisico(espacoFisico);
+		this.tipoAtividade = tipoAtividade;
+		this.hoharioInicio = hoharioInicio;
+		this.hoharioTermino = hoharioTermino;
+	}
+
+	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
+		this.espacoFisico = espacoFisico;
+		espacoFisico.adicionarAtividade(this);
+		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
+	}
+	
+	
 	public double getValor() {
 		return valor;
 	}
 	
 	public TipoAtividade getTipoAtividade() {
 		return tipoAtividade;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+	
+	public Calendar getHoharioInicio() {
+		return hoharioInicio;
+	}
+	
+	public Calendar getHoharioTermino() {
+		return hoharioTermino;
 	}
 	
 	@Override

@@ -14,6 +14,8 @@ import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
+import br.edu.ifpi.evento.util.Converter;
+import br.edu.ifpi.evento.util.Validacoes;
 
 public class Evento {
 	private Long id;
@@ -33,7 +35,7 @@ public class Evento {
 	public Evento(Long id,String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim)
 			throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
 		verificarDataInicio(dataInicio);
-		verificarDataFim(dataInicio, dataFim);
+		Validacoes.verificarDataFim(dataInicio, dataFim);
 		this.id = id;
 		this.nome = nome;
 		this.status = StatusEvento.CADASTRADO;
@@ -49,18 +51,11 @@ public class Evento {
 			throw new DataMenorQueAtualException();
 		}
 	}
-	
-	public void verificarDataFim(Calendar dataInicio, Calendar dataFim) throws DataFimMenorQueDataInicioException{
-		if (dataFim.getTimeInMillis()- dataInicio.getTimeInMillis() <0 ) {
-			throw new DataFimMenorQueDataInicioException();
-		}
-	}
 
 	public void adicionarAtividade(Atividade atividade) throws AtividadeException {
 		if (atividades.contains(atividade)) {
 			throw new AtividadeException();
 		}
-		
 		atividades.add(atividade);
 	}
 	
@@ -76,6 +71,11 @@ public class Evento {
 		inscricoes.add(inscricao);
 	}
 	
+	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
+		this.espacoFisico = espacoFisico;
+		espacoFisico.adicionarEvento(this);
+	}
+	
 	public void adicionarEventoSatelite(Evento eventoSatelite) throws EventoSateliteException{
 		if (eventosSatelites.contains(eventoSatelite)) {
 			throw new EventoSateliteException();
@@ -88,6 +88,13 @@ public class Evento {
 		return dataFim.getTimeInMillis() < now.getTimeInMillis();
 	}
 
+	public void gerarAgenda() {
+		System.out.println("Agenda de atividade por Evento");
+		System.out.println("Espaco Fisico Pai: " + this.espacoFisico.getDescricao());
+		for (EspacoFisico espacoFisico : espacoFisico.getEspacoFisicos()) {
+			espacoFisico.gerarAgenda();
+		}
+	}
 	public List<Atividade> getAtividades() {
 		return Collections.unmodifiableList(atividades);
 	}
@@ -119,6 +126,10 @@ public class Evento {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public EspacoFisico getEspacoFisico() {
+		return espacoFisico;
 	}
 
 }
