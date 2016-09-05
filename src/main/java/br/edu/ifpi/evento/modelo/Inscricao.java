@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import br.edu.ifpi.evento.Atividade.Atividade;
+import br.edu.ifpi.evento.Atividade.Compravel;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
@@ -20,9 +22,10 @@ public class Inscricao {
 	private Evento evento;
 	private double desconto = 0;
 	private List<Cupom> cupons = new ArrayList<>();
-
-	private Pessoa pessoa;
+	private List<Notificacao> notificaoes = new ArrayList<>();
 	private List<Atividade> atividades = new ArrayList<>();
+
+	private Usuario usuario;
 
 	public Inscricao(Evento evento) {
 		this.evento = evento;
@@ -65,7 +68,9 @@ public class Inscricao {
 
 	private double calcularValorTotal() {
 		for (Atividade atividade : atividades) {
-			valorTotal += atividade.getValor();
+			if(atividade instanceof Compravel){
+				valorTotal += ((Compravel) atividade).getValor();
+			}
 		}
 		return AplicarDescontoNaInscricao();
 	}

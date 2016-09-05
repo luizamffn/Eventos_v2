@@ -3,6 +3,7 @@ package br.edu.ifpi.evento.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.util.Converter;
 

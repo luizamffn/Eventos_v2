@@ -1,51 +1,39 @@
-package br.edu.ifpi.evento.modelo;
+package br.edu.ifpi.evento.Atividade;
 
 import java.util.Calendar;
 
 import br.edu.ifpi.evento.enums.TipoAtividade;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
+import br.edu.ifpi.evento.modelo.EspacoFisico;
+import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.util.Validacoes;
 
 public class Atividade {
-	private Long id;
-	private double valor = 0;
-	private String nome;
-	private Evento evento;
-	private TipoAtividade tipoAtividade;
-	private EspacoFisico espacoFisico;
-	private Calendar hoharioInicio;
-	private Calendar hoharioTermino;
+	protected Long id;
+	protected String nome;
+	protected Evento evento;
+	protected TipoAtividade tipoAtividade;
+	protected EspacoFisico espacoFisico;
+	protected Calendar hoharioInicio;
+	protected Calendar hoharioTermino;
 	
-	public Atividade(Long id, double valor, String nome, Evento evento, TipoAtividade tipoAtividade) {
-		this.id = id;
-		this.valor = valor;
-		this.nome = nome;
-		this.tipoAtividade = tipoAtividade;
-	}
-	
-	public Atividade(Long id, double valor, String nome, Evento evento, TipoAtividade tipoAtividade,
+	public Atividade(Long id, String nome, Evento evento, TipoAtividade tipoAtividade,
 			EspacoFisico espacoFisico, Calendar hoharioInicio, Calendar hoharioTermino) throws DataFimMenorQueDataInicioException {
 		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
 		this.id = id;
-		this.valor = valor;
 		this.nome = nome;
 		this.evento = evento;
-		adicionarEspacoFisico(espacoFisico);
+		this.espacoFisico = espacoFisico;
 		this.tipoAtividade = tipoAtividade;
 		this.hoharioInicio = hoharioInicio;
 		this.hoharioTermino = hoharioTermino;
 	}
 
-	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
-		this.espacoFisico = espacoFisico;
-		espacoFisico.adicionarAtividade(this);
-		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
-	}
-	
-	
-	public double getValor() {
-		return valor;
-	}
+//	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
+//		this.espacoFisico = espacoFisico;
+//		espacoFisico.adicionarAtividade(this);
+//		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
+//	}
 	
 	public TipoAtividade getTipoAtividade() {
 		return tipoAtividade;

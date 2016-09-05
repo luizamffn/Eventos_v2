@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoEvento;
@@ -83,11 +84,6 @@ public class Evento {
 		eventosSatelites.add(eventoSatelite);
 	}
 
-	public boolean isAtivo() {
-		Calendar now = new GregorianCalendar();
-		return dataFim.getTimeInMillis() < now.getTimeInMillis();
-	}
-
 	public void gerarAgenda() {
 		System.out.println("Agenda de atividade por Evento");
 		System.out.println("Espaco Fisico Pai: " + this.espacoFisico.getDescricao());
@@ -95,6 +91,12 @@ public class Evento {
 			espacoFisico.gerarAgenda();
 		}
 	}
+	
+	public boolean isAtivo() {
+		Calendar now = new GregorianCalendar();
+		return dataFim.getTimeInMillis() < now.getTimeInMillis();
+	}
+	
 	public List<Atividade> getAtividades() {
 		return Collections.unmodifiableList(atividades);
 	}

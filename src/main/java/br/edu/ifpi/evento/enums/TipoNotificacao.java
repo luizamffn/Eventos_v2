@@ -2,7 +2,7 @@ package br.edu.ifpi.evento.enums;
 
 public enum TipoNotificacao {
 	Email						("Email"),
-	mensagem_de_texto			("mensagem_de_texto");
+	mensagem_de_texto			("mensagem de texto");
 	
 	private String descricao;
 
