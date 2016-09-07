@@ -48,6 +48,7 @@ public class Evento {
 		this.dataFim = dataFim;
 		this.espacoFisico = espacoFisico;
 		this.organizador = usuario;
+		organizador.adicionarevento(this);
 	}
 
 	public void verificarDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
@@ -152,6 +153,14 @@ public class Evento {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Usuario getOrganizador() {
+		return organizador;
+	}
+
+	public String getNome() {
+		return nome;
 	}
 
 }

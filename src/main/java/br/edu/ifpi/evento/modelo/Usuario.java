@@ -1,5 +1,7 @@
 package br.edu.ifpi.evento.modelo;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import br.edu.ifpi.evento.enums.TipoUsuario;
@@ -12,7 +14,9 @@ public class Usuario {
 	
 	private Pessoa pessoa;
 	private TipoUsuario tipoUsuario;
-	private List<Evento> eventos;
+	private List<Evento> eventosOrganizados = new ArrayList<>();
+	private List<Evento> eventosdaEquipe;
+	private List<Inscricao> inscricoes = new ArrayList<>();
 	
 	public Usuario(String usuario, String senha, Pessoa pessoa, TipoUsuario tipoUsuario) {
 		this.usuario = usuario;
@@ -21,6 +25,13 @@ public class Usuario {
 		this.tipoUsuario = tipoUsuario;
 	}
 	
+	public void adicionarInscricao(Inscricao inscricao) {
+		inscricoes.add(inscricao);
+	}
+	
+	public void adicionarevento(Evento evento) {
+		eventosOrganizados.add(evento);
+	}
 	public Long getId() {
 		return id;
 	}
@@ -51,6 +62,18 @@ public class Usuario {
 	}
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+
+	public List<Inscricao> getInscricoes() {
+		return Collections.unmodifiableList(inscricoes);
+	}
+
+	public List<Evento> getEventosOrganizados() {
+		return Collections.unmodifiableList(eventosOrganizados);
+	}
+
+	public List<Evento> getEventosdaEquipe() {
+		return Collections.unmodifiableList(eventosdaEquipe);
 	}
 	
 }

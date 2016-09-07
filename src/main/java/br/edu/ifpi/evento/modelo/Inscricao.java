@@ -33,6 +33,7 @@ public class Inscricao {
 		this.evento = evento;
 		this.usuario = usuario;
 		this.evento.adicionarIncricao(this);
+		usuario.adicionarInscricao(this);
 	}
 
 	public void pagarInscricao(Pagamento pagamento) throws PagamentoInferiorException {
