@@ -12,10 +12,10 @@ import org.junit.Test;
 
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.Atividade.Palestra;
 import br.edu.ifpi.evento.Responsavel.Pessoa;
 import br.edu.ifpi.evento.cupom.Palestras_50;
 import br.edu.ifpi.evento.enums.Sexo;
+import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.enums.TipoUsuario;
@@ -52,8 +52,8 @@ public class IncricaoTest {
 				false);
 
 		espacoFisico = new EspacoFisico("Predi A", 300, TipoEspacoFisico.PREDIO);
-		Palestra atividade = new Palestra(Long.valueOf(1), "java pra web", evento, espacoFisico, dataInicial, dataFinal,
-				20.00);
+		AtividadeCompravel atividade = new AtividadeCompravel(Long.valueOf(1), "java pra web", evento, espacoFisico,
+				dataInicial, dataFinal, 20.00, TipoAtividadeCompravel.PALESTRA);
 
 		inscricao = new Inscricao(evento);
 		inscricao.adicionarAtividade(evento.getAtividades().get(0));
@@ -66,7 +66,8 @@ public class IncricaoTest {
 
 	@Test
 	public void nao_deve_aplicar_descontos_de_cupons_nao_ativos() throws Exception {
-		Palestra atividade = new Palestra(Long.valueOf(2), "html", evento, espacoFisico, dataInicial, dataFinal, 40.00);
+		AtividadeCompravel atividade = new AtividadeCompravel(Long.valueOf(2), "html", evento, espacoFisico,
+				dataInicial, dataFinal, 40.00, TipoAtividadeCompravel.PALESTRA);
 		inscricao.adicionarAtividade(atividade);
 		System.out.println(inscricao.getValorTotal());
 	}
@@ -105,8 +106,8 @@ public class IncricaoTest {
 
 	@Test
 	public void deve_aceitar_incluir_atividades_que_estejam_no_seu_evento() throws Exception {
-		Palestra palestra = new Palestra(Long.valueOf(2), "algoritmos", evento, espacoFisico, dataInicial, dataFinal,
-				50.00);
+		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(2), "algoritmos", evento, espacoFisico,
+				dataInicial, dataFinal, 50.00, TipoAtividadeCompravel.PALESTRA);
 
 		inscricao.adicionarAtividade(palestra);
 	}
@@ -128,8 +129,8 @@ public class IncricaoTest {
 
 		Evento evento2 = new Evento(Long.valueOf(2), "evento2", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal,
 				predioA, organizador, false);
-		Palestra palestra = new Palestra(Long.valueOf(2), "algoritmos", evento2, espacoFisico, dataInicial, dataFinal,
-				50.00);
+		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(2), "algoritmos", evento2, espacoFisico,
+				dataInicial, dataFinal, 50.00, TipoAtividadeCompravel.PALESTRA);
 
 		inscricao.adicionarAtividade(palestra);
 	}
@@ -140,20 +141,23 @@ public class IncricaoTest {
 		inscricao.pagarInscricao(pagamento);
 		inscricao.adicionarAtividade(evento.getAtividades().get(0));
 	}
-	
+
 	public void adcionar_todas_as_atividades_em_incricao_se_o_evento_for_unico() throws Exception {
-		Evento evento = new Evento((long) 7, "Programacao", TipoEvento.SIMPOSIO, dataInicial, dataFinal, espacoFisico, organizador , true);
-		AtividadeCompravel palestra = new AtividadeCompravel((long) 1, "palesta", evento, espacoFisico, dataInicial, dataFinal, 40.00);
-		AtividadeCompravel minicurso = new AtividadeCompravel((long) 2, "minicurso", evento, espacoFisico, dataInicial, dataFinal, 50.00);
-		
+		Evento evento = new Evento((long) 7, "Programacao", TipoEvento.SIMPOSIO, dataInicial, dataFinal, espacoFisico,
+				organizador, true);
+		AtividadeCompravel palestra = new AtividadeCompravel((long) 1, "palesta", evento, espacoFisico, dataInicial,
+				dataFinal, 40.00, TipoAtividadeCompravel.PALESTRA);
+		AtividadeCompravel minicurso = new AtividadeCompravel((long) 2, "minicurso", evento, espacoFisico, dataInicial,
+				dataFinal, 50.00, TipoAtividadeCompravel.MINICURSO);
+
 		List<AtividadeCompravel> compravel = new ArrayList<>();
 		Inscricao inscricao = new Inscricao(evento, organizador);
 		for (Atividade atividade : evento.getAtividades()) {
-			if(atividade instanceof AtividadeCompravel){
+			if (atividade instanceof AtividadeCompravel) {
 				compravel.add((AtividadeCompravel) atividade);
 			}
 		}
-		
+
 		assertEquals(true, compravel.equals(inscricao.getAtividades()));
 	}
 }

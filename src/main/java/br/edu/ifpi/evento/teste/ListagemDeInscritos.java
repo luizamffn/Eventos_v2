@@ -3,9 +3,10 @@ package br.edu.ifpi.evento.teste;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import br.edu.ifpi.evento.Atividade.Palestra;
+import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.Responsavel.Pessoa;
 import br.edu.ifpi.evento.enums.Sexo;
+import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.enums.TipoUsuario;
@@ -43,7 +44,7 @@ public class ListagemDeInscritos {
 		dataFinal2.set(2016, 8, 20, 16, 00, 00);
 
 		EspacoFisico b3_sala4 = new EspacoFisico("B3-04", 40, TipoEspacoFisico.SALA);
-		Palestra palestra = new Palestra(Long.valueOf(1), "python", evento, b3_sala4, dataInicial2, dataFinal2, 30.00);
+		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(1), "python", evento, b3_sala4, dataInicial2, dataFinal2, 30.00,TipoAtividadeCompravel.PALESTRA);
 
 		Inscricao inscricao = new Inscricao(evento, usuario);
 		inscricao.adicionarAtividade(palestra);
