@@ -8,13 +8,19 @@ import java.util.GregorianCalendar;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.edu.ifpi.evento.enums.Sexo;
+import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.enums.TipoInstituicao;
+import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
+import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Instituicao;
+import br.edu.ifpi.evento.modelo.Pessoa;
+import br.edu.ifpi.evento.modelo.Usuario;
 
 public class EventoTest {
 
@@ -22,6 +28,8 @@ public class EventoTest {
 	Calendar dataFinal;
 	Evento evento;
 	Inscricao inscricao;
+	EspacoFisico predioA;
+	Usuario organizador;
 
 	@Before
 	public void init() throws DataMenorQueAtualException, DataFimMenorQueDataInicioException{
@@ -29,21 +37,26 @@ public class EventoTest {
 		dataInicial.set(2016, 10, 12, 20, 44, 11);
 		dataFinal = Calendar.getInstance();
 		dataFinal.set(2016, 10, 15, 20, 44, 11);
-		evento = new Evento(Long.valueOf(1), "Evento1", TipoEvento.CONGRESSO, dataInicial, dataFinal);
+		predioA = new EspacoFisico("Predio A", 1000,TipoEspacoFisico.PREDIO);
+		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
+		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
+
+		evento = new Evento(Long.valueOf(1), "Evento1", TipoEvento.CONGRESSO, dataInicial, dataFinal,predioA,organizador);
 	}
 	
 	@Test(expected = Exception.class)
 	public void nao_deve_aceitar_eventos_data_passada() throws Exception {
 		dataInicial.set(2016, 5, 12, 20, 44, 11);
 		dataFinal.set(2016, 8, 12, 22, 00);
-		evento = new Evento((long) 1,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal);
+		
+		evento = new Evento((long) 1,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal,predioA,organizador);
 	}
 	
 	@Test
 	public void deve_settar_automaticamente_em_inscrição_este_evento() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento((long) 2,"teste", TipoEvento.SIMPOSIO, dataInicial, dataFinal);
+		evento = new Evento((long) 2,"teste", TipoEvento.SIMPOSIO, dataInicial, dataFinal,predioA,organizador);
 		inscricao = new Inscricao(evento);
 		assertEquals(inscricao.getEvento().equals(evento), true);
 	}
@@ -52,7 +65,7 @@ public class EventoTest {
 	public void evento_recem_criado_deve_ter_zero_atividades() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44, 11);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento((long) 3,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal);
+		evento = new Evento((long) 3,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal,predioA,organizador);
 		assertEquals(0, evento.getAtividades().size());
 	}
 	
@@ -65,14 +78,14 @@ public class EventoTest {
 	public void deve_aceitar_eventos_com_data_hoje_ou_futura() throws Exception{
 		dataInicial.set(2016, 9, 18, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento((long) 4,"teste", TipoEvento.CONGRESSO, dataInicial, dataFinal);
+		evento = new Evento((long) 4,"teste", TipoEvento.CONGRESSO, dataInicial, dataFinal,predioA,organizador);
 	}
 	
 	@Test(expected = Exception.class)
 	public void nao_deve_aceitar_eventos_data_fim_menor_que_data_inicio() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44, 11);
 		dataFinal.set(2016, 4, 12, 22, 00);
-		evento = new Evento((long) 1,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal);
+		evento = new Evento((long) 1,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal,predioA,organizador);
 	}
 	
 	@Test(expected = Exception.class)
@@ -82,4 +95,12 @@ public class EventoTest {
 		evento.adicionarInstituicao(instituicao);
 	}
 	
+	@Test(expected = Exception.class)
+	public void nao_deve_aceitar_inclusao_de_usuario_repetido() throws Exception {
+		Pessoa pessoa = new Pessoa("Gabriela", 8994, Sexo.F);
+		Usuario usuario = new Usuario("gabi78#", "jkkk", pessoa, TipoUsuario.ORGANIZADOR);
+		
+		evento.adicionarUsuarioAEquipe(usuario);
+		evento.adicionarUsuarioAEquipe(usuario);
+	}
 }

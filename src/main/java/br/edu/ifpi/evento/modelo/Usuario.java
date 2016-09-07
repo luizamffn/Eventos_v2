@@ -1,5 +1,7 @@
 package br.edu.ifpi.evento.modelo;
 
+import java.util.List;
+
 import br.edu.ifpi.evento.enums.TipoUsuario;
 
 public class Usuario {
@@ -10,7 +12,7 @@ public class Usuario {
 	
 	private Pessoa pessoa;
 	private TipoUsuario tipoUsuario;
-	
+	private List<Evento> eventos;
 	
 	public Usuario(String usuario, String senha, Pessoa pessoa, TipoUsuario tipoUsuario) {
 		this.usuario = usuario;

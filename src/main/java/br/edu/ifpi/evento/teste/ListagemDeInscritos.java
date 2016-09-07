@@ -28,10 +28,12 @@ public class ListagemDeInscritos {
 		dataInicial.set(2016, 10, 12, 12, 00, 00);
 		Calendar dataFinal = Calendar.getInstance();
 		dataFinal.set(2016, 10, 20, 20, 00,00);
-		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal);
-		
 		EspacoFisico predioA = new EspacoFisico("Predio A", 1000,TipoEspacoFisico.PREDIO);
-		evento.adicionarEspacoFisico(predioA);
+		
+		Pessoa p = new Pessoa("Josefa", 4454, Sexo.F);
+		Usuario organizador = new Usuario("Jose123", "8766Y", p, TipoUsuario.ORGANIZADOR);
+
+		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal,predioA,organizador);
 		
 		GregorianCalendar dataInicial2 = new GregorianCalendar();
 		dataInicial2.set(2016, 8, 12, 14, 00, 00);

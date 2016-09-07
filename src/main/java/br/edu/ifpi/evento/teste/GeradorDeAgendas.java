@@ -5,13 +5,17 @@ import java.util.GregorianCalendar;
 
 import br.edu.ifpi.evento.Atividade.Intervalo;
 import br.edu.ifpi.evento.Atividade.Palestra;
+import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
+import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
+import br.edu.ifpi.evento.modelo.Pessoa;
+import br.edu.ifpi.evento.modelo.Usuario;
 
 public class GeradorDeAgendas {
 	
@@ -20,10 +24,12 @@ public class GeradorDeAgendas {
 		dataInicial.set(2016, 10, 12, 12, 00, 00);
 		Calendar dataFinal = Calendar.getInstance();
 		dataFinal.set(2016, 10, 20, 20, 00,00);
-		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal);
-		
 		EspacoFisico predioA = new EspacoFisico("Predio A", 1000,TipoEspacoFisico.PREDIO);
-		evento.adicionarEspacoFisico(predioA);
+		
+		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
+		Usuario organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
+
+		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal,predioA,organizador);
 		
 		GregorianCalendar dataInicial2 = new GregorianCalendar();
 		dataInicial2.set(2016, 8, 12, 14, 00, 00);

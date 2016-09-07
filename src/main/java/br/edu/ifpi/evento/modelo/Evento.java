@@ -15,6 +15,7 @@ import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
+import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
 import br.edu.ifpi.evento.util.Converter;
 import br.edu.ifpi.evento.util.Validacoes;
 
@@ -32,9 +33,11 @@ public class Evento {
 	private Calendar dataFim;
 	private StatusEvento status;
 	private EspacoFisico espacoFisico;
+	private Usuario organizador;
+	private List<Usuario> equipe = new ArrayList<>();
 
-	public Evento(Long id,String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim)
-			throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
+	public Evento(Long id, String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim,
+			EspacoFisico espacoFisico, Usuario usuario) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
 		verificarDataInicio(dataInicio);
 		Validacoes.verificarDataFim(dataInicio, dataFim);
 		this.id = id;
@@ -43,18 +46,8 @@ public class Evento {
 		this.tipoEvento = tipoEvento;
 		this.dataInicio = dataInicio;
 		this.dataFim = dataFim;
-	}
-
-	public Evento(Long id, String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim,
-			EspacoFisico espacoFisico) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.status = StatusEvento.CADASTRADO;
-		this.tipoEvento = tipoEvento;
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
 		this.espacoFisico = espacoFisico;
+		this.organizador = usuario;
 	}
 
 	public void verificarDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
@@ -78,6 +71,13 @@ public class Evento {
 		}
 		
 		instituicoes.add(instituicao);
+	}
+	
+	public void adicionarUsuarioAEquipe(Usuario usuario)throws UsuarioRepetidoException {
+		if(equipe.contains(usuario)){
+			throw new UsuarioRepetidoException();
+		}
+		equipe.add(usuario);
 	}
 
 	public void adicionarIncricao(Inscricao inscricao) {
@@ -123,6 +123,10 @@ public class Evento {
 	
 	public EspacoFisico getEspacoFisico() {
 		return espacoFisico;
+	}
+	
+	public List<Usuario> getEquipe() {
+		return Collections.unmodifiableList(equipe);
 	}
 
 	@Override

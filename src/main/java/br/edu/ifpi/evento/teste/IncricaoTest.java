@@ -10,13 +10,17 @@ import org.junit.Test;
 
 import br.edu.ifpi.evento.Atividade.Palestra;
 import br.edu.ifpi.evento.cupom.Palestras_50;
+import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
+import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.CupomException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Pagamento;
+import br.edu.ifpi.evento.modelo.Pessoa;
+import br.edu.ifpi.evento.modelo.Usuario;
 
 public class IncricaoTest {
 	Calendar dataInicial;
@@ -26,6 +30,7 @@ public class IncricaoTest {
 	Calendar validadePalestra = Calendar.getInstance();
 	Pagamento pagamento;
 	EspacoFisico espacoFisico;
+	Usuario organizador;
 
 	@Before
 	public void init() throws Exception{
@@ -35,8 +40,11 @@ public class IncricaoTest {
 		dataFinal.set(2016, 12, 12, 22, 00);
 		validadePalestra.set(2016, 9, 12, 20, 44);
 		
+		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
+		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
+		
 		espacoFisico = new EspacoFisico("Instituto Federal", 1000, TipoEspacoFisico.PREDIO);
-		evento = new Evento((long) 1,"teste1", TipoEvento.CONGRESSO, dataInicial, dataFinal, espacoFisico);
+		evento = new Evento((long) 1,"teste1", TipoEvento.CONGRESSO, dataInicial, dataFinal, espacoFisico,organizador);
 		
 		espacoFisico = new EspacoFisico("Predi A", 300, TipoEspacoFisico.PREDIO);
 		Palestra atividade = new Palestra(Long.valueOf(1), "java pra web", evento , espacoFisico, dataInicial, dataFinal, 20.00);
@@ -109,7 +117,9 @@ public class IncricaoTest {
 	
 	@Test(expected = Exception.class)
 	public void nao_deve_aceitar_incluir_atividades_de_outros_eventos() throws Exception {
-		Evento evento2 = new Evento(Long.valueOf(2), "evento2", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal);
+		EspacoFisico predioA = new EspacoFisico("Predio A", 1000,TipoEspacoFisico.PREDIO);
+
+		Evento evento2 = new Evento(Long.valueOf(2), "evento2", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal,predioA,organizador);
 		Palestra palestra = new Palestra(Long.valueOf(2), "algoritmos", evento2,  espacoFisico, dataInicial, dataFinal, 50.00);
 
 		inscricao.adicionarAtividade(palestra);
