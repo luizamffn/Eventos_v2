@@ -45,6 +45,18 @@ public class Evento {
 		this.dataFim = dataFim;
 	}
 
+	public Evento(Long id, String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim,
+			EspacoFisico espacoFisico) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.status = StatusEvento.CADASTRADO;
+		this.tipoEvento = tipoEvento;
+		this.dataInicio = dataInicio;
+		this.dataFim = dataFim;
+		this.espacoFisico = espacoFisico;
+	}
+
 	public void verificarDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
 		Calendar now = new GregorianCalendar();
 
@@ -70,6 +82,10 @@ public class Evento {
 
 	public void adicionarIncricao(Inscricao inscricao) {
 		inscricoes.add(inscricao);
+	}
+	
+	public void adicionarCupons(Cupom cupom) {
+		Cupons.add(cupom);
 	}
 	
 	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
@@ -104,6 +120,10 @@ public class Evento {
 	public List<Cupom> getCupons() {
 		return Collections.unmodifiableList(Cupons);
 	}
+	
+	public EspacoFisico getEspacoFisico() {
+		return espacoFisico;
+	}
 
 	@Override
 	public int hashCode() {
@@ -128,10 +148,6 @@ public class Evento {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public EspacoFisico getEspacoFisico() {
-		return espacoFisico;
 	}
 
 }

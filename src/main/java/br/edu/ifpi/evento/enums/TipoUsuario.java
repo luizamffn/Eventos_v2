@@ -1,15 +1,13 @@
 package br.edu.ifpi.evento.enums;
 
-public enum TipoEspacoFisico {
-	PREDIO				("PRÉDIO"),
-	SALA				("SALA"),
-	AUDITORIO			("AUDITÓRIO"),
-	LABORATORIO			("LABORATÓRIO"),
-	PATIO				("PÁTIO");
+public enum TipoUsuario {
+	PALESTRANTE				("PALESTRANTE"),
+	PARTICIPANTE			("PARTICIPANTE"),
+	ORGANIZADOR				("ORGANIZADOR");
 	
 	private String descricao;
 
-	private TipoEspacoFisico(String descricao) {
+	private TipoUsuario(String descricao) {
 		this.descricao = descricao;
 	}
 
@@ -20,5 +18,4 @@ public enum TipoEspacoFisico {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
 }
