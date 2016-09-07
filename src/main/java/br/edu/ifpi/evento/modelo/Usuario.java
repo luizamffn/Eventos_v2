@@ -1,5 +1,7 @@
 package br.edu.ifpi.evento.modelo;
 
+import br.edu.ifpi.evento.enums.TipoUsuario;
+
 public class Usuario {
 	private Long id;
 //	private String nome;
@@ -8,6 +10,14 @@ public class Usuario {
 	
 	private Pessoa pessoa;
 	private TipoUsuario tipoUsuario;
+	
+	
+	public Usuario(String usuario, String senha, Pessoa pessoa, TipoUsuario tipoUsuario) {
+		this.usuario = usuario;
+		this.senha = senha;
+		this.pessoa = pessoa;
+		this.tipoUsuario = tipoUsuario;
+	}
 	
 	public Long getId() {
 		return id;

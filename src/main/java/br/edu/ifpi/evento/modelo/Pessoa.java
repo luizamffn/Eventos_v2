@@ -8,6 +8,12 @@ public class Pessoa {
 	private int cpf;
 	private Sexo sexo;
 	
+	public Pessoa(String nome, int cpf, Sexo sexo) {
+		super();
+		this.nome = nome;
+		this.cpf = cpf;
+		this.sexo = sexo;
+	}
 	public String getNome() {
 		return nome;
 	}

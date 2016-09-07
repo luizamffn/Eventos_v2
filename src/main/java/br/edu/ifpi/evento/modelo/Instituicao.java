@@ -8,4 +8,12 @@ public class Instituicao {
 	private int cnpg;
 	private TipoInstituicao tipoInstituicao;
 	
+	public Instituicao(String nome, int cnpg, TipoInstituicao tipoInstituicao) {
+		super();
+		this.nome = nome;
+		this.cnpg = cnpg;
+		this.tipoInstituicao = tipoInstituicao;
+	}
+	
+	
 }
