@@ -16,7 +16,6 @@ import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
-import br.edu.ifpi.evento.util.Converter;
 import br.edu.ifpi.evento.util.Validacoes;
 
 public class Evento {
@@ -35,9 +34,10 @@ public class Evento {
 	private EspacoFisico espacoFisico;
 	private Usuario organizador;
 	private List<Usuario> equipe = new ArrayList<>();
+	private boolean eventoUnico;
 
 	public Evento(Long id, String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim,
-			EspacoFisico espacoFisico, Usuario usuario) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
+			EspacoFisico espacoFisico, Usuario usuario,boolean eventoUnico) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
 		verificarDataInicio(dataInicio);
 		Validacoes.verificarDataFim(dataInicio, dataFim);
 		this.id = id;
@@ -48,6 +48,7 @@ public class Evento {
 		this.dataFim = dataFim;
 		this.espacoFisico = espacoFisico;
 		this.organizador = usuario;
+		this.eventoUnico = eventoUnico;
 		organizador.adicionarevento(this);
 	}
 
@@ -161,6 +162,10 @@ public class Evento {
 
 	public String getNome() {
 		return nome;
+	}
+
+	public boolean isEventoUnico() {
+		return eventoUnico;
 	}
 
 }

@@ -33,10 +33,10 @@ public class EventosOrganizadoEInscrito {
 		Usuario organizador2 = new Usuario("Jose123ee", "8766Y", p, TipoUsuario.ORGANIZADOR);
 
 		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA,
-				organizador);
+				organizador,false);
 
 		Evento evento2 = new Evento(Long.valueOf(1), "Aulao", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA,
-				organizador);
+				organizador,false);
 
 		GregorianCalendar dataInicial2 = new GregorianCalendar();
 		dataInicial2.set(2016, 8, 12, 14, 00, 00);
@@ -58,6 +58,5 @@ public class EventosOrganizadoEInscrito {
 		for (Inscricao ins : organizador.getInscricoes()) {
 			System.out.println("\t" + ins.getEvento().getNome());
 		}
-
 	}
 }

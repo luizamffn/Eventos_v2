@@ -29,11 +29,22 @@ public class Inscricao {
 		this.evento.adicionarIncricao(this);
 	}
 	
-	public Inscricao(Evento evento, Usuario usuario) {
+	public Inscricao(Evento evento, Usuario usuario) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException{
 		this.evento = evento;
 		this.usuario = usuario;
 		this.evento.adicionarIncricao(this);
 		usuario.adicionarInscricao(this);
+		SeOEventoDaInscricaoForUnico();
+	}
+	
+	public void SeOEventoDaInscricaoForUnico() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+		if(evento.isEventoUnico()){
+			for (Atividade atividade : evento.getAtividades()) {
+				if(atividade instanceof AtividadeCompravel){
+					this.adicionarAtividade(atividade);
+				}	
+			}
+		}
 	}
 
 	public void pagarInscricao(Pagamento pagamento) throws PagamentoInferiorException {

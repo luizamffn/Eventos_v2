@@ -20,40 +20,42 @@ import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Usuario;
 
 public class ListagemDeInscritos {
-	public static void main(String[] args) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException, InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+	public static void main(String[] args) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException,
+			InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
 		Pessoa pessoa = new Pessoa("Maria", 176, Sexo.F);
 		Usuario usuario = new Usuario("Maria_F", "122345", pessoa, TipoUsuario.PARTICIPANTE);
-		
+
 		GregorianCalendar dataInicial = new GregorianCalendar();
 		dataInicial.set(2016, 10, 12, 12, 00, 00);
 		Calendar dataFinal = Calendar.getInstance();
-		dataFinal.set(2016, 10, 20, 20, 00,00);
-		EspacoFisico predioA = new EspacoFisico("Predio A", 1000,TipoEspacoFisico.PREDIO);
-		
+		dataFinal.set(2016, 10, 20, 20, 00, 00);
+		EspacoFisico predioA = new EspacoFisico("Predio A", 1000, TipoEspacoFisico.PREDIO);
+
 		Pessoa p = new Pessoa("Josefa", 4454, Sexo.F);
 		Usuario organizador = new Usuario("Jose123", "8766Y", p, TipoUsuario.ORGANIZADOR);
 
-		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal,predioA,organizador);
-		
+		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA,
+				organizador, false);
+
 		GregorianCalendar dataInicial2 = new GregorianCalendar();
 		dataInicial2.set(2016, 8, 12, 14, 00, 00);
 		Calendar dataFinal2 = Calendar.getInstance();
-		dataFinal2.set(2016, 8, 20, 16, 00,00);
+		dataFinal2.set(2016, 8, 20, 16, 00, 00);
 
-		EspacoFisico b3_sala4 = new EspacoFisico("B3-04", 40,TipoEspacoFisico.SALA);
-		Palestra palestra = new Palestra(Long.valueOf(1), "python", evento, b3_sala4,dataInicial2,dataFinal2, 30.00);
-		
+		EspacoFisico b3_sala4 = new EspacoFisico("B3-04", 40, TipoEspacoFisico.SALA);
+		Palestra palestra = new Palestra(Long.valueOf(1), "python", evento, b3_sala4, dataInicial2, dataFinal2, 30.00);
+
 		Inscricao inscricao = new Inscricao(evento, usuario);
 		inscricao.adicionarAtividade(palestra);
-		
+
 		Pessoa pessoa2 = new Pessoa("Joao", 9888, Sexo.M);
 		Usuario usuario2 = new Usuario("João1", "12#1", pessoa2, TipoUsuario.PARTICIPANTE);
 		Inscricao inscricao2 = new Inscricao(evento, usuario2);
 		inscricao2.adicionarAtividade(palestra);
-		
-//		palestra.listaInscritos();
-		
+
+		// palestra.listaInscritos();
+
 		b3_sala4.listaInscritos();
 	}
-	
+
 }
