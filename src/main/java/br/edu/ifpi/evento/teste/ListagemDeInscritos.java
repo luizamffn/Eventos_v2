@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import br.edu.ifpi.evento.Atividade.Palestra;
+import br.edu.ifpi.evento.Responsavel.Pessoa;
 import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
@@ -16,7 +17,6 @@ import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
-import br.edu.ifpi.evento.modelo.Pessoa;
 import br.edu.ifpi.evento.modelo.Usuario;
 
 public class ListagemDeInscritos {

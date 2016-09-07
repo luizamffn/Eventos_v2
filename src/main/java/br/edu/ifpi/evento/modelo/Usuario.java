@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.edu.ifpi.evento.Responsavel.Pessoa;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 
 public class Usuario {

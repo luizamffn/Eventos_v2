@@ -1,7 +1,9 @@
 package br.edu.ifpi.evento.Atividade;
 
 import java.util.Calendar;
+import java.util.List;
 
+import br.edu.ifpi.evento.Responsavel.Responsavel;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
@@ -15,6 +17,9 @@ public class Atividade {
 	protected EspacoFisico espacoFisico;
 	protected Calendar hoharioInicio;
 	protected Calendar hoharioTermino;
+	
+	protected Responsavel responsavelPrincipal;
+	protected List<Responsavel> responsaveis;
 
 	public Atividade(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
 			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException {

@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 import br.edu.ifpi.evento.Atividade.Intervalo;
 import br.edu.ifpi.evento.Atividade.Palestra;
+import br.edu.ifpi.evento.Responsavel.Pessoa;
 import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
@@ -14,7 +15,6 @@ import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
-import br.edu.ifpi.evento.modelo.Pessoa;
 import br.edu.ifpi.evento.modelo.Usuario;
 
 public class GeradorDeAgendas {
