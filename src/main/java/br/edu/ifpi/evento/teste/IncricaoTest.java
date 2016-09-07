@@ -8,12 +8,11 @@ import java.util.GregorianCalendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.Palestra;
 import br.edu.ifpi.evento.cupom.Palestras_50;
-import br.edu.ifpi.evento.enums.TipoAtividade;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
+import br.edu.ifpi.evento.exceptions.CupomException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
@@ -35,23 +34,25 @@ public class IncricaoTest {
 		dataInicial.set(2016, 9, 12, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
 		validadePalestra.set(2016, 9, 12, 20, 44);
-		evento = new Evento((long) 1,"teste1", TipoEvento.CONGRESSO, dataInicial, dataFinal);
+		
+		espacoFisico = new EspacoFisico("Instituto Federal", 1000, TipoEspacoFisico.PREDIO);
+		evento = new Evento((long) 1,"teste1", TipoEvento.CONGRESSO, dataInicial, dataFinal, espacoFisico);
 		
 		espacoFisico = new EspacoFisico("Predi A", 300, TipoEspacoFisico.PREDIO);
-		Palestra atividade = new Palestra(Long.valueOf(1), "java pra web", evento, TipoAtividade.PALESTRA, espacoFisico, dataInicial, dataFinal, 20);
-		evento.adicionarAtividade(atividade);
+		Palestra atividade = new Palestra(Long.valueOf(1), "java pra web", evento , espacoFisico, dataInicial, dataFinal, 20.00);
 		
 		inscricao = new Inscricao(evento);
 		inscricao.adicionarAtividade(evento.getAtividades().get(0));
 		
 		Palestras_50 palestras_50 = new Palestras_50("p50", validadePalestra);
-		inscricao.adicionarCupom(palestras_50);
+		evento.adicionarCupons(palestras_50);
+		
+//		evento.gerarAgenda();
 	}
 	
 	@Test
 	public void nao_deve_aplicar_descontos_de_cupons_nao_ativos() throws Exception {
-		Palestra atividade = new Palestra(Long.valueOf(2), "html", evento, TipoAtividade.PALESTRA, espacoFisico, dataInicial, dataFinal, 40);
-		evento.adicionarAtividade(atividade);
+		Palestra atividade = new Palestra(Long.valueOf(2), "html", evento, espacoFisico, dataInicial, dataFinal, 40.00);
 		inscricao.adicionarAtividade(atividade);
 		System.out.println(inscricao.getValorTotal());
 	}
@@ -90,8 +91,7 @@ public class IncricaoTest {
 	
 	@Test
 	public void deve_aceitar_incluir_atividades_que_estejam_no_seu_evento() throws Exception {
-		Palestra palestra = new Palestra(Long.valueOf(2), "algoritmos", evento, TipoAtividade.PALESTRA, espacoFisico, dataInicial, dataFinal, 50);
-		evento.adicionarAtividade(palestra);
+		Palestra palestra = new Palestra(Long.valueOf(2), "algoritmos", evento, espacoFisico, dataInicial, dataFinal, 50.00);
 
 		inscricao.adicionarAtividade(palestra);
 	}
@@ -102,14 +102,15 @@ public class IncricaoTest {
 		assertEquals(0.0, inscricao3.getValorTotal(),0.0);
 	}
 	
-//	@Test
-//	public void inscricao_deve_aplicar_descontos_ativos_no_evento() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void inscricao_deve_aplicar_descontos_ativos_no_evento() throws CupomException {
+		inscricao.getValorTotal();
+	}
 	
 	@Test(expected = Exception.class)
 	public void nao_deve_aceitar_incluir_atividades_de_outros_eventos() throws Exception {
-		Palestra palestra = new Palestra(Long.valueOf(2), "algoritmos", evento, TipoAtividade.PALESTRA, espacoFisico, dataInicial, dataFinal, 50);
+		Evento evento2 = new Evento(Long.valueOf(2), "evento2", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal);
+		Palestra palestra = new Palestra(Long.valueOf(2), "algoritmos", evento2,  espacoFisico, dataInicial, dataFinal, 50.00);
 
 		inscricao.adicionarAtividade(palestra);
 	}

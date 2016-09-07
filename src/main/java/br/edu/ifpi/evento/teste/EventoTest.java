@@ -9,8 +9,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.edu.ifpi.evento.enums.TipoEvento;
+import br.edu.ifpi.evento.enums.TipoInstituicao;
+import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
+import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
+import br.edu.ifpi.evento.modelo.Instituicao;
 
 public class EventoTest {
 
@@ -20,11 +24,12 @@ public class EventoTest {
 	Inscricao inscricao;
 
 	@Before
-	public void init(){
+	public void init() throws DataMenorQueAtualException, DataFimMenorQueDataInicioException{
 		dataInicial = new GregorianCalendar();
-//		dataInicial.set(2016, 7, 12, 20, 44, 11);
+		dataInicial.set(2016, 10, 12, 20, 44, 11);
 		dataFinal = Calendar.getInstance();
-//		evento = new Evento("teste", TipoEventoEnum.PUBLICA,dataInicial , dataFinal);
+		dataFinal.set(2016, 10, 15, 20, 44, 11);
+		evento = new Evento(Long.valueOf(1), "Evento1", TipoEvento.CONGRESSO, dataInicial, dataFinal);
 	}
 	
 	@Test(expected = Exception.class)
@@ -69,4 +74,12 @@ public class EventoTest {
 		dataFinal.set(2016, 4, 12, 22, 00);
 		evento = new Evento((long) 1,"teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal);
 	}
+	
+	@Test(expected = Exception.class)
+	public void nao_deve_aceitar_instituicoes_repetidas() throws Exception {
+		Instituicao instituicao = new Instituicao("IFPI", 99998877, TipoInstituicao.PUBLICA);
+		evento.adicionarInstituicao(instituicao);
+		evento.adicionarInstituicao(instituicao);
+	}
+	
 }
