@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpi.evento.Atividade.Atividade;
+import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.util.Converter;
 
@@ -17,7 +18,7 @@ public class EspacoFisico {
 	private Evento evento;
 	private List<Atividade> atividades = new ArrayList<>();
 	private List<EspacoFisico> espacoFisicos = new ArrayList<>();
-
+	
 	public EspacoFisico(String descricao, int capacidade, TipoEspacoFisico tipoEspacoFisico) {
 		this.descricao = descricao;
 		this.capacidade = capacidade;
@@ -44,11 +45,23 @@ public class EspacoFisico {
 		for (Atividade atividade : atividades) {
 			System.out.println("\t" + atividade.getNome() + " - "
 					+ Converter.dateToStrFormatoBrasileiro(atividade.getHoharioInicio().getTime()) + " - "
-					+ Converter.dateToStrFormatoBrasileiro(atividade.getHoharioTermino().getTime()));
+					+ Converter.dateToStrFormatoBrasileiro(atividade.getHoharioTermino().getTime()) + "\t"
+					+ Converter.datetimeToStr(atividade.getHoharioInicio().getTime()) + " - "
+					+ Converter.datetimeToStr(atividade.getHoharioTermino().getTime()));
 
 		}
 	}
 
+	public void listaInscritos() {
+		System.out.println("Espaco fisico: " + this.descricao);
+		for (Atividade atividade : atividades) {
+			if(atividade instanceof AtividadeCompravel){
+				System.out.println("Atividade: " + atividade.getNome());
+				((AtividadeCompravel) atividade).listaInscritos();
+			}
+		}
+	}
+	
 	public String getDescricao() {
 		return descricao;
 	}

@@ -2,23 +2,17 @@ package br.edu.ifpi.evento.Atividade;
 
 import java.util.Calendar;
 
-import br.edu.ifpi.evento.enums.TipoAtividade;
+import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 
-public class Palestra extends Atividade implements Compravel{
-	private double valor;
+public class Palestra extends AtividadeCompravel{
+
+	public Palestra(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
+			Calendar hoharioTermino, Double valor) throws DataFimMenorQueDataInicioException, AtividadeException {
+		super(id, nome, evento, espacoFisico, hoharioInicio, hoharioTermino, valor);
+	}
+
 	
-	public Palestra(Long id, String nome, Evento evento, TipoAtividade tipoAtividade, EspacoFisico espacoFisico,
-			Calendar hoharioInicio, Calendar hoharioTermino, double valor) throws DataFimMenorQueDataInicioException {
-		super(id, nome, evento, tipoAtividade, espacoFisico, hoharioInicio, hoharioTermino);
-		this.valor = valor;
-	}
-
-	@Override
-	public double getValor() {
-		return valor;
-	}
-
 }

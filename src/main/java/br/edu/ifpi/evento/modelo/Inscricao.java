@@ -1,16 +1,14 @@
 package br.edu.ifpi.evento.modelo;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 import br.edu.ifpi.evento.Atividade.Atividade;
-import br.edu.ifpi.evento.Atividade.Compravel;
+import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
-import br.edu.ifpi.evento.exceptions.CupomException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 
@@ -21,7 +19,6 @@ public class Inscricao {
 	private double valorTotal = 0;
 	private Evento evento;
 	private double desconto = 0;
-	private List<Cupom> cupons = new ArrayList<>();
 	private List<Notificacao> notificaoes = new ArrayList<>();
 	private List<Atividade> atividades = new ArrayList<>();
 
@@ -29,6 +26,12 @@ public class Inscricao {
 
 	public Inscricao(Evento evento) {
 		this.evento = evento;
+		this.evento.adicionarIncricao(this);
+	}
+	
+	public Inscricao(Evento evento, Usuario usuario) {
+		this.evento = evento;
+		this.usuario = usuario;
 		this.evento.adicionarIncricao(this);
 	}
 
@@ -64,32 +67,25 @@ public class Inscricao {
 		}
 
 		atividades.add(atividade);
+		((AtividadeCompravel) atividade).adicionarInscricao(this);
 	}
 
 	private double calcularValorTotal() {
 		for (Atividade atividade : atividades) {
-			if(atividade instanceof Compravel){
-				valorTotal += ((Compravel) atividade).getValor();
+			if(atividade instanceof AtividadeCompravel){
+				valorTotal += ((AtividadeCompravel) atividade).getValor();
 			}
 		}
 		return AplicarDescontoNaInscricao();
 	}
 
 	private double AplicarDescontoNaInscricao() {
-		for (Cupom cupom : cupons) {
+		for (Cupom cupom : evento.getCupons()) {
 			if (cupom.isAtivo() == true) {
 				desconto += cupom.getDesconto(this);
 			}
 		}
 		return valorTotal -= desconto;
-	}
-
-	public void adicionarCupom(Cupom cupom) throws CupomException {
-		if (cupons.contains(cupom)) {
-			throw new CupomException();
-
-		}
-		cupons.add(cupom);
 	}
 
 	public double getValorTotal() {
@@ -107,9 +103,9 @@ public class Inscricao {
 	public Evento getEvento() {
 		return evento;
 	}
-
-	public List<Cupom> getCupons() {
-		return Collections.unmodifiableList(cupons);
+	
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
 	@Override

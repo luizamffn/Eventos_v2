@@ -2,7 +2,7 @@ package br.edu.ifpi.evento.Atividade;
 
 import java.util.Calendar;
 
-import br.edu.ifpi.evento.enums.TipoAtividade;
+import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
@@ -12,45 +12,40 @@ public class Atividade {
 	protected Long id;
 	protected String nome;
 	protected Evento evento;
-	protected TipoAtividade tipoAtividade;
 	protected EspacoFisico espacoFisico;
 	protected Calendar hoharioInicio;
 	protected Calendar hoharioTermino;
-	
-	public Atividade(Long id, String nome, Evento evento, TipoAtividade tipoAtividade,
-			EspacoFisico espacoFisico, Calendar hoharioInicio, Calendar hoharioTermino) throws DataFimMenorQueDataInicioException {
+
+	public Atividade(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
+			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException {
 		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
 		this.id = id;
 		this.nome = nome;
 		this.evento = evento;
-		this.espacoFisico = espacoFisico;
-		this.tipoAtividade = tipoAtividade;
+		evento.adicionarAtividade(this);
+		adicionarEspacoFisico(espacoFisico);
 		this.hoharioInicio = hoharioInicio;
 		this.hoharioTermino = hoharioTermino;
 	}
 
-//	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
-//		this.espacoFisico = espacoFisico;
-//		espacoFisico.adicionarAtividade(this);
-//		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
-//	}
-	
-	public TipoAtividade getTipoAtividade() {
-		return tipoAtividade;
+	private void adicionarEspacoFisico(EspacoFisico espacoFisico) {
+		this.espacoFisico = espacoFisico;
+		espacoFisico.adicionarAtividade(this);
+		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
 	}
 
 	public String getNome() {
 		return nome;
 	}
-	
+
 	public Calendar getHoharioInicio() {
 		return hoharioInicio;
 	}
-	
+
 	public Calendar getHoharioTermino() {
 		return hoharioTermino;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

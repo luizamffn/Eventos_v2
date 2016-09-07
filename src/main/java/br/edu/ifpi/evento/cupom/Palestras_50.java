@@ -3,8 +3,8 @@ package br.edu.ifpi.evento.cupom;
 import java.util.Calendar;
 
 import br.edu.ifpi.evento.Atividade.Atividade;
-import br.edu.ifpi.evento.Atividade.Compravel;
-import br.edu.ifpi.evento.enums.TipoAtividade;
+import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.Atividade.Palestra;
 import br.edu.ifpi.evento.modelo.Inscricao;
 
 public class Palestras_50 extends Cupom{
@@ -18,9 +18,9 @@ public class Palestras_50 extends Cupom{
 		double desconto = 0;
 		if(isAtivo()){
 			for (Atividade atividade : inscricao.getAtividades()) {
-				if(atividade.getTipoAtividade() == TipoAtividade.PALESTRA){
-					if(atividade instanceof Compravel){
-						desconto += ((Compravel) atividade).getValor() *0.5;
+				if(atividade instanceof Palestra){
+					if(atividade instanceof AtividadeCompravel){
+						desconto += ((AtividadeCompravel) atividade).getValor() *0.5;
 					}
 				}
 			}

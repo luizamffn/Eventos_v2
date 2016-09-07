@@ -7,9 +7,9 @@ import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 
-public class Intervalo extends AtividadeNaoCompravel {
+public class AtividadeNaoCompravel extends Atividade {
 
-	public Intervalo(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
+	public AtividadeNaoCompravel(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
 			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException {
 		super(id, nome, evento, espacoFisico, hoharioInicio, hoharioTermino);
 	}
