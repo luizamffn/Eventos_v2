@@ -15,7 +15,7 @@ public class Converter {
 	public static String datetimeToStr(Date data) {
 		if (data == null)
 			return "";
-		SimpleDateFormat dt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		SimpleDateFormat dt = new SimpleDateFormat("HH:mm:ss");
 		return dt.format(data);
 	}
 }
