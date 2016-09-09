@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.Responsavel.Pessoa;
 import br.edu.ifpi.evento.cupom.Palestras_50;
 import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
@@ -24,6 +23,7 @@ import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Pagamento;
+import br.edu.ifpi.evento.modelo.Pessoa;
 import br.edu.ifpi.evento.modelo.Usuario;
 
 public class IncricaoTest {

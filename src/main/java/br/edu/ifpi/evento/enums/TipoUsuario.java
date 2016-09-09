@@ -3,7 +3,8 @@ package br.edu.ifpi.evento.enums;
 public enum TipoUsuario {
 	PALESTRANTE				("PALESTRANTE"),
 	PARTICIPANTE			("PARTICIPANTE"),
-	ORGANIZADOR				("ORGANIZADOR");
+	ORGANIZADOR				("ORGANIZADOR"),
+	MEMBROS_DA_EQUIPE		("MEMBROS_DA_EQUIPE");
 	
 	private String descricao;
 

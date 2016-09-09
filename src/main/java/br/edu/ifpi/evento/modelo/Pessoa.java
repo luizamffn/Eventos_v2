@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.Responsavel;
+package br.edu.ifpi.evento.modelo;
 
 import br.edu.ifpi.evento.enums.Sexo;
 

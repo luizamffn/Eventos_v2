@@ -3,14 +3,14 @@ package br.edu.ifpi.evento.Atividade;
 import java.util.Calendar;
 import java.util.List;
 
-import br.edu.ifpi.evento.Responsavel.Responsavel;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
+import br.edu.ifpi.evento.modelo.Responsavel;
 import br.edu.ifpi.evento.util.Validacoes;
 
-public class Atividade {
+public abstract class Atividade {
 	protected Long id;
 	protected String nome;
 	protected Evento evento;
