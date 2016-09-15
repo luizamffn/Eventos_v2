@@ -6,6 +6,17 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.enums.StatusEvento;
@@ -18,23 +29,55 @@ import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
 import br.edu.ifpi.evento.util.Validacoes;
 
+@Entity
 public class Evento {
+	@Id
+	@GeneratedValue
 	private Long id;
 
-	private String nome;
-	private List<Atividade> atividades = new ArrayList<Atividade>();
+	@Enumerated(EnumType.STRING)
 	private TipoEvento tipoEvento;
+	
+	private String nome;
+	
+	@OneToMany(mappedBy="evento")
+	private List<Atividade> atividades = new ArrayList<Atividade>();
+	
+	@OneToMany(mappedBy="evento")
 	private List<Inscricao> inscricoes = new ArrayList<Inscricao>();
+	
+	@OneToMany(mappedBy="evento")
 	private List<Cupom> Cupons = new ArrayList<Cupom>();
-	private List<Instituicao> instituicoes = new ArrayList<>();
-	private List<Evento> eventosSatelites = new ArrayList<>();
+	
+	@ManyToMany
+	@JoinTable(name = "evento_instituicao", joinColumns = @JoinColumn(name = "evento_id"),
+	inverseJoinColumns = @JoinColumn(name = "instituicao_id"))
+	private List<Instituicao> instituicoes = new ArrayList<Instituicao>();
+	
+	@ManyToOne
+	private Evento eventoPai;
+	
+	@OneToMany(mappedBy="eventoPai")
+	private List<Evento> eventosSatelites = new ArrayList<Evento>();
 	private Calendar dataInicio;
 	private Calendar dataFim;
 	private StatusEvento status;
+	
+	@ManyToOne
 	private EspacoFisico espacoFisico;
+	
+	@ManyToOne
 	private Usuario organizador;
-	private List<Usuario> equipe = new ArrayList<>();
+	
+	@ManyToMany
+	@JoinTable(name = "evento_equipe", joinColumns = @JoinColumn(name = "evento_id"),
+	inverseJoinColumns = @JoinColumn(name = "equipe_id"))
+	private List<Usuario> equipe = new ArrayList<Usuario>();
+	
 	private boolean eventoUnico;
+	
+	public Evento() {
+	}
 
 	public Evento(Long id, String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim,
 			EspacoFisico espacoFisico, Usuario usuario,boolean eventoUnico) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
@@ -105,7 +148,7 @@ public class Evento {
 	public void gerarAgenda() {
 		System.out.println("Agenda de atividade por Evento");
 		System.out.println("Espaco Fisico Pai: " + this.espacoFisico.getDescricao());
-		for (EspacoFisico espacoFisico : espacoFisico.getEspacoFisicos()) {
+		for (EspacoFisico espacoFisico : espacoFisico.getEspacoFilhos()) {
 			espacoFisico.gerarAgenda();
 		}
 	}

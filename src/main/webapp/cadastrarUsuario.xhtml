@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Insert title here</title>
+	<h:outputStylesheet name="css/screen.css" />
+
+</h:head>
+<body>
+	<div align="center">
+		<h:form style="width:60%; text-aling: center; border:1px">
+
+			<p:messages showDetail="false" showSummary="true" id="message" />
+
+			<h:panelGrid style="width:100%; text-align:center;">
+				<h:outputText value="Cadastrar Usuario"
+					style="font-weight:bold; font-size:30px;" />
+			</h:panelGrid>
+
+			<p:spacer width="10" />
+
+			<h:panelGrid style="width:100%;text-align:center;" columns="2">
+				<h:outputText value="Username:" style="font-weight:bold;float:right" />
+				<p:inputText value="#{usuarioController.usuario.usuario}"
+					style="float:left" />
+				<h:outputText value="senha:" style="font-weight:bold;float:right" />
+				<p:inputText value="#{usuarioController.usuario.senha}"
+					style="float:left" />
+				<h:outputText value="Email:" style="font-weight:bold;float:right" />
+				<p:inputText value="#{usuarioController.usuario.email}"
+					style="float:left" />
+				<h:outputText value="Tipo:" style="font-weight:bold;float:right" />
+				<p:selectOneMenu
+					style="float:left; width:170px !important; height:30px"
+					value="#{usuarioController.usuario.tipoUsuario}">
+					<f:selectItem itemLabel="-- SELECIONE --" itemValue="#{null}" />
+					<f:selectItems value="#{gerarSelectController.tipoUsuario}"
+						var="tipoUsuario" itemValue="#{tipoUsuario}"
+						itemLabel="#{tipoUsuario.descricao}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+
+			<h:panelGrid style="text-align:center;">
+				<p:commandButton value="Cadastrar" style="float:center;"
+					action="#{usuarioController.salvar}" update="@form"/>
+			</h:panelGrid>
+		</h:form>
+	</div>
+</body>
+</html>

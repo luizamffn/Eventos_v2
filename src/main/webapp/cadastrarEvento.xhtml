@@ -6,11 +6,17 @@
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Cadastrar Evento</title>
-	<h:outputStylesheet name="css/screen.css" />
+	<h:link href="css/screen.css" rel="stylesheet" />
+
 </h:head>
 <body>
 	<h:form>
 		<p:growl id="growl" life="2000" />
+
+		<h:panelGrid style="width:100%; text-align:center;">
+			<h:outputText value="CADASTRO DE EVENTO" style="font-size:25px;" />
+		</h:panelGrid>
+		<p:spacer width="10" />
 
 		<p:fieldset legend="Dados do Evento" toggleable="true"
 			toggleSpeed="500">

@@ -150,7 +150,7 @@ public class IncricaoTest {
 		AtividadeCompravel minicurso = new AtividadeCompravel((long) 2, "minicurso", evento, espacoFisico, dataInicial,
 				dataFinal, 50.00, TipoAtividadeCompravel.MINICURSO);
 
-		List<AtividadeCompravel> compravel = new ArrayList<>();
+		List<AtividadeCompravel> compravel = new ArrayList<AtividadeCompravel>();
 		Inscricao inscricao = new Inscricao(evento, organizador);
 		for (Atividade atividade : evento.getAtividades()) {
 			if (atividade instanceof AtividadeCompravel) {

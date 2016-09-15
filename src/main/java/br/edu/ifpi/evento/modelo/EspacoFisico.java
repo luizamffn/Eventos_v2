@@ -3,21 +3,52 @@ package br.edu.ifpi.evento.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.util.Converter;
 
+@Entity
 public class EspacoFisico {
+	
+	@Id
+	@GeneratedValue
 	private Long id;
 	private String descricao;
 	private int capacidade;
+	
+	@Enumerated(EnumType.STRING)
 	private TipoEspacoFisico tipoEspacoFisico;
+	
+	@OneToOne
+	@JoinColumn(name = "endereco_id")
 	private Endereco endereco;
 
-	private Evento evento;
-	private List<Atividade> atividades = new ArrayList<>();
-	private List<EspacoFisico> espacoFisicos = new ArrayList<>();
+	@OneToMany(mappedBy="espacoFisico")
+	private List<Evento> eventos;
+	
+	@OneToMany(mappedBy="espacoFisico")
+	private List<Atividade> atividades = new ArrayList<Atividade>();
+	
+	@ManyToOne
+	private EspacoFisico espacoPai;
+	
+	@OneToMany(mappedBy="espacoPai")
+	private List<EspacoFisico> espacoFilhos = new ArrayList<EspacoFisico>();
+	
+	public EspacoFisico() {
+
+	}
 	
 	public EspacoFisico(String descricao, int capacidade, TipoEspacoFisico tipoEspacoFisico) {
 		this.descricao = descricao;
@@ -30,13 +61,13 @@ public class EspacoFisico {
 	}
 	
 	public void adicionarEspacosFisicos(EspacoFisico espacoFisico){
-		if (!espacoFisicos.contains(espacoFisico)) {
-			espacoFisicos.add(espacoFisico);
+		if (!espacoFilhos.contains(espacoFisico)) {
+			espacoFilhos.add(espacoFisico);
 		}
 	}
 	
 	public void adicionarEvento(Evento evento){
-		this.evento = evento;
+		eventos.add(evento);
 	}
 	
 	public void gerarAgenda() {
@@ -66,8 +97,8 @@ public class EspacoFisico {
 		return descricao;
 	}
 
-	public List<EspacoFisico> getEspacoFisicos() {
-		return espacoFisicos;
+	public List<EspacoFisico> getEspacoFilhos() {
+		return espacoFilhos;
 	}
 
 	public List<Atividade> getAtividades() {

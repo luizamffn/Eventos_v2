@@ -2,15 +2,25 @@ package br.edu.ifpi.evento.modelo;
 
 import java.util.Calendar;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 
+@Entity
 public class Pagamento {
+	@Id
 	private Long id;
 
+	@OneToOne
 	private Inscricao inscricao;
 	private Calendar dataPagamento;
 	private double valorRecebido;
+	
+	public Pagamento() {
+	}
 
 	public Pagamento(Inscricao inscricao,double valorRecebido)
 			throws PagamentoInferiorException, InscricaoPagaException {

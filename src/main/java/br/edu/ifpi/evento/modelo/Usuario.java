@@ -4,19 +4,45 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 import br.edu.ifpi.evento.enums.TipoUsuario;
 
+@Entity
 public class Usuario {
+	@Id
+	@GeneratedValue
 	private Long id;
-//	private String nome;
 	private String usuario;
 	private String senha;
+	private String email;
 	
-	private Pessoa pessoa;
+	@Enumerated(EnumType.STRING)
 	private TipoUsuario tipoUsuario;
-	private List<Evento> eventosOrganizados = new ArrayList<>();
+	
+	@OneToOne
+    @JoinColumn(name="pessoa_id")
+	private Pessoa pessoa;
+	
+	@OneToMany(mappedBy="organizador")
+	private List<Evento> eventosOrganizados = new ArrayList<Evento>();
+	
+	@ManyToMany(mappedBy="equipe")
 	private List<Evento> eventosdaEquipe;
-	private List<Inscricao> inscricoes = new ArrayList<>();
+	
+	@OneToMany(mappedBy="usuario")
+	private List<Inscricao> inscricoes = new ArrayList<Inscricao>();
+	
+	public Usuario() {
+	}
 	
 	public Usuario(String usuario, String senha, Pessoa pessoa, TipoUsuario tipoUsuario) {
 		this.usuario = usuario;
@@ -75,5 +101,22 @@ public class Usuario {
 	public List<Evento> getEventosdaEquipe() {
 		return Collections.unmodifiableList(eventosdaEquipe);
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", usuario=" + usuario + ", senha=" + senha + ", email=" + email + ", tipoUsuario="
+				+ tipoUsuario + ", pessoa=" + pessoa + ", eventosOrganizados=" + eventosOrganizados
+				+ ", eventosdaEquipe=" + eventosdaEquipe + ", inscricoes=" + inscricoes + "]";
+	}
+	
+	
 	
 }

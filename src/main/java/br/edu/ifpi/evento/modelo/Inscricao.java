@@ -4,26 +4,49 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 
+@Entity
 public class Inscricao {
+	
+	@Id
 	private Long id;
-	private Pagamento pagamento;
 	private boolean paga;
 	private double valorTotal = 0;
-	private Evento evento;
 	private double desconto = 0;
-	private List<Notificacao> notificaoes = new ArrayList<>();
-	private List<Atividade> atividades = new ArrayList<>();
+	
+	@ManyToOne
+	private Evento evento;
+	
+	@OneToOne
+	private Pagamento pagamento;
+	
+	@ManyToMany
+	@JoinTable(name = "inscricao_atividade", joinColumns = @JoinColumn(name = "inscricao_id"),
+	inverseJoinColumns = @JoinColumn(name = "atividade_id"))
+	private List<Atividade> atividades = new ArrayList<Atividade>();
 
+	@ManyToOne
 	private Usuario usuario;
 
+	public Inscricao() {
+	}
+	
 	public Inscricao(Evento evento) {
 		this.evento = evento;
 		this.evento.adicionarIncricao(this);
@@ -35,6 +58,7 @@ public class Inscricao {
 		this.evento.adicionarIncricao(this);
 		usuario.adicionarInscricao(this);
 		SeOEventoDaInscricaoForUnico();
+		Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_CONCLUIDA);
 	}
 	
 	public void SeOEventoDaInscricaoForUnico() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
@@ -52,7 +76,8 @@ public class Inscricao {
 			throw new PagamentoInferiorException();
 		}
 		paga = true;
-		this.pagamento = pagamento; 
+		this.pagamento = pagamento;
+		Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_PAGA);
 	}
 
 	public void adicionarAtividade(Atividade atividade)

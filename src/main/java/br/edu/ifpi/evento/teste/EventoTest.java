@@ -55,7 +55,7 @@ public class EventoTest {
 	}
 
 	@Test
-	public void deve_settar_automaticamente_em_inscrição_este_evento() throws Exception {
+	public void deve_settar_automaticamente_em_inscricao_este_evento() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
 		evento = new Evento((long) 2, "teste", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA, organizador,
