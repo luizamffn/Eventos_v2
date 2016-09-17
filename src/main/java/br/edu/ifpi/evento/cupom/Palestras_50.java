@@ -7,13 +7,15 @@ import javax.persistence.Entity;
 
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.Atividade.Item;
+import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.modelo.Inscricao;
 
 @Entity
 @DiscriminatorValue(value = "PL_50")
-public class Palestras_50 extends Cupom{
-	
+public class Palestras_50 extends Cupom {
+
 	public Palestras_50() {
 	}
 
@@ -24,16 +26,25 @@ public class Palestras_50 extends Cupom{
 	@Override
 	public double getDesconto(Inscricao inscricao) {
 		double desconto = 0;
-		if(isAtivo()){
-			for (Atividade atividade : inscricao.getAtividades()) {
-				if(atividade instanceof AtividadeCompravel){
-					if(((AtividadeCompravel) atividade).getTipoCompravel() == TipoAtividadeCompravel.PALESTRA){
-						desconto += ((AtividadeCompravel) atividade).getValor() *0.5;
-					}
+
+		for (Item item : inscricao.getItens()) {
+			if (item instanceof ItemSimples) {
+				if (((ItemSimples) item).getAtividadeCompravel()
+						.getTipoCompravel() == TipoAtividadeCompravel.PALESTRA) {
+					desconto += ((ItemSimples) item).getAtividadeCompravel().getValor() * 0.5;
 				}
 			}
 		}
+		// for (Atividade atividade : inscricao.getAtividades()) {
+		// if(atividade instanceof AtividadeCompravel){
+		// if(((AtividadeCompravel) atividade).getTipoCompravel() ==
+		// TipoAtividadeCompravel.PALESTRA){
+		// desconto += ((AtividadeCompravel) atividade).getValor() *0.5;
+		// }
+		// }
+		// }
+
 		return desconto;
 	}
-			
+
 }

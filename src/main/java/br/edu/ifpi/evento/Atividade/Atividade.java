@@ -14,12 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
-import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Notificacao;
 import br.edu.ifpi.evento.modelo.Responsavel;
 import br.edu.ifpi.evento.util.Validacoes;

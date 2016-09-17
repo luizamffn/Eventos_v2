@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -14,6 +15,9 @@ import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.Atividade.Item;
+import br.edu.ifpi.evento.Atividade.ItemComposto;
+import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
@@ -25,6 +29,7 @@ import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 public class Inscricao {
 	
 	@Id
+	@GeneratedValue
 	private Long id;
 	private boolean paga;
 	private double valorTotal = 0;
@@ -37,9 +42,9 @@ public class Inscricao {
 	private Pagamento pagamento;
 	
 	@ManyToMany
-	@JoinTable(name = "inscricao_atividade", joinColumns = @JoinColumn(name = "inscricao_id"),
-	inverseJoinColumns = @JoinColumn(name = "atividade_id"))
-	private List<Atividade> atividades = new ArrayList<Atividade>();
+	@JoinTable(name = "inscricao_item", joinColumns = @JoinColumn(name = "inscricao_id"),
+	inverseJoinColumns = @JoinColumn(name = "item_id"))
+	private List<Item> itens = new ArrayList<Item>();
 
 	@ManyToOne
 	private Usuario usuario;
@@ -65,7 +70,7 @@ public class Inscricao {
 		if(evento.isEventoUnico()){
 			for (Atividade atividade : evento.getAtividades()) {
 				if(atividade instanceof AtividadeCompravel){
-					this.adicionarAtividade(atividade);
+					this.adicionarItem(((AtividadeCompravel) atividade).getItemSimples());
 				}	
 			}
 		}
@@ -80,40 +85,60 @@ public class Inscricao {
 		Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_PAGA);
 	}
 
-	public void adicionarAtividade(Atividade atividade)
+	public void adicionarItem(Item item)
 			throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
 		if (paga) {
 			throw new InscricaoPagaException();
 		}
 
-		verificarSeAtividadeEstaNoEvento(atividade);
+		verificarSeAtividadeDoItemEstaNoEvento(item);
 	}
 
-	private void verificarSeAtividadeEstaNoEvento(Atividade atividade)
+	private void verificarSeAtividadeDoItemEstaNoEvento(Item item)
 			throws AtividadeNaoEstaNoEventoException, AtividadeException {
-		if (!evento.getAtividades().contains(atividade)) {
-			throw new AtividadeNaoEstaNoEventoException();
+		if(item instanceof ItemSimples){
+			if (!evento.getAtividades().contains(((ItemSimples) item).getAtividadeCompravel())) {
+				throw new AtividadeNaoEstaNoEventoException();
+			}
+		}
+	
+		if(item instanceof ItemComposto){
+			for (ItemSimples itemSimples : ((ItemComposto) item).getItensSimples()) {
+				if (!evento.getAtividades().contains(itemSimples.getAtividadeCompravel())) {
+					throw new AtividadeNaoEstaNoEventoException();
+				}
+			}
 		}
 
-		adicionarAtividadeNaoRepetida(atividade);
+		adicionarItemNaoRepetido(item);
 	}
 
-	private void adicionarAtividadeNaoRepetida(Atividade atividade) throws AtividadeException {
-		if (atividades.contains(atividade)) {
+	//mudou
+	private void adicionarItemNaoRepetido(Item item) throws AtividadeException {
+		if (itens.contains(item)) {
 			throw new AtividadeException();
 		}
 
-		atividades.add(atividade);
-		((AtividadeCompravel) atividade).adicionarInscricao(this);
+		itens.add(item);
+		item.adicionarInscricao(this);
 	}
 
 	private double calcularValorTotal() {
-		for (Atividade atividade : atividades) {
-			if(atividade instanceof AtividadeCompravel){
-				valorTotal += ((AtividadeCompravel) atividade).getValor();
-			}
+		for (Item item : itens) {
+			if(item instanceof ItemSimples)
+				valorTotal +=((ItemSimples) item).getAtividadeCompravel().getValor();
+			if(item instanceof ItemComposto)
+				valorTotal += ((ItemComposto) item).getPrecoComDesconto();
 		}
+		
 		return AplicarDescontoNaInscricao();
+		
+//		for (Atividade atividade : iatividades) {
+//			if(atividade instanceof AtividadeCompravel){
+//				valorTotal += ((AtividadeCompravel) atividade).getValor();
+//			}
+//		}
+//		return AplicarDescontoNaInscricao();
 	}
 
 	private double AplicarDescontoNaInscricao() {
@@ -133,9 +158,9 @@ public class Inscricao {
 		return paga;
 	}
 
-	public List<Atividade> getAtividades() {
-		return Collections.unmodifiableList(atividades);
-	}
+//	public List<Atividade> getAtividades() {
+//		return Collections.unmodifiableList(atividades);
+//	}
 
 	public Evento getEvento() {
 		return evento;
@@ -168,6 +193,10 @@ public class Inscricao {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public List<Item> getItens() {
+		return itens;
 	}
 
 }

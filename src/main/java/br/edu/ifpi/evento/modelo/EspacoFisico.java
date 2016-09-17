@@ -88,7 +88,7 @@ public class EspacoFisico {
 		for (Atividade atividade : atividades) {
 			if(atividade instanceof AtividadeCompravel){
 				System.out.println("Atividade: " + atividade.getNome());
-				((AtividadeCompravel) atividade).listaInscritos();
+				((AtividadeCompravel) atividade).getItemSimples().listaInscritos();
 			}
 		}
 	}

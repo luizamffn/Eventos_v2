@@ -75,7 +75,7 @@ public class GeradorDeAgendas {
 		AtividadeNaoCompravel intervalo = new AtividadeNaoCompravel(Long.valueOf(5), "intervalo", evento, patio,
 				dataInicial6, dataFinal6, TipoNaoAtividadeCompravel.INTERVALO);
 
-		// b3_sala4.gerarAgenda();
+//		b3_sala4.gerarAgenda();
 
 		evento.gerarAgenda();
 

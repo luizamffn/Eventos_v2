@@ -1,15 +1,13 @@
 package br.edu.ifpi.evento.Atividade;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
@@ -25,11 +23,13 @@ import br.edu.ifpi.evento.modelo.Notificacao;
 public class AtividadeCompravel extends Atividade {
 	private Double valor;
 
-	@ManyToMany(mappedBy = "atividades")
-	private List<Inscricao> inscricoes = new ArrayList<Inscricao>();
+//	@ManyToMany(mappedBy = "atividades")
 
 	@Enumerated(EnumType.STRING)
 	private TipoAtividadeCompravel tipoCompravel;
+	
+	@OneToOne
+	private ItemSimples itemSimples;
 
 	public AtividadeCompravel() {
 	}
@@ -42,23 +42,12 @@ public class AtividadeCompravel extends Atividade {
 		this.tipoCompravel = tipo;
 	}
 
-	public void adicionarInscricao(Inscricao inscricao) {
-		inscricoes.add(inscricao);
+	public void adicionarItem(ItemSimples itemSimples) {
+		this.itemSimples = itemSimples;
 	}
 
 	public Double getValor() {
 		return valor;
-	}
-
-	public void listaInscritos() {
-		System.out.println("Nome dos inscritos:");
-		for (Inscricao inscricao : inscricoes) {
-			System.out.println("\t" + inscricao.getUsuario().getPessoa().getNome());
-		}
-	}
-
-	public List<Inscricao> getInscricoes() {
-		return Collections.unmodifiableList(inscricoes);
 	}
 
 	public TipoAtividadeCompravel getTipoCompravel() {
@@ -66,9 +55,13 @@ public class AtividadeCompravel extends Atividade {
 	}
 
 	public void notificarMudancaEspacoFisico() {
-		for (Inscricao inscricao : inscricoes) {
+		for (Inscricao inscricao : itemSimples.getInscricoes()) {
 			Notificacao.enviarNorificacaoAtividade(inscricao.getUsuario(), Constante.MUDOU_ESPACO_FISICO,
 					this.getNome());
 		}
+	}
+
+	public Item getItemSimples() {
+		return itemSimples;
 	}
 }

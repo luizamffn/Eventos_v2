@@ -3,6 +3,7 @@ package br.edu.ifpi.evento.modelo;
 import java.util.Calendar;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -12,6 +13,7 @@ import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 @Entity
 public class Pagamento {
 	@Id
+	@GeneratedValue
 	private Long id;
 
 	@OneToOne

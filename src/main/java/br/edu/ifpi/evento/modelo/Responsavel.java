@@ -1,6 +1,7 @@
 package br.edu.ifpi.evento.modelo;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -8,6 +9,7 @@ import javax.persistence.OneToOne;
 public class Responsavel{
 	
 	@Id
+	@GeneratedValue
 	private Long id;
 	
 	@OneToOne

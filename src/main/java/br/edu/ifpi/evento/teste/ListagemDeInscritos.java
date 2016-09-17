@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.Atividade.Item;
+import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
@@ -46,13 +48,15 @@ public class ListagemDeInscritos {
 		EspacoFisico b3_sala4 = new EspacoFisico("B3-04", 40, TipoEspacoFisico.SALA);
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(1), "python", evento, b3_sala4, dataInicial2, dataFinal2, 30.00,TipoAtividadeCompravel.PALESTRA);
 
+		ItemSimples itemSimples = new ItemSimples((long) 1, "palestra", palestra);
+		
 		Inscricao inscricao = new Inscricao(evento, usuario);
-		inscricao.adicionarAtividade(palestra);
+		inscricao.adicionarItem(itemSimples);
 
 		Pessoa pessoa2 = new Pessoa("Joao", 9888, Sexo.M);
 		Usuario usuario2 = new Usuario("João1", "12#1", pessoa2, TipoUsuario.PARTICIPANTE);
 		Inscricao inscricao2 = new Inscricao(evento, usuario2);
-		inscricao2.adicionarAtividade(palestra);
+		inscricao2.adicionarItem(itemSimples);
 
 		// palestra.listaInscritos();
 
