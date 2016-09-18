@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.teste;
+package br.edu.ifpi.evento.teste.modelo;
 
 import java.util.Calendar;
 
@@ -8,22 +8,25 @@ import org.junit.Test;
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
+import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
+import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EnderecoEspacoFisicoException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoPaiException;
 import br.edu.ifpi.evento.modelo.Endereco;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
+import br.edu.ifpi.evento.modelo.Usuario;
 
 public class EspacoFisicoTest {
 	private EspacoFisico ef1, ef2;
 	
 	@Before
 	public void init() {
-		ef1 = new EspacoFisico((long) 1);
-		ef2 = new EspacoFisico((long) 2);		
+		ef1 = new EspacoFisico.EspacoFisicoBuilder((long) 1).build();
+		ef2 = new EspacoFisico.EspacoFisicoBuilder((long) 2).build();		
 	}
 
 	@Test(expected = EnderecoEspacoFisicoException.class)
@@ -43,10 +46,17 @@ public class EspacoFisicoTest {
 	
 	@Test(expected = EspacoFisicoComAtividadesConflitantes.class)
 	public void espacoFisicoNaoPodeConterAtividadesComHorariosConflitantes()
-			throws DataFimMenorQueDataInicioException, EspacoFisicoComAtividadesConflitantes, AtividadeException {
-		Evento evento = new Evento();
-		evento.setEspacoFisico(new EspacoFisico(Long.valueOf(1)));
-		EspacoFisico espacoFisico = new EspacoFisico((long) 2);
+			throws DataFimMenorQueDataInicioException, EspacoFisicoComAtividadesConflitantes, AtividadeException,
+			AtividadeComHorarioForaDoPeriodoDoEvento, DataMenorQueAtualException {
+		
+		Calendar dataInicio = Calendar.getInstance();
+		dataInicio.set(2016, 10, 10, 12, 00, 00);
+		Calendar dataFim = Calendar.getInstance();
+		dataFim.set(2016, 10, 20, 22, 00, 00);
+		Usuario organizador = new Usuario(); 
+		Evento evento = new Evento.EventoBuilder((long) 1, dataInicio, dataFim, organizador).build();
+		evento.setEspacoFisico(new EspacoFisico.EspacoFisicoBuilder((long) 1).build());
+		EspacoFisico espacoFisico = new EspacoFisico.EspacoFisicoBuilder((long) 2).build();
 		
 		Calendar dataInicialAt1 = Calendar.getInstance();
 		dataInicialAt1.set(2016, 10, 12, 20, 00,00);

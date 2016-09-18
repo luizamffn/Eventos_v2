@@ -20,13 +20,18 @@ import javax.persistence.OneToMany;
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.enums.StatusEvento;
+import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
+import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
+import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
 import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
@@ -92,7 +97,73 @@ public class Evento {
 		this.espacoFisico = espacoFisico;
 		this.organizador = usuario;
 		this.eventoUnico = eventoUnico;
+	}
+	
+	public Evento(EventoBuilder builder) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException{
+		verificarDataInicio(builder.dataInicio);
+		Validacoes.verificarDataFim(builder.dataInicio, builder.dataFim);
+		this.dataInicio = builder.dataInicio;
+		this.dataFim = builder.dataFim;
+		this.id = builder.id;
+		this.nome = builder.nome;
+		this.status = StatusEvento.CADASTRADO;
+		this.tipoEvento = builder.tipoEvento;
+		this.espacoFisico = builder.espacoFisico;
+		this.organizador = builder.organizador;
 		organizador.adicionarevento(this);
+		this.eventoUnico = builder.eventoUnico;
+		this.eventoPai = builder.eventoPai;
+
+	}
+	
+	public static class EventoBuilder {
+		private Long id;
+		private Calendar dataInicio;
+		private Calendar dataFim;
+		private Usuario organizador;
+		
+		private String nome;
+		private TipoEvento tipoEvento;
+		private EspacoFisico espacoFisico;
+		private boolean eventoUnico;
+		private Evento eventoPai;
+		
+		public EventoBuilder(Long id, Calendar dataInicio, Calendar dataFim, Usuario organizador) {
+			this.id = id;
+			this.dataInicio = dataInicio;
+			this.dataFim = dataFim;
+			this.organizador = organizador;
+
+		}
+		
+		public EventoBuilder nome(String nome) {
+			this.nome = nome;
+			return this;
+		}
+		
+		public EventoBuilder tipoEvento(TipoEvento tipoEvento) {
+			this.tipoEvento = tipoEvento;
+			return this;
+		}
+		
+		public EventoBuilder espacoFisico(EspacoFisico espacoFisico) {
+			this.espacoFisico = espacoFisico;
+			return this;
+		}
+		
+		public EventoBuilder eventoUnico(boolean eventoUnico) {
+			this.eventoUnico = eventoUnico;
+			return this;
+		}
+		
+		public EventoBuilder eventoPai(Evento eventoPai) {
+			this.eventoPai = eventoPai;
+			return this;
+		}
+		
+		public Evento build() throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
+			return new Evento(this);
+		}
 	}
 
 	public void verificarDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
@@ -103,13 +174,15 @@ public class Evento {
 		}
 	}
 
-	public void adicionarAtividade(Atividade atividade) throws AtividadeException {
+	public void adicionarAtividade(Atividade atividade) throws AtividadeException,
+			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento, AtividadeJaPossuiUmEvento {
 		if (atividades.contains(atividade)) {
 			throw new AtividadeException();
 		}
+		Validacoes.verificarHorariosAtividadesDoEvento(dataInicio, dataFim, atividade.getHorarioInicio(), atividade.getHorarioTermino());
 		atividades.add(atividade);
-	}
-	
+	}	
+
 	public void adicionarInstituicao(Instituicao instituicao) throws InstituicaoException{
 		if (instituicoes.contains(instituicao)) {
 			throw new InstituicaoException();

@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.teste;
+package br.edu.ifpi.evento.teste.modelo;
 
 import static org.junit.Assert.assertEquals;
 
@@ -34,10 +34,10 @@ public class EventoTest {
 	@Before
 	public void init() throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
 		dataInicial = new GregorianCalendar();
-		dataInicial.set(2016, 10, 12, 20, 44, 11);
+		dataInicial.set(2016, 10, 10, 20, 44, 11);
 		dataFinal = Calendar.getInstance();
-		dataFinal.set(2016, 10, 15, 20, 44, 11);
-		predioA = new EspacoFisico("Predio A", 1000, TipoEspacoFisico.PREDIO);
+		dataFinal.set(2016, 10, 20, 20, 44, 11);
+		predioA = new EspacoFisico.EspacoFisicoBuilder((long) 1).descricao("Predio A").build();
 		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
 		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
 

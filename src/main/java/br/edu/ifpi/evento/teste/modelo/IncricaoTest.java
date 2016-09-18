@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.teste;
+package br.edu.ifpi.evento.teste.modelo;
 
 import static org.junit.Assert.assertEquals;
 
@@ -44,20 +44,25 @@ public class IncricaoTest {
 	public void init() throws Exception {
 		dataInicial = new GregorianCalendar();
 		dataFinal = Calendar.getInstance();
-		dataInicial.set(2016, 9, 12, 20, 44);
-		dataFinal.set(2016, 12, 12, 22, 00);
+		dataInicial.set(2016, 12, 10, 20, 44);
+		dataFinal.set(2016, 12, 20, 22, 00);
 		validadePalestra.set(2016, 9, 12, 20, 44);
 
 		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
 		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
 
-		espacoFisico = new EspacoFisico("Instituto Federal", 1000, TipoEspacoFisico.PREDIO);
+		espacoFisico = new EspacoFisico.EspacoFisicoBuilder((long) 1).descricao("Instituto Federal").build();
 		evento = new Evento((long) 1, "teste1", TipoEvento.CONGRESSO, dataInicial, dataFinal, espacoFisico, organizador,
 				false);
 
-		espacoFisico = new EspacoFisico("Predi A", 300, TipoEspacoFisico.PREDIO);
+		Calendar dataInicialAt = new GregorianCalendar();
+		dataInicialAt.set(2016, 12, 11, 20, 44);
+		Calendar dataFinalAt = Calendar.getInstance();
+		dataFinalAt.set(2016, 12, 11, 22, 00);
+		
+		espacoFisico = new EspacoFisico.EspacoFisicoBuilder((long) 2).descricao("PredioA").build();
 		AtividadeCompravel atividade = new AtividadeCompravel(Long.valueOf(1), "java pra web", evento, espacoFisico,
-				dataInicial, dataFinal, 20.00, TipoAtividadeCompravel.PALESTRA);
+				dataInicialAt, dataFinalAt, 20.00, TipoAtividadeCompravel.PALESTRA);
 
 		inscricao = new Inscricao(evento, organizador);
 
@@ -72,13 +77,18 @@ public class IncricaoTest {
 
 	@Test
 	public void nao_deve_aplicar_descontos_de_cupons_nao_ativos() throws Exception {
+		Calendar dataInicial = new GregorianCalendar();
+		dataInicial.set(2016, 12, 13, 8, 00);
+		Calendar dataFinal= Calendar.getInstance();
+		dataFinal.set(2016, 12, 13, 9, 00);
+		
 		AtividadeCompravel atividade = new AtividadeCompravel(Long.valueOf(2), "html", evento, espacoFisico,
 				dataInicial, dataFinal, 40.00, TipoAtividadeCompravel.PALESTRA);
 
 		ItemSimples itemSimples = new ItemSimples((long) 2, "palestra", atividade);
 
 		inscricao.adicionarItem(itemSimples);
-		System.out.println(inscricao.getValorTotal());
+		System.out.println("valor" + inscricao.getValorTotal());
 	}
 
 	@Test
@@ -115,6 +125,11 @@ public class IncricaoTest {
 
 	@Test
 	public void deve_aceitar_incluir_atividades_que_estejam_no_seu_evento() throws Exception {
+		Calendar dataInicial = new GregorianCalendar();
+		dataInicial.set(2016, 12, 13, 8, 00);
+		Calendar dataFinal= Calendar.getInstance();
+		dataFinal.set(2016, 12, 13, 10, 00);
+		
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(2), "algoritmos", evento, espacoFisico,
 				dataInicial, dataFinal, 50.00, TipoAtividadeCompravel.PALESTRA);
 
@@ -135,7 +150,7 @@ public class IncricaoTest {
 
 	@Test(expected = Exception.class)
 	public void nao_deve_aceitar_incluir_atividades_de_outros_eventos() throws Exception {
-		EspacoFisico predioA = new EspacoFisico("Predio A", 1000, TipoEspacoFisico.PREDIO);
+		EspacoFisico predioA = new EspacoFisico.EspacoFisicoBuilder((long) 3).descricao("PredioA").build();;
 
 		Evento evento2 = new Evento(Long.valueOf(2), "evento2", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal,
 				predioA, organizador, false);

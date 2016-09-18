@@ -16,10 +16,13 @@ import javax.persistence.OneToOne;
 import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
+import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.EnderecoEspacoFisicoException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoPaiException;
+import br.edu.ifpi.evento.modelo.Responsavel.ResponsavelBuilder;
 import br.edu.ifpi.evento.util.Converter;
+import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
 public class EspacoFisico {
@@ -53,30 +56,62 @@ public class EspacoFisico {
 
 	}
 
-	public EspacoFisico(Long id) {
-		this.id = id;
+	public EspacoFisico(EspacoFisicoBuilder builder) {
+		this.id = builder.id;
+		this.descricao = builder.descricao;
+		this.capacidade = builder.capacidade;
+		this.tipoEspacoFisico = builder.tipoEspacoFisico;
+		this.endereco = builder.endereco;
+		this.espacoPai = builder.espacoPai;
 	}
 
-	public EspacoFisico(String descricao, int capacidade, TipoEspacoFisico tipoEspacoFisico) {
-		this.descricao = descricao;
-		this.capacidade = capacidade;
-		this.tipoEspacoFisico = tipoEspacoFisico;
+	public static class EspacoFisicoBuilder {
+		private final Long id;
+		private String descricao;
+		private int capacidade;
+		private TipoEspacoFisico tipoEspacoFisico;
+		private Endereco endereco;
+		private EspacoFisico espacoPai;
+
+		public EspacoFisicoBuilder(Long id) {
+			this.id = id;
+		}
+
+		public EspacoFisicoBuilder descricao(String descricao) {
+			this.descricao = descricao;
+			return this;
+		}
+
+		public EspacoFisicoBuilder capacidade(int capacidade) {
+			this.capacidade = capacidade;
+			return this;
+		}
+
+		public EspacoFisicoBuilder tipoEspacoFisico(TipoEspacoFisico tipoEspacoFisico) {
+			this.tipoEspacoFisico = tipoEspacoFisico;
+			return this;
+		}
+
+		public EspacoFisicoBuilder endereco(Endereco endereco) {
+			this.endereco = endereco;
+			return this;
+		}
+
+		public EspacoFisicoBuilder espacoPai(EspacoFisico espacoPai) {
+			this.espacoPai = espacoPai;
+			return this;
+		}
+
+		public EspacoFisico build() {
+			return new EspacoFisico(this);
+		}
 	}
 
-	public void adicionarAtividade(Atividade atividade) throws EspacoFisicoComAtividadesConflitantes{
-		System.out.println("verificada " + atividade.getHoharioInicio().getTimeInMillis() );
-			for (Atividade a : atividades) {
-				System.out.println("atividade innicio " + a.getHoharioInicio().getTimeInMillis() );
-				System.out.println("atividade fim " + a.getHoharioTermino().getTimeInMillis());
-				if (a.getHoharioInicio().getTimeInMillis() <= atividade.getHoharioInicio().getTimeInMillis()
-						&& a.getHoharioTermino().getTimeInMillis() >= atividade.getHoharioInicio().getTimeInMillis()
-						|| a.getHoharioInicio().getTimeInMillis() <= atividade.getHoharioTermino().getTimeInMillis()
-								&& a.getHoharioTermino().getTimeInMillis() >= atividade.getHoharioTermino()
-										.getTimeInMillis()
-						) {
-					throw new EspacoFisicoComAtividadesConflitantes();
-				}
-			}
+	public void adicionarAtividade(Atividade atividade) throws EspacoFisicoComAtividadesConflitantes {
+		for (Atividade a : atividades) {
+			Validacoes.verificarHorariosAtividades(a.getHorarioInicio(), a.getHorarioTermino(), atividade.getHorarioInicio(),
+					atividade.getHorarioTermino());
+		}
 		atividades.add(atividade);
 	}
 
@@ -95,10 +130,10 @@ public class EspacoFisico {
 		System.out.println("Espaço fisico: " + this.descricao);
 		for (Atividade atividade : atividades) {
 			System.out.println("\t" + atividade.getNome() + " - "
-					+ Converter.dateToStrFormatoBrasileiro(atividade.getHoharioInicio().getTime()) + " - "
-					+ Converter.dateToStrFormatoBrasileiro(atividade.getHoharioTermino().getTime()) + "\t"
-					+ Converter.datetimeToStr(atividade.getHoharioInicio().getTime()) + " - "
-					+ Converter.datetimeToStr(atividade.getHoharioTermino().getTime()));
+					+ Converter.dateToStrFormatoBrasileiro(atividade.getHorarioInicio().getTime()) + " - "
+					+ Converter.dateToStrFormatoBrasileiro(atividade.getHorarioTermino().getTime()) + "\t"
+					+ Converter.datetimeToStr(atividade.getHorarioInicio().getTime()) + " - "
+					+ Converter.datetimeToStr(atividade.getHorarioTermino().getTime()));
 
 		}
 	}
@@ -129,7 +164,6 @@ public class EspacoFisico {
 	public List<Atividade> getAtividades() {
 		return atividades;
 	}
-
 
 	public void setEndereco(Endereco endereco) throws EspacoFisicoPaiException, EnderecoEspacoFisicoException {
 		if (!this.equals(espacoPai)) {
