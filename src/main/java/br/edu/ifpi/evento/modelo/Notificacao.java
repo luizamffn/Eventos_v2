@@ -12,20 +12,12 @@ public class Notificacao {
 		System.out.println(msg + " \n enviada p/ " + usuario.getEmail());
 	}
 
-	//mudou
 	public static void notificarMudancaEspacoFisico(Atividade atividade) {
 		if (atividade instanceof AtividadeCompravel) {
 			for (Inscricao inscricao : ((AtividadeCompravel) atividade).getItemSimples().getInscricoes()) {
 				Notificacao.enviarNorificacaoAtividade(inscricao.getUsuario(), Constante.MUDOU_ESPACO_FISICO,
 						atividade.getNome());
 			}
-
-			// for (Inscricao inscricao : ((AtividadeCompravel)
-			// atividade).getInscricoes()) {
-			// Notificacao.enviarNorificacaoAtividade(inscricao.getUsuario(),
-			// Constante.MUDOU_ESPACO_FISICO,
-			// atividade.getNome());
-			// }
 		}
 	}
 

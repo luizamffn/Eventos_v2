@@ -41,8 +41,7 @@ public class EventoTest {
 		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
 		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
 
-		evento = new Evento(Long.valueOf(1), "Evento1", TipoEvento.CONGRESSO, dataInicial, dataFinal, predioA,
-				organizador, false);
+		evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador).build();
 	}
 
 	@Test(expected = Exception.class)
@@ -50,17 +49,15 @@ public class EventoTest {
 		dataInicial.set(2016, 5, 12, 20, 44, 11);
 		dataFinal.set(2016, 8, 12, 22, 00);
 
-		evento = new Evento((long) 1, "teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal, predioA,
-				organizador, false);
+		evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador).build();
 	}
 
 	@Test
 	public void deve_settar_automaticamente_em_inscricao_este_evento() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento((long) 2, "teste", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA, organizador,
-				false);
-		inscricao = new Inscricao(evento);
+		evento = new Evento.EventoBuilder((long) 2, dataInicial, dataFinal, organizador).build();
+		inscricao = new Inscricao.InscricaoBuilder(evento,new Usuario()).build();
 		assertEquals(inscricao.getEvento().equals(evento), true);
 	}
 
@@ -68,8 +65,7 @@ public class EventoTest {
 	public void evento_recem_criado_deve_ter_zero_atividades() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44, 11);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento((long) 3, "teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal, predioA,
-				organizador, false);
+		evento = new Evento.EventoBuilder((long) 3, dataInicial, dataFinal, organizador).build();
 		assertEquals(0, evento.getAtividades().size());
 	}
 
@@ -82,16 +78,14 @@ public class EventoTest {
 	public void deve_aceitar_eventos_com_data_hoje_ou_futura() throws Exception {
 		dataInicial.set(2016, 9, 18, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento((long) 4, "teste", TipoEvento.CONGRESSO, dataInicial, dataFinal, predioA, organizador,
-				false);
+		evento = new Evento.EventoBuilder((long) 4, dataInicial, dataFinal, organizador).build();
 	}
 
 	@Test(expected = Exception.class)
 	public void nao_deve_aceitar_eventos_data_fim_menor_que_data_inicio() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44, 11);
 		dataFinal.set(2016, 4, 12, 22, 00);
-		evento = new Evento((long) 1, "teste", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal, predioA,
-				organizador, false);
+		evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador).build();
 	}
 
 	@Test(expected = Exception.class)

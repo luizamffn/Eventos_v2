@@ -12,6 +12,7 @@ import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
@@ -26,7 +27,7 @@ import br.edu.ifpi.evento.modelo.Usuario;
 public class EventosOrganizadoEInscrito {
 	public static void main(String[] args) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException,
 			AtividadeException, InscricaoPagaException, AtividadeNaoEstaNoEventoException,
-			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento {
+			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento, AtividadeJaPossuiUmEvento {
 		GregorianCalendar dataInicial = new GregorianCalendar();
 		dataInicial.set(2016, 10, 12, 12, 00, 00);
 		Calendar dataFinal = Calendar.getInstance();
@@ -37,11 +38,15 @@ public class EventosOrganizadoEInscrito {
 		Usuario organizador = new Usuario("Jose123", "8766Y", p, TipoUsuario.ORGANIZADOR);
 		Usuario organizador2 = new Usuario("Jose123ee", "8766Y", p, TipoUsuario.ORGANIZADOR);
 
-		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA,
-				organizador, false);
+		Evento evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador)
+				.nome("Evento1")
+				.espacoFisico(predioA)
+				.build();
 
-		Evento evento2 = new Evento(Long.valueOf(1), "Aulao", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA,
-				organizador, false);
+		Evento evento2 = new Evento.EventoBuilder((long) 2, dataInicial, dataFinal, organizador)
+				.nome("Aulão")
+				.espacoFisico(predioA)
+				.build();
 
 		GregorianCalendar dataInicial2 = new GregorianCalendar();
 		dataInicial2.set(2016, 10, 12, 14, 00, 00);
@@ -51,10 +56,10 @@ public class EventosOrganizadoEInscrito {
 		EspacoFisico b3_sala4 = new EspacoFisico.EspacoFisicoBuilder((long) 2).build();
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(1), "python", evento2, b3_sala4, dataInicial2,
 				dataFinal2, 30.00, TipoAtividadeCompravel.PALESTRA);
-		
+
 		ItemSimples itemSimples = new ItemSimples((long) 1, "palestra", palestra);
 
-		Inscricao inscricao = new Inscricao(evento2, organizador);
+		Inscricao inscricao = new Inscricao.InscricaoBuilder(evento2, organizador).build();
 		inscricao.adicionarItem(itemSimples);
 
 		System.out.println("Eventos Organizados: ");

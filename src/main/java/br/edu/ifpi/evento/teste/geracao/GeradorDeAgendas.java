@@ -13,6 +13,7 @@ import br.edu.ifpi.evento.enums.TipoNaoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
@@ -25,7 +26,8 @@ public class GeradorDeAgendas {
 
 	public static void main(String[] args)
  throws DataMenorQueAtualException, DataFimMenorQueDataInicioException,
-			AtividadeException, EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento {
+ AtividadeException,
+			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento, AtividadeJaPossuiUmEvento {
 		GregorianCalendar dataInicial = new GregorianCalendar();
 		dataInicial.set(2016, 10, 12, 12, 00, 00);
 		Calendar dataFinal = Calendar.getInstance();
@@ -35,8 +37,10 @@ public class GeradorDeAgendas {
 		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
 		Usuario organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
 
-		Evento evento = new Evento(Long.valueOf(1), "evento1", TipoEvento.SIMPOSIO, dataInicial, dataFinal, predioA,
-				organizador, false);
+		Evento evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador)
+				.nome("Evento1")
+				.espacoFisico(predioA)
+				.build();
 
 		GregorianCalendar dataInicial2 = new GregorianCalendar();
 		dataInicial2.set(2016, 10, 12, 14, 00, 00);

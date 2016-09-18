@@ -10,6 +10,7 @@ import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EnderecoEspacoFisicoException;
@@ -47,7 +48,7 @@ public class EspacoFisicoTest {
 	@Test(expected = EspacoFisicoComAtividadesConflitantes.class)
 	public void espacoFisicoNaoPodeConterAtividadesComHorariosConflitantes()
 			throws DataFimMenorQueDataInicioException, EspacoFisicoComAtividadesConflitantes, AtividadeException,
-			AtividadeComHorarioForaDoPeriodoDoEvento, DataMenorQueAtualException {
+			AtividadeComHorarioForaDoPeriodoDoEvento, DataMenorQueAtualException, AtividadeJaPossuiUmEvento {
 		
 		Calendar dataInicio = Calendar.getInstance();
 		dataInicio.set(2016, 10, 10, 12, 00, 00);

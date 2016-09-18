@@ -45,17 +45,20 @@ public class AtividadeTest {
 		dataFimE.set(2016, 10, 20, 22, 00, 00);
 
 		organizador = new Usuario();
-		evento = new Evento.EventoBuilder((long) 1, dataInicioE, dataFimE, organizador).espacoFisico(ef1)
+		evento = new Evento.EventoBuilder((long) 1, dataInicioE, dataFimE, organizador)
+				.espacoFisico(ef1)
 				.build();
 
 		atividadeCompravel = new AtividadeCompravel.AtividadeBuilder((long) 1, horarioInicio, horarioFim, evento, ef2)
-				.responsavelPrincipal(responsavel).build();
+				.responsavelPrincipal(responsavel)
+				.build();
 	}
 
 	@Test(expected = AtividadeJaPossuiUmEvento.class)
 	public void atividade_nao_pode_ser_de_mais_de_um_evento()
 			throws DataMenorQueAtualException, DataFimMenorQueDataInicioException, AtividadeJaPossuiUmEvento {
-		 Evento evento = new Evento.EventoBuilder((long) 2, dataInicioE, dataFimE, organizador).build();
+		 Evento evento = new Evento.EventoBuilder((long) 2, dataInicioE, dataFimE, organizador)
+				 .build();
 		 atividadeCompravel.setEvento(evento);
 	}
 	
@@ -70,7 +73,8 @@ public class AtividadeTest {
 		horarioFim.set(2016, 10, 10, 9, 00, 00);
 		
 		atividadeCompravel = new AtividadeCompravel.AtividadeBuilder((long) 2, horarioInicio, horarioFim, evento, ef2)
-				.responsavelPrincipal(responsavel).build();
+				.responsavelPrincipal(responsavel)
+				.build();
 	}
 
 	@Test(expected = ResponsavelPrincipalNaoPodeSerSecudarioException.class)
@@ -83,7 +87,8 @@ public class AtividadeTest {
 	@Test(expected = ResponsavelSecundarioNaoPodeSerRepetido.class)
 	public void Atividade_nao_pode_ter_responsaveis_secundarios_repetidos()
 			throws ResponsavelPrincipalNaoPodeSerSecudarioException, ResponsavelSecundarioNaoPodeSerRepetido {
-		Responsavel responsavel = new Responsavel.ResponsavelBuilder((long) 2).build();
+		Responsavel responsavel = new Responsavel.ResponsavelBuilder((long) 2)
+				.build();
 
 		atividadeCompravel.adicionarResponsaveisSecudarios(responsavel);
 		atividadeCompravel.adicionarResponsaveisSecudarios(responsavel);

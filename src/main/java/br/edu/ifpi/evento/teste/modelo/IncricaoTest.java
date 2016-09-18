@@ -21,7 +21,10 @@ import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.enums.TipoUsuario;
+import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.CupomException;
+import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
@@ -52,8 +55,9 @@ public class IncricaoTest {
 		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
 
 		espacoFisico = new EspacoFisico.EspacoFisicoBuilder((long) 1).descricao("Instituto Federal").build();
-		evento = new Evento((long) 1, "teste1", TipoEvento.CONGRESSO, dataInicial, dataFinal, espacoFisico, organizador,
-				false);
+		evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador)
+				.espacoFisico(espacoFisico)
+				.build();;
 
 		Calendar dataInicialAt = new GregorianCalendar();
 		dataInicialAt.set(2016, 12, 11, 20, 44);
@@ -64,7 +68,7 @@ public class IncricaoTest {
 		AtividadeCompravel atividade = new AtividadeCompravel(Long.valueOf(1), "java pra web", evento, espacoFisico,
 				dataInicialAt, dataFinalAt, 20.00, TipoAtividadeCompravel.PALESTRA);
 
-		inscricao = new Inscricao(evento, organizador);
+		inscricao = new Inscricao.InscricaoBuilder(evento, organizador).build();
 
 		itemSimples = new ItemSimples((long) 1, "palestra", atividade);
 		inscricao.adicionarItem(itemSimples);
@@ -110,8 +114,8 @@ public class IncricaoTest {
 	}
 
 	@Test
-	public void inscricao_recem_criada_deve_ter_zero_atividades() {
-		Inscricao inscricao2 = new Inscricao(evento);
+	public void inscricao_recem_criada_deve_ter_zero_atividades() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+		Inscricao inscricao2 = new Inscricao.InscricaoBuilder(evento, new Usuario()).build();
 		int tamanho = inscricao2.getItens().size();
 		assertEquals(0, tamanho);
 
@@ -138,8 +142,8 @@ public class IncricaoTest {
 	}
 
 	@Test
-	public void inscricao_sem_itens_deve_ter_valor_zero() {
-		Inscricao inscricao3 = new Inscricao(evento);
+	public void inscricao_sem_itens_deve_ter_valor_zero() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+		Inscricao inscricao3 = new Inscricao.InscricaoBuilder(evento, new Usuario()).build();
 		assertEquals(0.0, inscricao3.getValorTotal(), 0.0);
 	}
 
@@ -152,8 +156,9 @@ public class IncricaoTest {
 	public void nao_deve_aceitar_incluir_atividades_de_outros_eventos() throws Exception {
 		EspacoFisico predioA = new EspacoFisico.EspacoFisicoBuilder((long) 3).descricao("PredioA").build();;
 
-		Evento evento2 = new Evento(Long.valueOf(2), "evento2", TipoEvento.SEMANA_CIENTIFICA, dataInicial, dataFinal,
-				predioA, organizador, false);
+		Evento evento2 = new Evento.EventoBuilder((long) 2, dataInicial, dataFinal, organizador)
+				.espacoFisico(predioA)
+				.build();
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(2), "algoritmos", evento2, espacoFisico,
 				dataInicial, dataFinal, 50.00, TipoAtividadeCompravel.PALESTRA);
 
@@ -170,15 +175,17 @@ public class IncricaoTest {
 	}
 
 	public void adcionar_todas_as_atividades_em_incricao_se_o_evento_for_unico() throws Exception {
-		Evento evento = new Evento((long) 7, "Programacao", TipoEvento.SIMPOSIO, dataInicial, dataFinal, espacoFisico,
-				organizador, true);
+		Evento evento = new Evento.EventoBuilder((long) 7, dataInicial, dataFinal, organizador)
+				.espacoFisico(espacoFisico)
+				.build();
+		
 		AtividadeCompravel palestra = new AtividadeCompravel((long) 1, "palesta", evento, espacoFisico, dataInicial,
 				dataFinal, 40.00, TipoAtividadeCompravel.PALESTRA);
 		AtividadeCompravel minicurso = new AtividadeCompravel((long) 2, "minicurso", evento, espacoFisico, dataInicial,
 				dataFinal, 50.00, TipoAtividadeCompravel.MINICURSO);
 
 		List<AtividadeCompravel> compravel = new ArrayList<AtividadeCompravel>();
-		Inscricao inscricao = new Inscricao(evento, organizador);
+		Inscricao inscricao = new Inscricao.InscricaoBuilder(evento, organizador).build();
 		for (Atividade atividade : evento.getAtividades()) {
 			if (atividade instanceof AtividadeCompravel) {
 				compravel.add((AtividadeCompravel) atividade);

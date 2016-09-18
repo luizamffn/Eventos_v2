@@ -20,10 +20,12 @@ import br.edu.ifpi.evento.Atividade.ItemComposto;
 import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.cupom.Cupom;
+import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
 
 @Entity
 public class Inscricao {
@@ -52,18 +54,35 @@ public class Inscricao {
 	public Inscricao() {
 	}
 	
-	public Inscricao(Evento evento) {
-		this.evento = evento;
-		this.evento.adicionarIncricao(this);
-	}
-	
-	public Inscricao(Evento evento, Usuario usuario) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException{
-		this.evento = evento;
-		this.usuario = usuario;
+	public Inscricao(InscricaoBuilder builder) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+		this.id= builder.id;
+		this.evento = builder.evento;
+		this.usuario = builder.usuario;
 		this.evento.adicionarIncricao(this);
 		usuario.adicionarInscricao(this);
 		SeOEventoDaInscricaoForUnico();
 		Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_CONCLUIDA);
+		
+	}
+
+	public static class InscricaoBuilder {
+		private Long id;
+		private Evento evento;
+		private Usuario usuario;
+
+		public InscricaoBuilder(Evento evento,Usuario usuario) {
+			this.evento = evento;
+			this.usuario = usuario;
+		}
+
+		public InscricaoBuilder addId(Long id) {
+			this.id = id;
+			return this;
+		}
+
+		public Inscricao build() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+			return new Inscricao(this);
+		}
 	}
 	
 	public void SeOEventoDaInscricaoForUnico() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
@@ -113,7 +132,6 @@ public class Inscricao {
 		adicionarItemNaoRepetido(item);
 	}
 
-	//mudou
 	private void adicionarItemNaoRepetido(Item item) throws AtividadeException {
 		if (itens.contains(item)) {
 			throw new AtividadeException();
@@ -133,12 +151,6 @@ public class Inscricao {
 		
 		return AplicarDescontoNaInscricao();
 		
-//		for (Atividade atividade : iatividades) {
-//			if(atividade instanceof AtividadeCompravel){
-//				valorTotal += ((AtividadeCompravel) atividade).getValor();
-//			}
-//		}
-//		return AplicarDescontoNaInscricao();
 	}
 
 	private double AplicarDescontoNaInscricao() {
@@ -157,10 +169,6 @@ public class Inscricao {
 	public boolean isPaga() {
 		return paga;
 	}
-
-//	public List<Atividade> getAtividades() {
-//		return Collections.unmodifiableList(atividades);
-//	}
 
 	public Evento getEvento() {
 		return evento;

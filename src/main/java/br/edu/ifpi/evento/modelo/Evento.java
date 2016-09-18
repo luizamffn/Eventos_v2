@@ -83,21 +83,6 @@ public class Evento {
 	
 	public Evento() {
 	}
-
-	public Evento(Long id, String nome, TipoEvento tipoEvento, Calendar dataInicio, Calendar dataFim,
-			EspacoFisico espacoFisico, Usuario usuario,boolean eventoUnico) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
-		verificarDataInicio(dataInicio);
-		Validacoes.verificarDataFim(dataInicio, dataFim);
-		this.id = id;
-		this.nome = nome;
-		this.status = StatusEvento.CADASTRADO;
-		this.tipoEvento = tipoEvento;
-		this.dataInicio = dataInicio;
-		this.dataFim = dataFim;
-		this.espacoFisico = espacoFisico;
-		this.organizador = usuario;
-		this.eventoUnico = eventoUnico;
-	}
 	
 	public Evento(EventoBuilder builder) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException{
 		verificarDataInicio(builder.dataInicio);

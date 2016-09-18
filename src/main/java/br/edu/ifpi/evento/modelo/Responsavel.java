@@ -30,10 +30,7 @@ public class Responsavel{
 	}
 	
 	public static class ResponsavelBuilder {
-		//Parametros Obrigatórios
 		private final Long id;
-
-		//Parametros Opcionais
 		private Pessoa pessoa;
 		private Curriculo curriculo;
 		
