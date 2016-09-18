@@ -22,14 +22,14 @@ public abstract class Item {
 	
 	@Id
 	@GeneratedValue
-	private Long id;
-	private String descricao;
+	protected Long id;
+	protected String descricao;
 	
 	@Column(insertable = false, updatable = false)
-	private String tipo;
+	protected String tipo;
 	
 	@ManyToMany(mappedBy="itens")
-	private List<Inscricao> inscricoes = new ArrayList<Inscricao>();
+	protected List<Inscricao> inscricoes = new ArrayList<Inscricao>();
 	
 	public Item() {
 		

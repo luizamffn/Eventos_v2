@@ -54,8 +54,10 @@ public class ListagemDeInscritos {
 		EspacoFisico b3_sala4 = new EspacoFisico.EspacoFisicoBuilder((long) 1).descricao("B3-04").build();
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(1), "python", evento, b3_sala4, dataInicial2, dataFinal2, 30.00,TipoAtividadeCompravel.PALESTRA);
 
-		ItemSimples itemSimples = new ItemSimples((long) 1, "palestra", palestra);
-		
+		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 1)
+				.atividadeCompravel(palestra)
+				.build();
+
 		Inscricao inscricao = new Inscricao.InscricaoBuilder(evento, usuario).build();
 		inscricao.adicionarItem(itemSimples);
 

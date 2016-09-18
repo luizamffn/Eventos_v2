@@ -127,4 +127,8 @@ public class AtividadeCompravel extends Atividade {
 	public Item getItemSimples() {
 		return itemSimples;
 	}
+
+	public void setValor(Double valor) {
+		this.valor = valor;
+	}
 }

@@ -70,7 +70,9 @@ public class IncricaoTest {
 
 		inscricao = new Inscricao.InscricaoBuilder(evento, organizador).build();
 
-		itemSimples = new ItemSimples((long) 1, "palestra", atividade);
+		itemSimples = new ItemSimples.ItemSimplesBuilder((long) 1)
+				.atividadeCompravel(atividade)
+				.build();
 		inscricao.adicionarItem(itemSimples);
 
 		Palestras_50 palestras_50 = new Palestras_50("p50", validadePalestra);
@@ -89,7 +91,9 @@ public class IncricaoTest {
 		AtividadeCompravel atividade = new AtividadeCompravel(Long.valueOf(2), "html", evento, espacoFisico,
 				dataInicial, dataFinal, 40.00, TipoAtividadeCompravel.PALESTRA);
 
-		ItemSimples itemSimples = new ItemSimples((long) 2, "palestra", atividade);
+		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 2)
+				.atividadeCompravel(atividade)
+				.build();
 
 		inscricao.adicionarItem(itemSimples);
 		System.out.println("valor" + inscricao.getValorTotal());
@@ -137,7 +141,9 @@ public class IncricaoTest {
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(2), "algoritmos", evento, espacoFisico,
 				dataInicial, dataFinal, 50.00, TipoAtividadeCompravel.PALESTRA);
 
-		ItemSimples itemSimples = new ItemSimples((long) 2, "palestra", palestra);
+		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 2)
+				.atividadeCompravel(palestra)
+				.build();
 		inscricao.adicionarItem(itemSimples);
 	}
 
@@ -162,7 +168,9 @@ public class IncricaoTest {
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(2), "algoritmos", evento2, espacoFisico,
 				dataInicial, dataFinal, 50.00, TipoAtividadeCompravel.PALESTRA);
 
-		ItemSimples itemSimples = new ItemSimples((long) 2, "palestra", palestra);
+		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 2)
+				.atividadeCompravel(palestra)
+				.build();;
 		inscricao.adicionarItem(itemSimples);
 	}
 

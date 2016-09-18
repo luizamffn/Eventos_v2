@@ -57,7 +57,9 @@ public class EventosOrganizadoEInscrito {
 		AtividadeCompravel palestra = new AtividadeCompravel(Long.valueOf(1), "python", evento2, b3_sala4, dataInicial2,
 				dataFinal2, 30.00, TipoAtividadeCompravel.PALESTRA);
 
-		ItemSimples itemSimples = new ItemSimples((long) 1, "palestra", palestra);
+		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 1)
+				.atividadeCompravel(palestra)
+				.build();
 
 		Inscricao inscricao = new Inscricao.InscricaoBuilder(evento2, organizador).build();
 		inscricao.adicionarItem(itemSimples);
