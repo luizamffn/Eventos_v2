@@ -15,6 +15,7 @@ import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
+import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
@@ -24,7 +25,7 @@ import br.edu.ifpi.evento.modelo.Usuario;
 
 public class ListagemDeInscritos {
 	public static void main(String[] args) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException,
-			InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+			InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException, EspacoFisicoComAtividadesConflitantes {
 		Pessoa pessoa = new Pessoa("Maria", 176, Sexo.F);
 		Usuario usuario = new Usuario("Maria_F", "122345", pessoa, TipoUsuario.PARTICIPANTE);
 

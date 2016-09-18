@@ -211,4 +211,8 @@ public class Evento {
 		return eventoUnico;
 	}
 
+	public void setEspacoFisico(EspacoFisico espacoFisico) {
+		this.espacoFisico = espacoFisico;
+	}
+
 }

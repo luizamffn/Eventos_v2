@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
+import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Notificacao;
@@ -54,18 +55,32 @@ public abstract class Atividade {
 	}
 
 	public Atividade(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
-			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException {
+			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException, EspacoFisicoComAtividadesConflitantes {
 		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
+		this.hoharioInicio = hoharioInicio;
+		this.hoharioTermino = hoharioTermino;
 		this.id = id;
 		this.nome = nome;
 		this.evento = evento;
 		evento.adicionarAtividade(this);
 		adicionarEspacoFisico(espacoFisico);
-		this.hoharioInicio = hoharioInicio;
-		this.hoharioTermino = hoharioTermino;
+		
 	}
 
-	private void adicionarEspacoFisico(EspacoFisico espacoFisico) {
+	
+	public Atividade(Long id, EspacoFisico espacoFisico, Calendar hoharioInicio, Calendar hoharioTermino)
+			throws DataFimMenorQueDataInicioException, EspacoFisicoComAtividadesConflitantes {
+		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
+		this.hoharioInicio = hoharioInicio;
+		this.hoharioTermino = hoharioTermino;
+		this.id = id;
+		this.espacoFisico = espacoFisico;
+		adicionarEspacoFisico(espacoFisico);
+		
+		
+	}
+
+	private void adicionarEspacoFisico(EspacoFisico espacoFisico) throws EspacoFisicoComAtividadesConflitantes {
 		this.espacoFisico = espacoFisico;
 		espacoFisico.adicionarAtividade(this);
 		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
@@ -111,6 +126,13 @@ public abstract class Atividade {
 	public void setEspacoFisico(EspacoFisico espacoFisico) {
 		this.espacoFisico = espacoFisico;
 		Notificacao.notificarMudancaEspacoFisico(this);
+	}
+
+	@Override
+	public String toString() {
+		return "Atividade [id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", evento=" + evento + ", espacoFisico="
+				+ espacoFisico + ", hoharioInicio=" + hoharioInicio + ", hoharioTermino=" + hoharioTermino
+				+ ", responsavelPrincipal=" + responsavelPrincipal + ", responsaveis=" + responsaveis + "]";
 	}
 
 }

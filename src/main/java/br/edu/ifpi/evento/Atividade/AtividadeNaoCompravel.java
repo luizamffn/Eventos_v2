@@ -11,6 +11,7 @@ import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoNaoAtividadeCompravel;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
+import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 
@@ -25,7 +26,8 @@ public class AtividadeNaoCompravel extends Atividade {
 	}
 	
 	public AtividadeNaoCompravel(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
-			Calendar hoharioTermino, TipoNaoAtividadeCompravel tipo) throws DataFimMenorQueDataInicioException, AtividadeException {
+			Calendar hoharioTermino, TipoNaoAtividadeCompravel tipo) throws DataFimMenorQueDataInicioException,
+					AtividadeException, EspacoFisicoComAtividadesConflitantes {
 		super(id, nome, evento, espacoFisico, hoharioInicio, hoharioTermino);
 		this.tipoNaoCompravel = tipo;
 	}

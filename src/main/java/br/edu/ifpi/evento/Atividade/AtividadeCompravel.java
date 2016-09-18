@@ -13,10 +13,12 @@ import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
+import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Notificacao;
+import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
 @DiscriminatorValue(value = "At_compravel")
@@ -36,10 +38,15 @@ public class AtividadeCompravel extends Atividade {
 
 	public AtividadeCompravel(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
 			Calendar hoharioTermino, Double valor, TipoAtividadeCompravel tipo)
-					throws DataFimMenorQueDataInicioException, AtividadeException {
+					throws DataFimMenorQueDataInicioException, AtividadeException, EspacoFisicoComAtividadesConflitantes {
 		super(id, nome, evento, espacoFisico, hoharioInicio, hoharioTermino);
 		this.valor = valor;
 		this.tipoCompravel = tipo;
+	}
+	
+	public AtividadeCompravel(Long id, EspacoFisico espacoFisico, Calendar hoharioInicio, Calendar hoharioTermino)
+			throws DataFimMenorQueDataInicioException, EspacoFisicoComAtividadesConflitantes {
+		super(id, espacoFisico, hoharioInicio, hoharioTermino);
 	}
 
 	public void adicionarItem(ItemSimples itemSimples) {

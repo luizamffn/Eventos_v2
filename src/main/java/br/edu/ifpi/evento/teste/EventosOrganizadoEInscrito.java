@@ -14,6 +14,7 @@ import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
+import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.modelo.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Evento;
@@ -23,7 +24,7 @@ import br.edu.ifpi.evento.modelo.Usuario;
 
 public class EventosOrganizadoEInscrito {
 	public static void main(String[] args) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException,
-			AtividadeException, InscricaoPagaException, AtividadeNaoEstaNoEventoException {
+			AtividadeException, InscricaoPagaException, AtividadeNaoEstaNoEventoException, EspacoFisicoComAtividadesConflitantes {
 		GregorianCalendar dataInicial = new GregorianCalendar();
 		dataInicial.set(2016, 10, 12, 12, 00, 00);
 		Calendar dataFinal = Calendar.getInstance();
