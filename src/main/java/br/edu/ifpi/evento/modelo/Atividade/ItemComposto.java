@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.Atividade;
+package br.edu.ifpi.evento.modelo.Atividade;
 
 import java.util.ArrayList;
 import java.util.List;

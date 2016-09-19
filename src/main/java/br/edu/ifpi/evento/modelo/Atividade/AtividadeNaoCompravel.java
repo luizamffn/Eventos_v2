@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.Atividade;
+package br.edu.ifpi.evento.modelo.Atividade;
 
 import java.util.Calendar;
 
@@ -14,8 +14,8 @@ import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
-import br.edu.ifpi.evento.modelo.EspacoFisico;
-import br.edu.ifpi.evento.modelo.Evento;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
+import br.edu.ifpi.evento.modelo.evento.Evento;
 
 @Entity
 @DiscriminatorValue(value = "At_nao_compravel")
@@ -25,14 +25,6 @@ public class AtividadeNaoCompravel extends Atividade {
 	private TipoNaoAtividadeCompravel tipoNaoCompravel;
 
 	public AtividadeNaoCompravel() {
-	}
-
-	public AtividadeNaoCompravel(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
-			Calendar hoharioTermino, TipoNaoAtividadeCompravel tipo) throws DataFimMenorQueDataInicioException,
-					AtividadeException, EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento,
-					AtividadeJaPossuiUmEvento {
-		super(id, nome, evento, espacoFisico, hoharioInicio, hoharioTermino);
-		this.tipoNaoCompravel = tipo;
 	}
 
 	public TipoNaoAtividadeCompravel getTipoNaoCompravel() {

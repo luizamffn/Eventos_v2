@@ -1,10 +1,11 @@
 package br.edu.ifpi.evento.modelo;
 
-import br.edu.ifpi.evento.Atividade.Atividade;
-import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.Atividade.Item;
-import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.constantes.Constante;
+import br.edu.ifpi.evento.modelo.Atividade.Atividade;
+import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.modelo.Atividade.Item;
+import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
+import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 
 public class Notificacao {
 
@@ -14,9 +15,11 @@ public class Notificacao {
 
 	public static void notificarMudancaEspacoFisico(Atividade atividade) {
 		if (atividade instanceof AtividadeCompravel) {
-			for (Inscricao inscricao : ((AtividadeCompravel) atividade).getItemSimples().getInscricoes()) {
-				Notificacao.enviarNorificacaoAtividade(inscricao.getUsuario(), Constante.MUDOU_ESPACO_FISICO,
-						atividade.getNome());
+			if (((AtividadeCompravel) atividade).getItemSimples() != null) {
+				for (Inscricao inscricao : ((AtividadeCompravel) atividade).getItemSimples().getInscricoes()) {
+					Notificacao.enviarNorificacaoAtividade(inscricao.getUsuario(), Constante.MUDOU_ESPACO_FISICO,
+							atividade.getNome());
+				}
 			}
 		}
 	}

@@ -1,14 +1,9 @@
-package br.edu.ifpi.evento.Atividade;
+package br.edu.ifpi.evento.modelo.Atividade;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
-import br.edu.ifpi.evento.enums.TipoEspacoFisico;
-import br.edu.ifpi.evento.modelo.Endereco;
-import br.edu.ifpi.evento.modelo.EspacoFisico;
-import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
 
 @Entity
 @DiscriminatorValue(value = "Item_simples")

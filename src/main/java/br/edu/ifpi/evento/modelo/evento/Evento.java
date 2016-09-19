@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.modelo;
+package br.edu.ifpi.evento.modelo.evento;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,10 +17,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import br.edu.ifpi.evento.Atividade.Atividade;
 import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.enums.StatusEvento;
-import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
@@ -31,7 +29,11 @@ import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
-import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
+import br.edu.ifpi.evento.modelo.Instituicao;
+import br.edu.ifpi.evento.modelo.Usuario;
+import br.edu.ifpi.evento.modelo.Atividade.Atividade;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
+import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
@@ -81,76 +83,6 @@ public class Evento {
 	
 	private boolean eventoUnico;
 	
-	public Evento() {
-	}
-	
-	public Evento(EventoBuilder builder) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException{
-		verificarDataInicio(builder.dataInicio);
-		Validacoes.verificarDataFim(builder.dataInicio, builder.dataFim);
-		this.dataInicio = builder.dataInicio;
-		this.dataFim = builder.dataFim;
-		this.id = builder.id;
-		this.nome = builder.nome;
-		this.status = StatusEvento.CADASTRADO;
-		this.tipoEvento = builder.tipoEvento;
-		this.espacoFisico = builder.espacoFisico;
-		this.organizador = builder.organizador;
-		organizador.adicionarevento(this);
-		this.eventoUnico = builder.eventoUnico;
-		this.eventoPai = builder.eventoPai;
-
-	}
-	
-	public static class EventoBuilder {
-		private Long id;
-		private Calendar dataInicio;
-		private Calendar dataFim;
-		private Usuario organizador;
-		
-		private String nome;
-		private TipoEvento tipoEvento;
-		private EspacoFisico espacoFisico;
-		private boolean eventoUnico;
-		private Evento eventoPai;
-		
-		public EventoBuilder(Long id, Calendar dataInicio, Calendar dataFim, Usuario organizador) {
-			this.id = id;
-			this.dataInicio = dataInicio;
-			this.dataFim = dataFim;
-			this.organizador = organizador;
-
-		}
-		
-		public EventoBuilder nome(String nome) {
-			this.nome = nome;
-			return this;
-		}
-		
-		public EventoBuilder tipoEvento(TipoEvento tipoEvento) {
-			this.tipoEvento = tipoEvento;
-			return this;
-		}
-		
-		public EventoBuilder espacoFisico(EspacoFisico espacoFisico) {
-			this.espacoFisico = espacoFisico;
-			return this;
-		}
-		
-		public EventoBuilder eventoUnico(boolean eventoUnico) {
-			this.eventoUnico = eventoUnico;
-			return this;
-		}
-		
-		public EventoBuilder eventoPai(Evento eventoPai) {
-			this.eventoPai = eventoPai;
-			return this;
-		}
-		
-		public Evento build() throws DataMenorQueAtualException, DataFimMenorQueDataInicioException {
-			return new Evento(this);
-		}
-	}
-
 	public void verificarDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
 		Calendar now = new GregorianCalendar();
 
@@ -271,6 +203,69 @@ public class Evento {
 
 	public void setEspacoFisico(EspacoFisico espacoFisico) {
 		this.espacoFisico = espacoFisico;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setTipoEvento(TipoEvento tipoEvento) {
+		this.tipoEvento = tipoEvento;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setAtividades(List<Atividade> atividades) {
+		this.atividades = atividades;
+	}
+
+	public void setInscricoes(List<Inscricao> inscricoes) {
+		this.inscricoes = inscricoes;
+	}
+
+	public void setCupons(List<Cupom> cupons) {
+		Cupons = cupons;
+	}
+
+	public void setInstituicoes(List<Instituicao> instituicoes) {
+		this.instituicoes = instituicoes;
+	}
+
+	public void setEventoPai(Evento eventoPai) {
+		this.eventoPai = eventoPai;
+	}
+
+	public void setEventosSatelites(List<Evento> eventosSatelites) {
+		this.eventosSatelites = eventosSatelites;
+	}
+
+	public void setDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
+		verificarDataInicio(dataInicio);
+		this.dataInicio = dataInicio;
+	}
+
+	public void setDataFim(Calendar dataFim) throws DataFimMenorQueDataInicioException {
+		Validacoes.verificarDataFim(this.dataInicio, dataFim);
+		this.dataFim = dataFim;
+	}
+
+	public void setStatus(StatusEvento status) {
+		this.status = status;
+	}
+
+	public void setOrganizador(Usuario organizador) {
+		this.organizador = organizador;
+		if (organizador != null) organizador.adicionarevento(this);
+	}
+
+	public void setEquipe(List<Usuario> equipe) {
+		this.equipe = equipe;
+	}
+
+	public void setEventoUnico(boolean eventoUnico) {
+		this.eventoUnico = eventoUnico;
 	}
 
 }

@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.exceptions.EnderecoEspacoFisicoException;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 
 @Entity
 public class Endereco {
@@ -31,6 +32,17 @@ public class Endereco {
 	public Endereco(Long id) {
 		this.id = id;
 	}
+	
+	public EspacoFisico getEspacoFisico() {
+		return espacoFisico;
+	}
+
+	public void setEspacoFisico(EspacoFisico espacoFisico) throws EnderecoEspacoFisicoException {
+		if(this.espacoFisico != null){
+			throw new EnderecoEspacoFisicoException();
+		}
+		this.espacoFisico = espacoFisico;
+	}
 		
 	@Override
 	public int hashCode() {
@@ -54,18 +66,6 @@ public class Endereco {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public EspacoFisico getEspacoFisico() {
-		return espacoFisico;
-	}
-
-	public void setEspacoFisico(EspacoFisico espacoFisico) throws EnderecoEspacoFisicoException {
-		if(this.espacoFisico != null){
-			throw new EnderecoEspacoFisicoException();
-		}
-		this.espacoFisico = espacoFisico;
-	}
-	
+	}	
 	
 }

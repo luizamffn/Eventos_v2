@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.Atividade;
+package br.edu.ifpi.evento.modelo.Atividade;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +13,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
-import br.edu.ifpi.evento.modelo.Inscricao;
+import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

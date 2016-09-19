@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.Atividade;
+package br.edu.ifpi.evento.modelo.Atividade;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,10 +25,10 @@ import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.ResponsavelPrincipalNaoPodeSerSecudarioException;
 import br.edu.ifpi.evento.exceptions.ResponsavelSecundarioNaoPodeSerRepetido;
-import br.edu.ifpi.evento.modelo.EspacoFisico;
-import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Notificacao;
-import br.edu.ifpi.evento.modelo.Responsavel;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
+import br.edu.ifpi.evento.modelo.Responsavel.Responsavel;
+import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
@@ -60,28 +60,22 @@ public abstract class Atividade {
 	@JoinTable(name = "atividade_responsavel", joinColumns = @JoinColumn(name = "atividade_id") , inverseJoinColumns = @JoinColumn(name = "_id") )
 	protected List<Responsavel> responsaveisSecudarios = new ArrayList<Responsavel>();
 
-	public Atividade() {
-	}
+//	public Atividade() {
+//	}
 
-	public Atividade(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
-			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException,
-					EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento,
-					AtividadeJaPossuiUmEvento {
-		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
-		this.horarioInicio = hoharioInicio;
-		this.horarioTermino = hoharioTermino;
-		this.id = id;
-		this.nome = nome;
-		this.evento = evento;
-		evento.adicionarAtividade(this);
-		adicionarEspacoFisico(espacoFisico);
-	}
-
-	protected void adicionarEspacoFisico(EspacoFisico espacoFisico) throws EspacoFisicoComAtividadesConflitantes {
-		espacoFisico.adicionarAtividade(this);
-		this.espacoFisico = espacoFisico;
-		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
-	}
+//	public Atividade(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
+//			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException,
+//					EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento,
+//					AtividadeJaPossuiUmEvento {
+//		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
+//		this.horarioInicio = hoharioInicio;
+//		this.horarioTermino = hoharioTermino;
+//		this.id = id;
+//		this.nome = nome;
+//		this.evento = evento;
+//		evento.adicionarAtividade(this);
+//		adicionarEspacoFisico(espacoFisico);
+//	}
 
 	public void adicionarResponsaveisSecudarios(Responsavel responsavel)
 			throws ResponsavelPrincipalNaoPodeSerSecudarioException, ResponsavelSecundarioNaoPodeSerRepetido {
@@ -115,9 +109,13 @@ public abstract class Atividade {
 		return horarioTermino;
 	}
 
-	public void setEspacoFisico(EspacoFisico espacoFisico) {
+	public void setEspacoFisico(EspacoFisico espacoFisico) throws EspacoFisicoComAtividadesConflitantes {
 		this.espacoFisico = espacoFisico;
-		Notificacao.notificarMudancaEspacoFisico(this);
+		if (espacoFisico != null) {
+			this.espacoFisico.adicionarAtividade(this);
+			evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
+			Notificacao.notificarMudancaEspacoFisico(this);
+		}
 	}
 
 	@Override
@@ -156,12 +154,43 @@ public abstract class Atividade {
 		return evento;
 	}
 
-	public void setEvento(Evento evento) throws AtividadeJaPossuiUmEvento {
+	public void setEvento(Evento evento) throws AtividadeJaPossuiUmEvento, AtividadeException,
+			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento {
 		if (this.getEvento() != null) {
 			throw new AtividadeJaPossuiUmEvento();
 		}
 
 		this.evento = evento;
+		this.evento.adicionarAtividade(this);
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public void setHorarioInicio(Calendar horarioInicio) {
+		this.horarioInicio = horarioInicio;
+	}
+
+	public void setHorarioTermino(Calendar horarioTermino) throws DataFimMenorQueDataInicioException {
+		Validacoes.verificarDataFim(this.horarioInicio, horarioTermino);
+		this.horarioTermino = horarioTermino;
+	}
+
+	public void setResponsavelPrincipal(Responsavel responsavelPrincipal) {
+		this.responsavelPrincipal = responsavelPrincipal;
+	}
+
+	public void setResponsaveisSecudarios(List<Responsavel> responsaveisSecudarios) {
+		this.responsaveisSecudarios = responsaveisSecudarios;
 	}
 
 }
