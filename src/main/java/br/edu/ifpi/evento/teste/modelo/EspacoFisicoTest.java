@@ -5,8 +5,6 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.edu.ifpi.evento.Atividade.Atividade;
-import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
@@ -17,17 +15,26 @@ import br.edu.ifpi.evento.exceptions.EnderecoEspacoFisicoException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoPaiException;
 import br.edu.ifpi.evento.modelo.Endereco;
-import br.edu.ifpi.evento.modelo.EspacoFisico;
-import br.edu.ifpi.evento.modelo.Evento;
 import br.edu.ifpi.evento.modelo.Usuario;
+import br.edu.ifpi.evento.modelo.Atividade.Atividade;
+import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravelBuilder;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
+import br.edu.ifpi.evento.modelo.evento.Evento;
+import br.edu.ifpi.evento.modelo.evento.EventoBuilder;
 
 public class EspacoFisicoTest {
 	private EspacoFisico ef1, ef2;
 	
 	@Before
 	public void init() {
-		ef1 = new EspacoFisico.EspacoFisicoBuilder((long) 1).build();
-		ef2 = new EspacoFisico.EspacoFisicoBuilder((long) 2).build();		
+		ef1 = EspacoFisicoBuilder.builder()
+				.id((long)1)
+				.getEspacoFisico();
+		ef2 = EspacoFisicoBuilder.builder()
+				.id((long)2)
+				.getEspacoFisico();		
 	}
 
 	@Test(expected = EnderecoEspacoFisicoException.class)
@@ -55,9 +62,21 @@ public class EspacoFisicoTest {
 		Calendar dataFim = Calendar.getInstance();
 		dataFim.set(2016, 10, 20, 22, 00, 00);
 		Usuario organizador = new Usuario(); 
-		Evento evento = new Evento.EventoBuilder((long) 1, dataInicio, dataFim, organizador).build();
-		evento.setEspacoFisico(new EspacoFisico.EspacoFisicoBuilder((long) 1).build());
-		EspacoFisico espacoFisico = new EspacoFisico.EspacoFisicoBuilder((long) 2).build();
+		Evento evento = EventoBuilder.builder()
+				.id((long) 1)
+				.dataInicio(dataInicio)
+				.dataFim(dataFim)
+				.organizador(organizador)
+				.espacoFisico(ef1)
+				.getEvento(); 
+		
+		evento.setEspacoFisico(EspacoFisicoBuilder.builder()
+				.id((long)1)
+				.getEspacoFisico());
+		
+		EspacoFisico espacoFisico = EspacoFisicoBuilder.builder()
+				.id((long)2)
+				.getEspacoFisico();
 		
 		Calendar dataInicialAt1 = Calendar.getInstance();
 		dataInicialAt1.set(2016, 10, 12, 20, 00,00);
@@ -69,9 +88,21 @@ public class EspacoFisicoTest {
 		Calendar dataFinalAt2 = Calendar.getInstance();
 		dataFinalAt2.set(2016, 10, 12, 20, 00,00);
 
-		Atividade atividade1 = new  AtividadeCompravel((long)1, "at1", evento, espacoFisico, dataInicialAt1, dataFinalAt1, 20.00, TipoAtividadeCompravel.MINICURSO);
-		Atividade atividade2 = new  AtividadeCompravel((long)2, "at1", evento, espacoFisico, dataInicialAt2, dataFinalAt2, 20.00, TipoAtividadeCompravel.MINICURSO);
-
+		Atividade atividade1 = AtividadeCompravelBuilder.builder()
+				.id(Long.valueOf(1))
+				.horarioInicio(dataInicialAt1)
+				.horarioFim(dataFinalAt1)
+				.evento(evento)
+				.espacoFisico(ef2)
+				.getAtidadeCompravel();
+				
+		Atividade atividade2 = AtividadeCompravelBuilder.builder()
+				.id(Long.valueOf(2))
+				.horarioInicio(dataInicialAt2)
+				.horarioFim(dataFinalAt2)
+				.evento(evento)
+				.espacoFisico(ef2)
+				.getAtidadeCompravel();
 	}
 
 }

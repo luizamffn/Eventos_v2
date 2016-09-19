@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
+import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 
 @Entity
 public class Pagamento {

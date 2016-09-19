@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.modelo;
+package br.edu.ifpi.evento.modelo.EspacoFisico;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import br.edu.ifpi.evento.Atividade.Atividade;
-import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
-import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.EnderecoEspacoFisicoException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoPaiException;
-import br.edu.ifpi.evento.modelo.Responsavel.ResponsavelBuilder;
+import br.edu.ifpi.evento.modelo.Endereco;
+import br.edu.ifpi.evento.modelo.Atividade.Atividade;
+import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.util.Converter;
 import br.edu.ifpi.evento.util.Validacoes;
 
@@ -51,61 +51,6 @@ public class EspacoFisico {
 
 	@OneToMany(mappedBy = "espacoPai")
 	private List<EspacoFisico> espacoFilhos = new ArrayList<EspacoFisico>();
-
-	public EspacoFisico() {
-
-	}
-
-	public EspacoFisico(EspacoFisicoBuilder builder) {
-		this.id = builder.id;
-		this.descricao = builder.descricao;
-		this.capacidade = builder.capacidade;
-		this.tipoEspacoFisico = builder.tipoEspacoFisico;
-		this.endereco = builder.endereco;
-		this.espacoPai = builder.espacoPai;
-	}
-
-	public static class EspacoFisicoBuilder {
-		private final Long id;
-		private String descricao;
-		private int capacidade;
-		private TipoEspacoFisico tipoEspacoFisico;
-		private Endereco endereco;
-		private EspacoFisico espacoPai;
-
-		public EspacoFisicoBuilder(Long id) {
-			this.id = id;
-		}
-
-		public EspacoFisicoBuilder descricao(String descricao) {
-			this.descricao = descricao;
-			return this;
-		}
-
-		public EspacoFisicoBuilder capacidade(int capacidade) {
-			this.capacidade = capacidade;
-			return this;
-		}
-
-		public EspacoFisicoBuilder tipoEspacoFisico(TipoEspacoFisico tipoEspacoFisico) {
-			this.tipoEspacoFisico = tipoEspacoFisico;
-			return this;
-		}
-
-		public EspacoFisicoBuilder endereco(Endereco endereco) {
-			this.endereco = endereco;
-			return this;
-		}
-
-		public EspacoFisicoBuilder espacoPai(EspacoFisico espacoPai) {
-			this.espacoPai = espacoPai;
-			return this;
-		}
-
-		public EspacoFisico build() {
-			return new EspacoFisico(this);
-		}
-	}
 
 	public void adicionarAtividade(Atividade atividade) throws EspacoFisicoComAtividadesConflitantes {
 		for (Atividade a : atividades) {
@@ -153,18 +98,6 @@ public class EspacoFisico {
 		this.endereco = null;
 	}
 
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public List<EspacoFisico> getEspacoFilhos() {
-		return espacoFilhos;
-	}
-
-	public List<Atividade> getAtividades() {
-		return atividades;
-	}
-
 	public void setEndereco(Endereco endereco) throws EspacoFisicoPaiException, EnderecoEspacoFisicoException {
 		if (!this.equals(espacoPai)) {
 			throw new EspacoFisicoPaiException();
@@ -174,6 +107,54 @@ public class EspacoFisico {
 		this.endereco = endereco;
 	}
 
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public List<EspacoFisico> getEspacoFilhos() {
+		return espacoFilhos;
+	}
+	
+	public List<Atividade> getAtividades() {
+		return atividades;
+	}
+
+	public EspacoFisico getEspacoPai() {
+		return espacoPai;
+	}
+
+	public void setEspacoPai(EspacoFisico espacoPai) {
+		this.espacoPai = espacoPai;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public void setCapacidade(int capacidade) {
+		this.capacidade = capacidade;
+	}
+
+	public void setTipoEspacoFisico(TipoEspacoFisico tipoEspacoFisico) {
+		this.tipoEspacoFisico = tipoEspacoFisico;
+	}
+
+	public void setEventos(List<Evento> eventos) {
+		this.eventos = eventos;
+	}
+
+	public void setAtividades(List<Atividade> atividades) {
+		this.atividades = atividades;
+	}
+
+	public void setEspacoFilhos(List<EspacoFisico> espacoFilhos) {
+		this.espacoFilhos = espacoFilhos;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -197,13 +178,5 @@ public class EspacoFisico {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public EspacoFisico getEspacoPai() {
-		return espacoPai;
-	}
-
-	public void setEspacoPai(EspacoFisico espacoPai) {
-		this.espacoPai = espacoPai;
 	}
 }

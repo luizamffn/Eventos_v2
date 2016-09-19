@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 import br.edu.ifpi.evento.enums.TipoInstituicao;
+import br.edu.ifpi.evento.modelo.evento.Evento;
 
 @Entity
 public class Instituicao {

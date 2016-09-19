@@ -15,12 +15,15 @@ import br.edu.ifpi.evento.enums.TipoInstituicao;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
-import br.edu.ifpi.evento.modelo.EspacoFisico;
-import br.edu.ifpi.evento.modelo.Evento;
-import br.edu.ifpi.evento.modelo.Inscricao;
 import br.edu.ifpi.evento.modelo.Instituicao;
 import br.edu.ifpi.evento.modelo.Pessoa;
 import br.edu.ifpi.evento.modelo.Usuario;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
+import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
+import br.edu.ifpi.evento.modelo.evento.Evento;
+import br.edu.ifpi.evento.modelo.evento.EventoBuilder;
+import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
+import br.edu.ifpi.evento.modelo.inscricao.InscricaoBuilder;
 
 public class EventoTest {
 
@@ -37,11 +40,20 @@ public class EventoTest {
 		dataInicial.set(2016, 10, 10, 20, 44, 11);
 		dataFinal = Calendar.getInstance();
 		dataFinal.set(2016, 10, 20, 20, 44, 11);
-		predioA = new EspacoFisico.EspacoFisicoBuilder((long) 1).descricao("Predio A").build();
+		predioA = EspacoFisicoBuilder.builder()
+				.id((long)1)
+				.descricao("Predio A")
+				.getEspacoFisico(); 
 		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
 		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);
 
-		evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador).build();
+		evento = EventoBuilder.builder()
+				.id((long) 1)
+				.dataInicio(dataInicial)
+				.dataFim(dataFinal)
+				.organizador(organizador)
+				.getEvento(); 
+
 	}
 
 	@Test(expected = Exception.class)
@@ -49,15 +61,30 @@ public class EventoTest {
 		dataInicial.set(2016, 5, 12, 20, 44, 11);
 		dataFinal.set(2016, 8, 12, 22, 00);
 
-		evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador).build();
+		evento = EventoBuilder.builder()
+				.id((long) 1)
+				.dataInicio(dataInicial)
+				.dataFim(dataFinal)
+				.organizador(organizador)
+				.getEvento();  				
 	}
 
 	@Test
 	public void deve_settar_automaticamente_em_inscricao_este_evento() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento.EventoBuilder((long) 2, dataInicial, dataFinal, organizador).build();
-		inscricao = new Inscricao.InscricaoBuilder(evento,new Usuario()).build();
+		evento = EventoBuilder.builder()
+				.id((long) 2)
+				.dataInicio(dataInicial)
+				.dataFim(dataFinal)
+				.organizador(organizador)
+				.getEvento();  
+				
+		inscricao = InscricaoBuilder.builder()
+				.evento(evento)
+				.usuario(new Usuario())
+				.getInscricao();
+		
 		assertEquals(inscricao.getEvento().equals(evento), true);
 	}
 
@@ -65,7 +92,13 @@ public class EventoTest {
 	public void evento_recem_criado_deve_ter_zero_atividades() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44, 11);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento.EventoBuilder((long) 3, dataInicial, dataFinal, organizador).build();
+		evento = EventoBuilder.builder()
+				.id((long) 3)
+				.dataInicio(dataInicial)
+				.dataFim(dataFinal)
+				.organizador(organizador)
+				.getEvento();
+		
 		assertEquals(0, evento.getAtividades().size());
 	}
 
@@ -78,14 +111,24 @@ public class EventoTest {
 	public void deve_aceitar_eventos_com_data_hoje_ou_futura() throws Exception {
 		dataInicial.set(2016, 9, 18, 20, 44);
 		dataFinal.set(2016, 12, 12, 22, 00);
-		evento = new Evento.EventoBuilder((long) 4, dataInicial, dataFinal, organizador).build();
+		evento = EventoBuilder.builder()
+				.id((long) 4)
+				.dataInicio(dataInicial)
+				.dataFim(dataFinal)
+				.organizador(organizador)
+				.getEvento(); 
 	}
 
 	@Test(expected = Exception.class)
 	public void nao_deve_aceitar_eventos_data_fim_menor_que_data_inicio() throws Exception {
 		dataInicial.set(2016, 9, 12, 20, 44, 11);
 		dataFinal.set(2016, 4, 12, 22, 00);
-		evento = new Evento.EventoBuilder((long) 1, dataInicial, dataFinal, organizador).build();
+		evento = EventoBuilder.builder()
+				.id((long) 1)
+				.dataInicio(dataInicial)
+				.dataFim(dataFinal)
+				.organizador(organizador)
+				.getEvento(); 
 	}
 
 	@Test(expected = Exception.class)

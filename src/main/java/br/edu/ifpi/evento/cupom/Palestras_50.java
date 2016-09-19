@@ -5,12 +5,12 @@ import java.util.Calendar;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import br.edu.ifpi.evento.Atividade.Atividade;
-import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.Atividade.Item;
-import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
-import br.edu.ifpi.evento.modelo.Inscricao;
+import br.edu.ifpi.evento.modelo.Atividade.Atividade;
+import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.modelo.Atividade.Item;
+import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
+import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 
 @Entity
 @DiscriminatorValue(value = "PL_50")

@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.enums.TipoUsuario;
+import br.edu.ifpi.evento.modelo.evento.Evento;
+import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 
 @Entity
 public class Usuario {

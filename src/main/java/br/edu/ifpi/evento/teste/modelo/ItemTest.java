@@ -2,10 +2,10 @@ package br.edu.ifpi.evento.teste.modelo;
 
 import org.junit.Test;
 
-import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.Atividade.ItemComposto;
-import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.exceptions.ItemSimplesJaAdicionadoException;
+import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
+import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
 
 public class ItemTest {
 

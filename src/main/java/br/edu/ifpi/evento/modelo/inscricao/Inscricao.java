@@ -1,7 +1,6 @@
-package br.edu.ifpi.evento.modelo;
+package br.edu.ifpi.evento.modelo.inscricao;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -13,19 +12,21 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import br.edu.ifpi.evento.Atividade.Atividade;
-import br.edu.ifpi.evento.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.Atividade.Item;
-import br.edu.ifpi.evento.Atividade.ItemComposto;
-import br.edu.ifpi.evento.Atividade.ItemSimples;
 import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.cupom.Cupom;
-import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
-import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
+import br.edu.ifpi.evento.modelo.Notificacao;
+import br.edu.ifpi.evento.modelo.Pagamento;
+import br.edu.ifpi.evento.modelo.Usuario;
+import br.edu.ifpi.evento.modelo.Atividade.Atividade;
+import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
+import br.edu.ifpi.evento.modelo.Atividade.Item;
+import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
+import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
+import br.edu.ifpi.evento.modelo.evento.Evento;
 
 @Entity
 public class Inscricao {
@@ -50,40 +51,6 @@ public class Inscricao {
 
 	@ManyToOne
 	private Usuario usuario;
-
-	public Inscricao() {
-	}
-	
-	public Inscricao(InscricaoBuilder builder) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
-		this.id= builder.id;
-		this.evento = builder.evento;
-		this.usuario = builder.usuario;
-		this.evento.adicionarIncricao(this);
-		usuario.adicionarInscricao(this);
-		SeOEventoDaInscricaoForUnico();
-		Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_CONCLUIDA);
-		
-	}
-
-	public static class InscricaoBuilder {
-		private Long id;
-		private Evento evento;
-		private Usuario usuario;
-
-		public InscricaoBuilder(Evento evento,Usuario usuario) {
-			this.evento = evento;
-			this.usuario = usuario;
-		}
-
-		public InscricaoBuilder addId(Long id) {
-			this.id = id;
-			return this;
-		}
-
-		public Inscricao build() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
-			return new Inscricao(this);
-		}
-	}
 	
 	public void SeOEventoDaInscricaoForUnico() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
 		if(evento.isEventoUnico()){
@@ -161,7 +128,7 @@ public class Inscricao {
 		}
 		return valorTotal -= desconto;
 	}
-
+	
 	public double getValorTotal() {
 		return calcularValorTotal();
 	}
@@ -205,6 +172,44 @@ public class Inscricao {
 
 	public List<Item> getItens() {
 		return itens;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setPaga(boolean paga) {
+		this.paga = paga;
+	}
+
+	public void setValorTotal(double valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+
+	public void setDesconto(double desconto) {
+		this.desconto = desconto;
+	}
+
+	public void setEvento(Evento evento)
+			throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+		this.evento = evento;
+		if(evento != null) SeOEventoDaInscricaoForUnico();
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+
+	public void setItens(List<Item> itens) {
+		this.itens = itens;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+		if(this.usuario != null){
+			usuario.adicionarInscricao(this);
+			Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_CONCLUIDA);
+		}
 	}
 
 }
