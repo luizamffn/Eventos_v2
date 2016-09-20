@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.constantes.Constante;
-import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
@@ -26,6 +25,7 @@ import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.modelo.Atividade.Item;
 import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
 import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
+import br.edu.ifpi.evento.modelo.cupom.Cupom;
 import br.edu.ifpi.evento.modelo.evento.Evento;
 
 @Entity

@@ -10,7 +10,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.edu.ifpi.evento.cupom.Palestras_50;
 import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
@@ -31,6 +30,7 @@ import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
 import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
+import br.edu.ifpi.evento.modelo.cupom.Palestras_50;
 import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.modelo.evento.EventoBuilder;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;

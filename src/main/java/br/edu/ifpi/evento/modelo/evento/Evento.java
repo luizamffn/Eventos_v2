@@ -17,7 +17,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import br.edu.ifpi.evento.cupom.Cupom;
 import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
@@ -33,6 +32,7 @@ import br.edu.ifpi.evento.modelo.Instituicao;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
+import br.edu.ifpi.evento.modelo.cupom.Cupom;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 import br.edu.ifpi.evento.util.Validacoes;
 

@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.cupom;
+package br.edu.ifpi.evento.modelo.cupom;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
