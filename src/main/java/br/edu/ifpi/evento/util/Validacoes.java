@@ -3,6 +3,7 @@ package br.edu.ifpi.evento.util;
 import java.util.Calendar;
 
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
+import br.edu.ifpi.evento.exceptions.CupomForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 
@@ -24,14 +25,23 @@ public class Validacoes {
 			throw new EspacoFisicoComAtividadesConflitantes();
 		}
 	}
-	
-	public static void verificarHorariosAtividadesDoEvento(Calendar dataInicio1, Calendar dataFim1, Calendar dataInicio2,
-			Calendar dataFim2) throws EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento {
+
+	public static void verificarHorariosAtividadesDoEvento(Calendar dataInicio1, Calendar dataFim1,
+			Calendar dataInicio2, Calendar dataFim2)
+					throws EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento {
 		if (!(dataInicio1.getTimeInMillis() <= dataInicio2.getTimeInMillis()
 				&& dataFim1.getTimeInMillis() >= dataInicio2.getTimeInMillis()
 				|| dataInicio1.getTimeInMillis() <= dataFim2.getTimeInMillis()
 						&& dataFim1.getTimeInMillis() >= dataFim2.getTimeInMillis())) {
 			throw new AtividadeComHorarioForaDoPeriodoDoEvento();
+		}
+	}
+
+	public static void verificarHorariosDoCumpomEveto(Calendar dataInicioEvento, Calendar dataFimEvento,
+			Calendar dataValidade) throws CupomForaDoPeriodoDoEvento{
+		if (!(dataInicioEvento.getTimeInMillis() <= dataValidade.getTimeInMillis()
+				&& dataFimEvento.getTimeInMillis() >= dataValidade.getTimeInMillis())) {
+			throw new CupomForaDoPeriodoDoEvento();
 		}
 	}
 }

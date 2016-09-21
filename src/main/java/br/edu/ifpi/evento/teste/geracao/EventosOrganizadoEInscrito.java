@@ -77,9 +77,6 @@ public class EventosOrganizadoEInscrito {
 				.evento(evento2)
 				.espacoFisico(b3_sala4)
 				.getAtidadeCompravel();
-		
-//				new AtividadeCompravel(Long.valueOf(1), "python", evento2, b3_sala4, dataInicial2,
-//				dataFinal2, 30.00, TipoAtividadeCompravel.PALESTRA);
 
 		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 1)
 				.atividadeCompravel(palestra)

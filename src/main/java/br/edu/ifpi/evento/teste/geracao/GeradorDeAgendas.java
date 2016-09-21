@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import br.edu.ifpi.evento.enums.Sexo;
-import br.edu.ifpi.evento.enums.TipoNaoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
@@ -105,9 +104,6 @@ public class GeradorDeAgendas {
 				.espacoFisico(b3_sala10)
 				.getAtidadeCompravel();
 				
-//				new AtividadeCompravel(Long.valueOf(3), "python", evento, b3_sala10,
-//				dataInicial4, dataFinal4, 30.00, TipoAtividadeCompravel.PALESTRA);
-
 		GregorianCalendar dataInicial5 = new GregorianCalendar();
 		dataInicial5.set(2016, 10, 13, 14, 00, 00);
 		Calendar dataFinal5 = Calendar.getInstance();
@@ -121,9 +117,6 @@ public class GeradorDeAgendas {
 				.espacoFisico(b3_sala10)
 				.getAtidadeCompravel();
 				
-//				new AtividadeCompravel(Long.valueOf(4), "android", evento, b3_sala10,
-//				dataInicial5, dataFinal5, 30.00, TipoAtividadeCompravel.PALESTRA);
-
 		EspacoFisico patio = EspacoFisicoBuilder.builder()
 				.id((long)4)
 				.descricao("Patio")

@@ -6,8 +6,6 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
-import br.edu.ifpi.evento.modelo.Atividade.Atividade;
-import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.modelo.Atividade.Item;
 import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;

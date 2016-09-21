@@ -1,5 +1,6 @@
 package br.edu.ifpi.evento.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class Instituicao {
 	private TipoInstituicao tipoInstituicao;
 	
 	@ManyToMany(mappedBy="instituicoes")
-	private List<Evento> eventos;
+	private List<Evento> eventos = new ArrayList<Evento>();
 	
 	public Instituicao() {
 	}
@@ -37,5 +38,11 @@ public class Instituicao {
 		this.tipoInstituicao = tipoInstituicao;
 	}
 	
-	
+	public void addEvento(Evento evento) {
+		eventos.add(evento);
+	}
+
+	public List<Evento> getEventos() {
+		return eventos;
+	}
 }

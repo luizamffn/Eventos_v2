@@ -22,6 +22,7 @@ import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
+import br.edu.ifpi.evento.exceptions.CupomForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
@@ -106,6 +107,7 @@ public class Evento {
 		}
 		
 		instituicoes.add(instituicao);
+		instituicao.addEvento(this);
 	}
 	
 	public void adicionarUsuarioAEquipe(Usuario usuario)throws UsuarioRepetidoException {
@@ -119,8 +121,10 @@ public class Evento {
 		inscricoes.add(inscricao);
 	}
 	
-	public void adicionarCupons(Cupom cupom) {
+	public void adicionarCupons(Cupom cupom) throws CupomForaDoPeriodoDoEvento {
+		Validacoes.verificarHorariosDoCumpomEveto(dataInicio, dataFim, cupom.getValidade());
 		Cupons.add(cupom);
+		cupom.setEvento(this);
 	}
 	
 	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
@@ -266,6 +270,10 @@ public class Evento {
 
 	public void setEventoUnico(boolean eventoUnico) {
 		this.eventoUnico = eventoUnico;
+	}
+
+	public List<Instituicao> getInstituicoes() {
+		return instituicoes;
 	}
 
 }

@@ -42,4 +42,21 @@ public abstract class Cupom {
 		Calendar now = new GregorianCalendar();
 		return validade.getTimeInMillis() > now.getTimeInMillis();
 	}
+
+	public Calendar getValidade() {
+		return validade;
+	}
+
+	public void setValidade(Calendar validade) {
+		this.validade = validade;
+	}
+
+	public void setEvento(Evento evento) {
+		this.evento = evento;
+	}
+
+	public Evento getEvento() {
+		return evento;
+	}
+
 }

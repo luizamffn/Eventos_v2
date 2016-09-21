@@ -53,7 +53,7 @@ public class IncricaoTest {
 		dataFinal = Calendar.getInstance();
 		dataInicial.set(2016, 12, 10, 20, 44);
 		dataFinal.set(2016, 12, 20, 22, 00);
-		validadePalestra.set(2016, 9, 12, 20, 44);
+		validadePalestra.set(2016, 12, 12, 20, 00);
 
 		Pessoa pessoa = new Pessoa("Josefa", 4454, Sexo.F);
 		organizador = new Usuario("Jose123", "8766Y", pessoa, TipoUsuario.ORGANIZADOR);

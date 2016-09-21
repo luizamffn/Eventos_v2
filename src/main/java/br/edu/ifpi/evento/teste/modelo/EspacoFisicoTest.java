@@ -5,7 +5,6 @@ import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
@@ -17,7 +16,6 @@ import br.edu.ifpi.evento.exceptions.EspacoFisicoPaiException;
 import br.edu.ifpi.evento.modelo.Endereco;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;
-import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravelBuilder;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
@@ -103,6 +101,14 @@ public class EspacoFisicoTest {
 				.evento(evento)
 				.espacoFisico(ef2)
 				.getAtidadeCompravel();
+	}
+	
+	public void nao_deve_aceitar_espaco_pai_como_espaco_filho() {
+
+	}
+	
+	public void nao_deve_aceitar_espaco_filho_como_espaco_pai() {
+
 	}
 
 }
