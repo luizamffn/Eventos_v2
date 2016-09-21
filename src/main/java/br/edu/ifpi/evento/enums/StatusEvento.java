@@ -4,7 +4,8 @@ public enum StatusEvento {
 	CADASTRADO			      	("CADASTRADO"),
 	RECEBENDO_INSCRICAO			("RECEBENDO INSCRIÇÃO"),
 	EM_ANDAMENTO				("EM_ANDAMENTO"),
-	FINALIZADO					("FINALIZADO");
+	FINALIZADO					("FINALIZADO"),
+	CANCELADO					("CANCELADO");
 	
 	private String descricao;
 

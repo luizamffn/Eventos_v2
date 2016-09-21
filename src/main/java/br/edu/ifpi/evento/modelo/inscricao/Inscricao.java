@@ -17,7 +17,6 @@ import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
-import br.edu.ifpi.evento.modelo.Notificacao;
 import br.edu.ifpi.evento.modelo.Pagamento;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;
@@ -27,9 +26,10 @@ import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
 import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
 import br.edu.ifpi.evento.modelo.cupom.Cupom;
 import br.edu.ifpi.evento.modelo.evento.Evento;
+import br.edu.ifpi.evento.observer.Observable;
 
 @Entity
-public class Inscricao {
+public class Inscricao extends Observable{
 	
 	@Id
 	@GeneratedValue
@@ -68,7 +68,8 @@ public class Inscricao {
 		}
 		paga = true;
 		this.pagamento = pagamento;
-		Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_PAGA);
+		setMensagem(usuario.getPessoa().getNome() +", " +Constante.INSCRICAO_PAGA);
+		notifyUmObserver(usuario);
 	}
 
 	public void adicionarItem(Item item)
@@ -208,8 +209,14 @@ public class Inscricao {
 		this.usuario = usuario;
 		if(this.usuario != null){
 			usuario.adicionarInscricao(this);
-			Notificacao.enviarNorificacao(usuario, Constante.INSCRICAO_CONCLUIDA);
+			addObserver(usuario);
+			setMensagem(usuario.getPessoa().getNome() +", " +Constante.INSCRICAO_CONCLUIDA);
+			notifyUmObserver(usuario);
 		}
+	}
+
+	public Pagamento getPagamento() {
+		return pagamento;
 	}
 
 }

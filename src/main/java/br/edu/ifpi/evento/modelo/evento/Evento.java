@@ -30,64 +30,64 @@ import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
 import br.edu.ifpi.evento.modelo.Instituicao;
+import br.edu.ifpi.evento.modelo.Notificacao;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.cupom.Cupom;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
+import br.edu.ifpi.evento.observer.Observable;
 import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
-public class Evento {
+public class Evento extends Observable {
 	@Id
 	@GeneratedValue
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
 	private TipoEvento tipoEvento;
-	
+
 	private String nome;
-	
-	@OneToMany(mappedBy="evento")
+
+	@OneToMany(mappedBy = "evento")
 	private List<Atividade> atividades = new ArrayList<Atividade>();
-	
-	@OneToMany(mappedBy="evento")
+
+	@OneToMany(mappedBy = "evento")
 	private List<Inscricao> inscricoes = new ArrayList<Inscricao>();
-	
-	@OneToMany(mappedBy="evento")
+
+	@OneToMany(mappedBy = "evento")
 	private List<Cupom> Cupons = new ArrayList<Cupom>();
-	
+
 	@ManyToMany
-	@JoinTable(name = "evento_instituicao", joinColumns = @JoinColumn(name = "evento_id"),
-	inverseJoinColumns = @JoinColumn(name = "instituicao_id"))
+	@JoinTable(name = "evento_instituicao", joinColumns = @JoinColumn(name = "evento_id") , inverseJoinColumns = @JoinColumn(name = "instituicao_id") )
 	private List<Instituicao> instituicoes = new ArrayList<Instituicao>();
-	
+
 	@ManyToOne
 	private Evento eventoPai;
-	
-	@OneToMany(mappedBy="eventoPai")
+
+	@OneToMany(mappedBy = "eventoPai")
 	private List<Evento> eventosSatelites = new ArrayList<Evento>();
 	private Calendar dataInicio;
 	private Calendar dataFim;
 	private StatusEvento status;
-	
+
 	@ManyToOne
 	private EspacoFisico espacoFisico;
-	
+
 	@ManyToOne
 	private Usuario organizador;
-	
+
 	@ManyToMany
-	@JoinTable(name = "evento_equipe", joinColumns = @JoinColumn(name = "evento_id"),
-	inverseJoinColumns = @JoinColumn(name = "equipe_id"))
+	@JoinTable(name = "evento_equipe", joinColumns = @JoinColumn(name = "evento_id") , inverseJoinColumns = @JoinColumn(name = "equipe_id") )
 	private List<Usuario> equipe = new ArrayList<Usuario>();
-	
+
 	private boolean eventoUnico;
-	
+
 	public void verificarDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
 		Calendar now = new GregorianCalendar();
 
-		if (dataInicio.getTimeInMillis()- now.getTimeInMillis() <0 ) {
+		if (dataInicio.getTimeInMillis() - now.getTimeInMillis() < 0) {
 			throw new DataMenorQueAtualException();
 		}
 	}
@@ -97,21 +97,22 @@ public class Evento {
 		if (atividades.contains(atividade)) {
 			throw new AtividadeException();
 		}
-		Validacoes.verificarHorariosAtividadesDoEvento(dataInicio, dataFim, atividade.getHorarioInicio(), atividade.getHorarioTermino());
+		Validacoes.verificarHorariosAtividadesDoEvento(dataInicio, dataFim, atividade.getHorarioInicio(),
+				atividade.getHorarioTermino());
 		atividades.add(atividade);
-	}	
+	}
 
-	public void adicionarInstituicao(Instituicao instituicao) throws InstituicaoException{
+	public void adicionarInstituicao(Instituicao instituicao) throws InstituicaoException {
 		if (instituicoes.contains(instituicao)) {
 			throw new InstituicaoException();
 		}
-		
+
 		instituicoes.add(instituicao);
 		instituicao.addEvento(this);
 	}
-	
-	public void adicionarUsuarioAEquipe(Usuario usuario)throws UsuarioRepetidoException {
-		if(equipe.contains(usuario)){
+
+	public void adicionarUsuarioAEquipe(Usuario usuario) throws UsuarioRepetidoException {
+		if (equipe.contains(usuario)) {
 			throw new UsuarioRepetidoException();
 		}
 		equipe.add(usuario);
@@ -120,19 +121,19 @@ public class Evento {
 	public void adicionarIncricao(Inscricao inscricao) {
 		inscricoes.add(inscricao);
 	}
-	
+
 	public void adicionarCupons(Cupom cupom) throws CupomForaDoPeriodoDoEvento {
 		Validacoes.verificarHorariosDoCumpomEveto(dataInicio, dataFim, cupom.getValidade());
 		Cupons.add(cupom);
 		cupom.setEvento(this);
 	}
-	
+
 	public void adicionarEspacoFisico(EspacoFisico espacoFisico) {
 		this.espacoFisico = espacoFisico;
 		espacoFisico.adicionarEvento(this);
 	}
-	
-	public void adicionarEventoSatelite(Evento eventoSatelite) throws EventoSateliteException{
+
+	public void adicionarEventoSatelite(Evento eventoSatelite) throws EventoSateliteException {
 		if (eventosSatelites.contains(eventoSatelite)) {
 			throw new EventoSateliteException();
 		}
@@ -146,12 +147,12 @@ public class Evento {
 			espacoFisico.gerarAgenda();
 		}
 	}
-	
+
 	public boolean isAtivo() {
 		Calendar now = new GregorianCalendar();
 		return dataFim.getTimeInMillis() < now.getTimeInMillis();
 	}
-	
+
 	public List<Atividade> getAtividades() {
 		return Collections.unmodifiableList(atividades);
 	}
@@ -159,11 +160,11 @@ public class Evento {
 	public List<Cupom> getCupons() {
 		return Collections.unmodifiableList(Cupons);
 	}
-	
+
 	public EspacoFisico getEspacoFisico() {
 		return espacoFisico;
 	}
-	
+
 	public List<Usuario> getEquipe() {
 		return Collections.unmodifiableList(equipe);
 	}
@@ -207,6 +208,9 @@ public class Evento {
 
 	public void setEspacoFisico(EspacoFisico espacoFisico) {
 		this.espacoFisico = espacoFisico;
+		if (espacoFisico != null) {
+			Notificacao.notificarMudancaEspacoFisicoEvento(this);
+		}
 	}
 
 	public void setId(Long id) {
@@ -248,20 +252,34 @@ public class Evento {
 	public void setDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
 		verificarDataInicio(dataInicio);
 		this.dataInicio = dataInicio;
+		if (dataInicio != null) {
+			setMensagem("O evento " + this.nome + " mudou a data de inicio" + dataInicio.getTime());
+			notifyObservers();
+		}
 	}
 
 	public void setDataFim(Calendar dataFim) throws DataFimMenorQueDataInicioException {
 		Validacoes.verificarDataFim(this.dataInicio, dataFim);
 		this.dataFim = dataFim;
+		if (dataFim != null) {
+			setMensagem("O evento " + this.nome + " mudou a data de término" + dataInicio.getTime());
+			notifyObservers();
+		}
 	}
 
 	public void setStatus(StatusEvento status) {
 		this.status = status;
+		if (status == StatusEvento.EM_ANDAMENTO) {
+			setMensagem("O evento " + this.nome
+					+ " ja começou, sua inscricao não foi paga. Infelizmente vcocê não poderá participar!");
+			Notificacao.notificarMudancaDeStatusDoEvento(this);
+		}
 	}
 
 	public void setOrganizador(Usuario organizador) {
 		this.organizador = organizador;
-		if (organizador != null) organizador.adicionarevento(this);
+		if (organizador != null)
+			organizador.adicionarevento(this);
 	}
 
 	public void setEquipe(List<Usuario> equipe) {
@@ -274,6 +292,10 @@ public class Evento {
 
 	public List<Instituicao> getInstituicoes() {
 		return instituicoes;
+	}
+
+	public List<Inscricao> getInscricoes() {
+		return inscricoes;
 	}
 
 }

@@ -9,8 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.edu.ifpi.evento.enums.Sexo;
-import br.edu.ifpi.evento.enums.TipoEspacoFisico;
-import br.edu.ifpi.evento.enums.TipoEvento;
 import br.edu.ifpi.evento.enums.TipoInstituicao;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
@@ -74,8 +72,10 @@ public class EventoTest {
 		dataFinal.set(2016, 12, 12, 22, 00);
 		evento = EventoBuilder.builder().id((long) 2).dataInicio(dataInicial).dataFim(dataFinal)
 				.organizador(organizador).getEvento();
-
-		inscricao = InscricaoBuilder.builder().evento(evento).usuario(new Usuario()).getInscricao();
+	
+		Pessoa joao = new Pessoa("Maria", 3322, Sexo.F);
+		Usuario usuario = new Usuario("maria", "123", joao, TipoUsuario.PALESTRANTE);
+		inscricao = InscricaoBuilder.builder().evento(evento).usuario(usuario).getInscricao();
 
 		assertEquals(inscricao.getEvento().equals(evento), true);
 	}
@@ -164,4 +164,11 @@ public class EventoTest {
 		evento.adicionarInstituicao(instituicao);
 		assertEquals(instituicao.getEventos().contains(evento),true);
 	}
+	
+	@Test
+	public void evento_so_pode_receber_inscricao_se_seu_status_for_recebendo_inscricoes(){
+		
+	}
+	
+	
 }

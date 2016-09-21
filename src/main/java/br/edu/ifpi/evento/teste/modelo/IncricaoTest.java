@@ -83,6 +83,7 @@ public class IncricaoTest {
 		
 		AtividadeCompravel atividade = AtividadeCompravelBuilder.builder()
 				.id(Long.valueOf(1))
+				.nome("Andriod")
 				.horarioInicio(dataInicialAt)
 				.horarioFim(dataFinalAt)
 				.evento(evento)
@@ -150,9 +151,11 @@ public class IncricaoTest {
 
 	@Test
 	public void inscricao_recem_criada_deve_ter_zero_atividades() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+		Pessoa joao = new Pessoa("Joao", 3322, Sexo.F);
+		Usuario usuario = new Usuario("joao", "123", joao, TipoUsuario.PALESTRANTE);
 		Inscricao inscricao2 = InscricaoBuilder.builder()
 				.evento(evento)
-				.usuario(new Usuario())
+				.usuario(usuario)
 				.getInscricao();
 		
 		int tamanho = inscricao2.getItens().size();
@@ -189,9 +192,11 @@ public class IncricaoTest {
 
 	@Test
 	public void inscricao_sem_itens_deve_ter_valor_zero() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+		Pessoa joao = new Pessoa("Manoel", 3322, Sexo.F);
+		Usuario usuario = new Usuario("manoel", "123", joao, TipoUsuario.PALESTRANTE);
 		Inscricao inscricao3 = InscricaoBuilder.builder()
 				.evento(evento)
-				.usuario(new Usuario())
+				.usuario(usuario)
 				.getInscricao();
 		
 		assertEquals(0.0, inscricao3.getValorTotal(), 0.0);

@@ -18,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
@@ -29,12 +30,13 @@ import br.edu.ifpi.evento.modelo.Notificacao;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Responsavel.Responsavel;
 import br.edu.ifpi.evento.modelo.evento.Evento;
+import br.edu.ifpi.evento.observer.Observable;
 import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo")
-public abstract class Atividade {
+public abstract class Atividade extends Observable {
 
 	@Id
 	@GeneratedValue
@@ -59,23 +61,6 @@ public abstract class Atividade {
 	@ManyToMany
 	@JoinTable(name = "atividade_responsavel", joinColumns = @JoinColumn(name = "atividade_id") , inverseJoinColumns = @JoinColumn(name = "_id") )
 	protected List<Responsavel> responsaveisSecudarios = new ArrayList<Responsavel>();
-
-//	public Atividade() {
-//	}
-
-//	public Atividade(Long id, String nome, Evento evento, EspacoFisico espacoFisico, Calendar hoharioInicio,
-//			Calendar hoharioTermino) throws DataFimMenorQueDataInicioException, AtividadeException,
-//					EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento,
-//					AtividadeJaPossuiUmEvento {
-//		Validacoes.verificarDataFim(hoharioInicio, hoharioTermino);
-//		this.horarioInicio = hoharioInicio;
-//		this.horarioTermino = hoharioTermino;
-//		this.id = id;
-//		this.nome = nome;
-//		this.evento = evento;
-//		evento.adicionarAtividade(this);
-//		adicionarEspacoFisico(espacoFisico);
-//	}
 
 	public void adicionarResponsaveisSecudarios(Responsavel responsavel)
 			throws ResponsavelPrincipalNaoPodeSerSecudarioException, ResponsavelSecundarioNaoPodeSerRepetido {
@@ -111,9 +96,9 @@ public abstract class Atividade {
 
 	public void setEspacoFisico(EspacoFisico espacoFisico) throws EspacoFisicoComAtividadesConflitantes {
 		this.espacoFisico = espacoFisico;
+		this.espacoFisico.adicionarAtividade(this);
+		evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
 		if (espacoFisico != null) {
-			this.espacoFisico.adicionarAtividade(this);
-			evento.getEspacoFisico().adicionarEspacosFisicos(espacoFisico);
 			Notificacao.notificarMudancaEspacoFisico(this);
 		}
 	}

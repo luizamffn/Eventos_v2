@@ -17,9 +17,10 @@ import javax.persistence.OneToOne;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
+import br.edu.ifpi.evento.observer.Observer;
 
 @Entity
-public class Usuario {
+public class Usuario implements Observer{
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -118,7 +119,9 @@ public class Usuario {
 				+ tipoUsuario + ", pessoa=" + pessoa + ", eventosOrganizados=" + eventosOrganizados
 				+ ", eventosdaEquipe=" + eventosdaEquipe + ", inscricoes=" + inscricoes + "]";
 	}
-	
-	
+
+	public void update(Object obj) {
+		System.out.println((String) obj);
+	}
 	
 }
