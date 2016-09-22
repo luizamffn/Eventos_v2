@@ -5,13 +5,15 @@ import java.util.GregorianCalendar;
 
 import br.edu.ifpi.evento.enums.Sexo;
 import br.edu.ifpi.evento.enums.TipoUsuario;
-import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
+import br.edu.ifpi.evento.exceptions.EventoSateliteHorarioForaDoPeriodoDoEvento;
+import br.edu.ifpi.evento.exceptions.EventoNaoEstaRecebendoInscricaoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.modelo.Pessoa;
 import br.edu.ifpi.evento.modelo.Usuario;
@@ -28,7 +30,8 @@ import br.edu.ifpi.evento.modelo.inscricao.InscricaoBuilder;
 public class EventosOrganizadoEInscrito {
 	public static void main(String[] args) throws DataMenorQueAtualException, DataFimMenorQueDataInicioException,
 			AtividadeException, InscricaoPagaException, AtividadeNaoEstaNoEventoException,
-			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento, AtividadeJaPossuiUmEvento {
+			EspacoFisicoComAtividadesConflitantes, AtividadeHorarioForaDoPeriodoDoEvento, AtividadeJaPossuiUmEvento,
+			EventoNaoEstaRecebendoInscricaoException, EventoSateliteHorarioForaDoPeriodoDoEvento {
 		GregorianCalendar dataInicial = new GregorianCalendar();
 		dataInicial.set(2016, 10, 12, 12, 00, 00);
 		Calendar dataFinal = Calendar.getInstance();

@@ -2,6 +2,7 @@ package br.edu.ifpi.evento.modelo.inscricao;
 
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
+import br.edu.ifpi.evento.exceptions.EventoNaoEstaRecebendoInscricaoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.evento.Evento;
@@ -24,7 +25,8 @@ public class InscricaoBuilder {
 	}
 	
 	public InscricaoBuilder evento(Evento evento)
-			throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+ throws InscricaoPagaException, AtividadeNaoEstaNoEventoException,
+			AtividadeException, EventoNaoEstaRecebendoInscricaoException {
 		this.inscricao.setEvento(evento);
 		return this;
 	}

@@ -1,26 +1,12 @@
 package br.edu.ifpi.evento.modelo.Atividade;
 
-import java.util.Calendar;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
 
-import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
-import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
-import br.edu.ifpi.evento.exceptions.AtividadeException;
-import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
-import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
-import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
-import br.edu.ifpi.evento.modelo.Notificacao;
-import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
-import br.edu.ifpi.evento.modelo.Responsavel.Responsavel;
-import br.edu.ifpi.evento.modelo.evento.Evento;
-import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
-import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
 @DiscriminatorValue(value = "At_compravel")

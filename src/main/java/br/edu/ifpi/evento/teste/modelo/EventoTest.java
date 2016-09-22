@@ -1,6 +1,7 @@
 package br.edu.ifpi.evento.teste.modelo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -9,15 +10,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.edu.ifpi.evento.enums.Sexo;
+import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoInstituicao;
 import br.edu.ifpi.evento.enums.TipoUsuario;
-import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
+import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.CupomForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
+import br.edu.ifpi.evento.exceptions.EventoSateliteHorarioForaDoPeriodoDoEvento;
+import br.edu.ifpi.evento.exceptions.EventoNaoEstaRecebendoInscricaoException;
+import br.edu.ifpi.evento.exceptions.EventoSateliteException;
+import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
 import br.edu.ifpi.evento.modelo.Instituicao;
@@ -72,9 +79,11 @@ public class EventoTest {
 		dataFinal.set(2016, 12, 12, 22, 00);
 		evento = EventoBuilder.builder().id((long) 2).dataInicio(dataInicial).dataFim(dataFinal)
 				.organizador(organizador).getEvento();
-	
+
+		evento.setStatus(StatusEvento.RECEBENDO_INSCRICAO);
 		Pessoa joao = new Pessoa("Maria", 3322, Sexo.F);
 		Usuario usuario = new Usuario("maria", "123", joao, TipoUsuario.PALESTRANTE);
+		System.out.println("status evento " + evento.getStatus());
 		inscricao = InscricaoBuilder.builder().evento(evento).usuario(usuario).getInscricao();
 
 		assertEquals(inscricao.getEvento().equals(evento), true);
@@ -137,16 +146,15 @@ public class EventoTest {
 
 	@Test
 	public void deve_settar_automaticamente_em_atividade_este_evento()
-			throws AtividadeException, EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento,
-			AtividadeJaPossuiUmEvento, DataFimMenorQueDataInicioException {
+			throws AtividadeException, EspacoFisicoComAtividadesConflitantes, EventoSateliteHorarioForaDoPeriodoDoEvento,
+			AtividadeJaPossuiUmEvento, DataFimMenorQueDataInicioException, AtividadeHorarioForaDoPeriodoDoEvento {
 		Calendar dataInicio = Calendar.getInstance();
 		dataInicio.set(2016, 10, 15, 20, 00);
 		Calendar dataFim = Calendar.getInstance();
 		dataFim.set(2016, 10, 19, 20, 00);
-		
-		AtividadeNaoCompravel sorteioCamisa = AtividadeNaoCompravelBuilder.builder().id((long)10)
-				.horarioInicio(dataInicio).horarioFim(dataFim)
-				.evento(evento).getAtividadeNaoCompravel();
+
+		AtividadeNaoCompravel sorteioCamisa = AtividadeNaoCompravelBuilder.builder().id((long) 10)
+				.horarioInicio(dataInicio).horarioFim(dataFim).evento(evento).getAtividadeNaoCompravel();
 		assertEquals(sorteioCamisa.getEvento().equals(evento), true);
 	}
 
@@ -154,7 +162,7 @@ public class EventoTest {
 	public void deve_settar_automaticamente_em_cupom_este_evento() throws CupomForaDoPeriodoDoEvento {
 		Desconto_50_Geral desconto_50_Geral = new Desconto_50_Geral("DG_50", dataFinal);
 		evento.adicionarCupons(desconto_50_Geral);
-		
+
 		assertEquals(desconto_50_Geral.getEvento().equals(evento), true);
 	}
 
@@ -162,13 +170,30 @@ public class EventoTest {
 	public void deve_settar_automaticamente_em_insituicao_este_evento() throws InstituicaoException {
 		Instituicao instituicao = new Instituicao();
 		evento.adicionarInstituicao(instituicao);
-		assertEquals(instituicao.getEventos().contains(evento),true);
+		assertEquals(instituicao.getEventos().contains(evento), true);
+	}
+
+	@Test(expected = EventoSateliteHorarioForaDoPeriodoDoEvento.class)
+	public void evento_nao_pode_aceitar_evento_satelite_fora_do_seu_periodo()
+			throws DataFimMenorQueDataInicioException, DataMenorQueAtualException, EventoSateliteException,
+			EspacoFisicoComAtividadesConflitantes, EventoSateliteHorarioForaDoPeriodoDoEvento {
+		Calendar dt_inicio = Calendar.getInstance();
+		dt_inicio.set(2016, 10, 1, 20, 0, 0);
+		Calendar dt_final = Calendar.getInstance();
+		dt_final.set(2016, 10, 5, 20, 0, 0);
+		Evento eventoStelite = EventoBuilder.builder().id((long) 4).dataInicio(dt_inicio).dataFim(dt_final).getEvento();
+
+		evento.adicionarEventoSatelite(eventoStelite);
+	}
+
+	@Test(expected = EventoNaoEstaRecebendoInscricaoException.class)
+	public void evento_nao_pode_aceitar_inscricao_se_seu_status_nao_permitir() throws InscricaoPagaException,
+			AtividadeNaoEstaNoEventoException, AtividadeException, EventoNaoEstaRecebendoInscricaoException {
+		Inscricao inscricao = new InscricaoBuilder().builder().Id((long) 1).evento(evento).getInscricao();
 	}
 	
 	@Test
-	public void evento_so_pode_receber_inscricao_se_seu_status_for_recebendo_inscricoes(){
-		
+	public void evento_pai_nao_pode_ser_evento_satelite() {
+		fail("Not yet implemented");
 	}
-	
-	
 }

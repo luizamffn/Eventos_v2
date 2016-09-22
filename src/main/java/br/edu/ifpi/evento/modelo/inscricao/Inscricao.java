@@ -13,8 +13,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.constantes.Constante;
+import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
+import br.edu.ifpi.evento.exceptions.EventoNaoEstaRecebendoInscricaoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.exceptions.PagamentoInferiorException;
 import br.edu.ifpi.evento.modelo.Pagamento;
@@ -29,35 +31,35 @@ import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.observer.Observable;
 
 @Entity
-public class Inscricao extends Observable{
-	
+public class Inscricao extends Observable {
+
 	@Id
 	@GeneratedValue
 	private Long id;
 	private boolean paga;
 	private double valorTotal = 0;
 	private double desconto = 0;
-	
+
 	@ManyToOne
 	private Evento evento;
-	
+
 	@OneToOne
 	private Pagamento pagamento;
-	
+
 	@ManyToMany
-	@JoinTable(name = "inscricao_item", joinColumns = @JoinColumn(name = "inscricao_id"),
-	inverseJoinColumns = @JoinColumn(name = "item_id"))
+	@JoinTable(name = "inscricao_item", joinColumns = @JoinColumn(name = "inscricao_id") , inverseJoinColumns = @JoinColumn(name = "item_id") )
 	private List<Item> itens = new ArrayList<Item>();
 
 	@ManyToOne
 	private Usuario usuario;
-	
-	public void SeOEventoDaInscricaoForUnico() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
-		if(evento.isEventoUnico()){
+
+	public void SeOEventoDaInscricaoForUnico() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException,
+			AtividadeException, EventoNaoEstaRecebendoInscricaoException {
+		if (evento.isEventoUnico()) {
 			for (Atividade atividade : evento.getAtividades()) {
-				if(atividade instanceof AtividadeCompravel){
+				if (atividade instanceof AtividadeCompravel) {
 					this.adicionarItem(((AtividadeCompravel) atividade).getItemSimples());
-				}	
+				}
 			}
 		}
 	}
@@ -68,28 +70,34 @@ public class Inscricao extends Observable{
 		}
 		paga = true;
 		this.pagamento = pagamento;
-		setMensagem(usuario.getPessoa().getNome() +", " +Constante.INSCRICAO_PAGA);
+		setMensagem(usuario.getPessoa().getNome() + ", " + Constante.INSCRICAO_PAGA);
 		notifyUmObserver(usuario);
 	}
 
-	public void adicionarItem(Item item)
-			throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+	public void adicionarItem(Item item) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException,
+			AtividadeException, EventoNaoEstaRecebendoInscricaoException {
 		if (paga) {
 			throw new InscricaoPagaException();
 		}
-
+		verificarStatusDoEvento(evento);
 		verificarSeAtividadeDoItemEstaNoEvento(item);
+	}
+
+	private void verificarStatusDoEvento(Evento evento) throws EventoNaoEstaRecebendoInscricaoException {
+		if (!evento.getStatus().equals(StatusEvento.RECEBENDO_INSCRICAO)) {
+			throw new EventoNaoEstaRecebendoInscricaoException();
+		}
 	}
 
 	private void verificarSeAtividadeDoItemEstaNoEvento(Item item)
 			throws AtividadeNaoEstaNoEventoException, AtividadeException {
-		if(item instanceof ItemSimples){
+		if (item instanceof ItemSimples) {
 			if (!evento.getAtividades().contains(((ItemSimples) item).getAtividadeCompravel())) {
 				throw new AtividadeNaoEstaNoEventoException();
 			}
 		}
-	
-		if(item instanceof ItemComposto){
+
+		if (item instanceof ItemComposto) {
 			for (ItemSimples itemSimples : ((ItemComposto) item).getItensSimples()) {
 				if (!evento.getAtividades().contains(itemSimples.getAtividadeCompravel())) {
 					throw new AtividadeNaoEstaNoEventoException();
@@ -111,14 +119,14 @@ public class Inscricao extends Observable{
 
 	private double calcularValorTotal() {
 		for (Item item : itens) {
-			if(item instanceof ItemSimples)
-				valorTotal +=((ItemSimples) item).getAtividadeCompravel().getValor();
-			if(item instanceof ItemComposto)
+			if (item instanceof ItemSimples)
+				valorTotal += ((ItemSimples) item).getAtividadeCompravel().getValor();
+			if (item instanceof ItemComposto)
 				valorTotal += ((ItemComposto) item).getPrecoComDesconto();
 		}
-		
+
 		return AplicarDescontoNaInscricao();
-		
+
 	}
 
 	private double AplicarDescontoNaInscricao() {
@@ -129,7 +137,7 @@ public class Inscricao extends Observable{
 		}
 		return valorTotal -= desconto;
 	}
-	
+
 	public double getValorTotal() {
 		return calcularValorTotal();
 	}
@@ -141,7 +149,7 @@ public class Inscricao extends Observable{
 	public Evento getEvento() {
 		return evento;
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -191,10 +199,13 @@ public class Inscricao extends Observable{
 		this.desconto = desconto;
 	}
 
-	public void setEvento(Evento evento)
-			throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+	public void setEvento(Evento evento) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException,
+			AtividadeException, EventoNaoEstaRecebendoInscricaoException {
+//		this.evento = evento;
+		evento.adicionarIncricao(this);
 		this.evento = evento;
-		if(evento != null) SeOEventoDaInscricaoForUnico();
+		if (this.evento != null)
+			SeOEventoDaInscricaoForUnico();
 	}
 
 	public void setPagamento(Pagamento pagamento) {
@@ -207,10 +218,10 @@ public class Inscricao extends Observable{
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-		if(this.usuario != null){
+		if (this.usuario != null) {
 			usuario.adicionarInscricao(this);
 			addObserver(usuario);
-			setMensagem(usuario.getPessoa().getNome() +", " +Constante.INSCRICAO_CONCLUIDA);
+			setMensagem(usuario.getPessoa().getNome() + ", " + Constante.INSCRICAO_CONCLUIDA);
 			notifyUmObserver(usuario);
 		}
 	}

@@ -19,13 +19,15 @@ import javax.persistence.OneToMany;
 
 import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoEvento;
-import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.CupomForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.DataMenorQueAtualException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
+import br.edu.ifpi.evento.exceptions.EventoSateliteHorarioForaDoPeriodoDoEvento;
+import br.edu.ifpi.evento.exceptions.EventoNaoEstaRecebendoInscricaoException;
 import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
@@ -93,7 +95,7 @@ public class Evento extends Observable {
 	}
 
 	public void adicionarAtividade(Atividade atividade) throws AtividadeException,
-			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento, AtividadeJaPossuiUmEvento {
+ EspacoFisicoComAtividadesConflitantes, AtividadeJaPossuiUmEvento,AtividadeHorarioForaDoPeriodoDoEvento {
 		if (atividades.contains(atividade)) {
 			throw new AtividadeException();
 		}
@@ -118,7 +120,10 @@ public class Evento extends Observable {
 		equipe.add(usuario);
 	}
 
-	public void adicionarIncricao(Inscricao inscricao) {
+	public void adicionarIncricao(Inscricao inscricao) throws EventoNaoEstaRecebendoInscricaoException {
+		if (!status.equals(StatusEvento.RECEBENDO_INSCRICAO)) {
+			throw new EventoNaoEstaRecebendoInscricaoException();
+		}
 		inscricoes.add(inscricao);
 	}
 
@@ -133,11 +138,19 @@ public class Evento extends Observable {
 		espacoFisico.adicionarEvento(this);
 	}
 
-	public void adicionarEventoSatelite(Evento eventoSatelite) throws EventoSateliteException {
+	public void adicionarEventoSatelite(Evento eventoSatelite) throws EventoSateliteException,
+			EspacoFisicoComAtividadesConflitantes, EventoSateliteHorarioForaDoPeriodoDoEvento {
 		if (eventosSatelites.contains(eventoSatelite)) {
 			throw new EventoSateliteException();
 		}
+		verificarPeriodoEventoSatelite(eventoSatelite);
 		eventosSatelites.add(eventoSatelite);
+	}
+
+	private void verificarPeriodoEventoSatelite(Evento eventoSatelite)
+			throws EspacoFisicoComAtividadesConflitantes, EventoSateliteHorarioForaDoPeriodoDoEvento{
+		Validacoes.verificarHorariosEspacoSatelitesDoEvento(dataInicio, dataFim, eventoSatelite.dataInicio,
+				eventoSatelite.dataFim);
 	}
 
 	public void gerarAgenda() {
@@ -296,6 +309,14 @@ public class Evento extends Observable {
 
 	public List<Inscricao> getInscricoes() {
 		return inscricoes;
+	}
+
+	public StatusEvento getStatus() {
+		return status;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 }

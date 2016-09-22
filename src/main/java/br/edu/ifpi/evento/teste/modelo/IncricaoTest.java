@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.edu.ifpi.evento.enums.Sexo;
+import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
 import br.edu.ifpi.evento.enums.TipoEspacoFisico;
 import br.edu.ifpi.evento.enums.TipoEvento;
@@ -18,6 +19,7 @@ import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeNaoEstaNoEventoException;
 import br.edu.ifpi.evento.exceptions.CupomException;
+import br.edu.ifpi.evento.exceptions.EventoNaoEstaRecebendoInscricaoException;
 import br.edu.ifpi.evento.exceptions.InscricaoPagaException;
 import br.edu.ifpi.evento.modelo.Pagamento;
 import br.edu.ifpi.evento.modelo.Pessoa;
@@ -70,6 +72,7 @@ public class IncricaoTest {
 				.organizador(organizador)
 				.espacoFisico(espacoFisico)
 				.getEvento();
+		evento.setStatus(StatusEvento.RECEBENDO_INSCRICAO);
 
 		Calendar dataInicialAt = new GregorianCalendar();
 		dataInicialAt.set(2016, 12, 11, 20, 44);
@@ -150,7 +153,8 @@ public class IncricaoTest {
 	}
 
 	@Test
-	public void inscricao_recem_criada_deve_ter_zero_atividades() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+	public void inscricao_recem_criada_deve_ter_zero_atividades() throws InscricaoPagaException,
+			AtividadeNaoEstaNoEventoException, AtividadeException, EventoNaoEstaRecebendoInscricaoException {
 		Pessoa joao = new Pessoa("Joao", 3322, Sexo.F);
 		Usuario usuario = new Usuario("joao", "123", joao, TipoUsuario.PALESTRANTE);
 		Inscricao inscricao2 = InscricaoBuilder.builder()
@@ -191,7 +195,8 @@ public class IncricaoTest {
 	}
 
 	@Test
-	public void inscricao_sem_itens_deve_ter_valor_zero() throws InscricaoPagaException, AtividadeNaoEstaNoEventoException, AtividadeException {
+	public void inscricao_sem_itens_deve_ter_valor_zero() throws InscricaoPagaException,
+			AtividadeNaoEstaNoEventoException, AtividadeException, EventoNaoEstaRecebendoInscricaoException {
 		Pessoa joao = new Pessoa("Manoel", 3322, Sexo.F);
 		Usuario usuario = new Usuario("manoel", "123", joao, TipoUsuario.PALESTRANTE);
 		Inscricao inscricao3 = InscricaoBuilder.builder()

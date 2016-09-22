@@ -15,15 +15,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import br.edu.ifpi.evento.constantes.Constante;
-import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
+import br.edu.ifpi.evento.exceptions.AtividadeHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.AtividadeJaPossuiUmEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
+import br.edu.ifpi.evento.exceptions.EventoSateliteHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.ResponsavelPrincipalNaoPodeSerSecudarioException;
 import br.edu.ifpi.evento.exceptions.ResponsavelSecundarioNaoPodeSerRepetido;
 import br.edu.ifpi.evento.modelo.Notificacao;
@@ -139,8 +138,9 @@ public abstract class Atividade extends Observable {
 		return evento;
 	}
 
-	public void setEvento(Evento evento) throws AtividadeJaPossuiUmEvento, AtividadeException,
-			EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento {
+	public void setEvento(Evento evento)
+			throws AtividadeJaPossuiUmEvento, AtividadeException, EspacoFisicoComAtividadesConflitantes,
+			AtividadeHorarioForaDoPeriodoDoEvento, EventoSateliteHorarioForaDoPeriodoDoEvento {
 		if (this.getEvento() != null) {
 			throw new AtividadeJaPossuiUmEvento();
 		}

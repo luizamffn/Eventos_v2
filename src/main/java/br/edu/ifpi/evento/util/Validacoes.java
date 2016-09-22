@@ -2,10 +2,11 @@ package br.edu.ifpi.evento.util;
 
 import java.util.Calendar;
 
-import br.edu.ifpi.evento.exceptions.AtividadeComHorarioForaDoPeriodoDoEvento;
+import br.edu.ifpi.evento.exceptions.AtividadeHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.CupomForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.DataFimMenorQueDataInicioException;
 import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
+import br.edu.ifpi.evento.exceptions.EventoSateliteHorarioForaDoPeriodoDoEvento;
 
 public class Validacoes {
 
@@ -28,13 +29,28 @@ public class Validacoes {
 
 	public static void verificarHorariosAtividadesDoEvento(Calendar dataInicio1, Calendar dataFim1,
 			Calendar dataInicio2, Calendar dataFim2)
-					throws EspacoFisicoComAtividadesConflitantes, AtividadeComHorarioForaDoPeriodoDoEvento {
+					throws EspacoFisicoComAtividadesConflitantes, AtividadeHorarioForaDoPeriodoDoEvento {
+		if (verificarDatas(dataInicio1, dataFim1, dataInicio2, dataFim2) == true) {
+			throw new AtividadeHorarioForaDoPeriodoDoEvento();
+		}
+	}
+	
+	public static void verificarHorariosEspacoSatelitesDoEvento(Calendar dataInicio1, Calendar dataFim1,
+			Calendar dataInicio2, Calendar dataFim2) throws EventoSateliteHorarioForaDoPeriodoDoEvento{
+		if (verificarDatas(dataInicio1, dataFim1, dataInicio2, dataFim2) == true) {
+			throw new EventoSateliteHorarioForaDoPeriodoDoEvento();
+		}
+	}
+	
+	private static boolean verificarDatas(Calendar dataInicio1, Calendar dataFim1,
+			Calendar dataInicio2, Calendar dataFim2){
 		if (!(dataInicio1.getTimeInMillis() <= dataInicio2.getTimeInMillis()
 				&& dataFim1.getTimeInMillis() >= dataInicio2.getTimeInMillis()
 				|| dataInicio1.getTimeInMillis() <= dataFim2.getTimeInMillis()
 						&& dataFim1.getTimeInMillis() >= dataFim2.getTimeInMillis())) {
-			throw new AtividadeComHorarioForaDoPeriodoDoEvento();
+			return true;
 		}
+		return false;
 	}
 
 	public static void verificarHorariosDoCumpomEveto(Calendar dataInicioEvento, Calendar dataFimEvento,
