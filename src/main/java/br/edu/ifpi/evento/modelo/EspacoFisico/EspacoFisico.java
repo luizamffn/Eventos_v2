@@ -1,6 +1,7 @@
 package br.edu.ifpi.evento.modelo.EspacoFisico;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -73,6 +74,7 @@ public class EspacoFisico {
 	public void gerarAgenda() {
 		// System.out.println("Agenda de atividade por espaço fisico");
 		System.out.println("Espaço fisico: " + this.descricao);
+		Collections.sort(atividades);
 		for (Atividade atividade : atividades) {
 			System.out.println("\t" + atividade.getNome() + " - "
 					+ Converter.dateToStrFormatoBrasileiro(atividade.getHorarioInicio().getTime()) + " - "
@@ -89,6 +91,7 @@ public class EspacoFisico {
 			if (atividade instanceof AtividadeCompravel) {
 				System.out.println("Atividade: " + atividade.getNome());
 				((AtividadeCompravel) atividade).getItemSimples().listaInscritos();
+//				((AtividadeCompravel) atividade).getItemSimples().listaInscritos();
 			}
 		}
 	}
@@ -106,33 +109,17 @@ public class EspacoFisico {
 		endereco.setEspacoFisico(this);
 		this.endereco = endereco;
 	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public List<EspacoFisico> getEspacoFilhos() {
-		return espacoFilhos;
-	}
 	
-	public List<Atividade> getAtividades() {
-		return atividades;
-	}
-
-	public EspacoFisico getEspacoPai() {
-		return espacoPai;
-	}
-
-	public void setEspacoPai(EspacoFisico espacoPai) {
-		this.espacoPai = espacoPai;
-	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public String getDescricao() {
+		return descricao;
 	}
 
 	public void setCapacidade(int capacidade) {
@@ -143,16 +130,20 @@ public class EspacoFisico {
 		this.tipoEspacoFisico = tipoEspacoFisico;
 	}
 
-	public void setEventos(List<Evento> eventos) {
-		this.eventos = eventos;
+	public List<EspacoFisico> getEspacoFilhos() {
+		return Collections.unmodifiableList(espacoFilhos);
+	}
+	
+	public List<Atividade> getAtividades() {
+		return Collections.unmodifiableList(atividades);
+	}
+	
+	public void setEspacoPai(EspacoFisico espacoPai) {
+		this.espacoPai = espacoPai;
 	}
 
-	public void setAtividades(List<Atividade> atividades) {
-		this.atividades = atividades;
-	}
-
-	public void setEspacoFilhos(List<EspacoFisico> espacoFilhos) {
-		this.espacoFilhos = espacoFilhos;
+	public EspacoFisico getEspacoPai() {
+		return espacoPai;
 	}
 	
 	@Override

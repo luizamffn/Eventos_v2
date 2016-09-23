@@ -1,6 +1,7 @@
-package br.edu.ifpi.evento.modelo.Atividade;
+package br.edu.ifpi.evento.modelo.Item;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -40,19 +41,20 @@ public class ItemComposto extends Item{
 		precoComDesconto = precoTotal - desconto;
 	}
 
-	public double getPrecoComDesconto() {
-		return precoComDesconto;
-	}
-
-	public List<ItemSimples> getItensSimples() {
-		return itensSimples;
-	}
-
 	public void calcularPrecoTotal() {
 		this.precoTotal= 0;
 		for (ItemSimples itemSimples : itensSimples) {
 			precoTotal += itemSimples.getAtividadeCompravel().getValor();
 		}
+	}
+	
+
+	public double getPrecoComDesconto() {
+		return precoComDesconto;
+	}
+
+	public List<ItemSimples> getItensSimples() {
+		return Collections.unmodifiableList(itensSimples);
 	}
 
 }

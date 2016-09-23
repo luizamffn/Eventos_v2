@@ -113,13 +113,6 @@ public class Usuario implements Observer{
 		this.email = email;
 	}
 
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", usuario=" + usuario + ", senha=" + senha + ", email=" + email + ", tipoUsuario="
-				+ tipoUsuario + ", pessoa=" + pessoa + ", eventosOrganizados=" + eventosOrganizados
-				+ ", eventosdaEquipe=" + eventosdaEquipe + ", inscricoes=" + inscricoes + "]";
-	}
-
 	public void update(Object obj) {
 		System.out.println((String) obj);
 	}

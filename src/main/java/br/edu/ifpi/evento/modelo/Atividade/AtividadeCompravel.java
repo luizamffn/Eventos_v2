@@ -7,6 +7,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToOne;
 
 import br.edu.ifpi.evento.enums.TipoAtividadeCompravel;
+import br.edu.ifpi.evento.modelo.Item.Item;
+import br.edu.ifpi.evento.modelo.Item.ItemSimples;
 
 @Entity
 @DiscriminatorValue(value = "At_compravel")
@@ -19,34 +21,37 @@ public class AtividadeCompravel extends Atividade {
 	@OneToOne
 	private ItemSimples itemSimples;
 
-	public void adicionarItem(ItemSimples itemSimples) {
-		this.itemSimples = itemSimples;
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
-
+	
 	public Double getValor() {
 		return valor;
+	}
+	
+	public void setTipoCompravel(TipoAtividadeCompravel tipoCompravel) {
+		this.tipoCompravel = tipoCompravel;
 	}
 
 	public TipoAtividadeCompravel getTipoCompravel() {
 		return tipoCompravel;
 	}
 
-//	public void notificarMudancaEspacoFisico() {
-//		for (Inscricao inscricao : itemSimples.getInscricoes()) {
-//			Notificacao.enviarNorificacaoAtividade(inscricao.getUsuario(), Constante.MUDOU_ESPACO_FISICO,
-//					this.getNome());
-//		}
-//	}
-
+	public void setItemSimples(ItemSimples itemSimples) {
+		this.itemSimples = itemSimples;
+	}
+	
 	public Item getItemSimples() {
 		return itemSimples;
 	}
 
-	public void setValor(Double valor) {
-		this.valor = valor;
+	public int compareTo(Atividade o) {
+		if(this.getHorarioInicio().getTimeInMillis() < o.getHorarioInicio().getTimeInMillis()){
+			return -1;
+		}else if(this.getHorarioInicio().getTimeInMillis() > o.getHorarioInicio().getTimeInMillis()){
+			return 1;
+		}
+		return 0;
 	}
 
-	public void setTipoCompravel(TipoAtividadeCompravel tipoCompravel) {
-		this.tipoCompravel = tipoCompravel;
-	}
 }

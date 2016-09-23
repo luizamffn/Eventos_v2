@@ -4,8 +4,9 @@ import org.junit.Test;
 
 import br.edu.ifpi.evento.exceptions.ItemSimplesJaAdicionadoException;
 import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
-import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
+import br.edu.ifpi.evento.modelo.Item.ItemComposto;
+import br.edu.ifpi.evento.modelo.Item.ItemSimples;
+import br.edu.ifpi.evento.modelo.Item.ItemSimplesBuilder;
 
 public class ItemTest {
 
@@ -14,10 +15,9 @@ public class ItemTest {
 		ItemComposto itemComposto = new ItemComposto((long) 1, "Kit minicurso");
 		AtividadeCompravel atividadeCompravel = new AtividadeCompravel();
 		atividadeCompravel.setValor(20.00);
-		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 1)
-		.atividadeCompravel(atividadeCompravel)
-		.build();
-		
+		ItemSimples itemSimples = ItemSimplesBuilder.builder().id((long) 1).atividadeCompravel(atividadeCompravel)
+				.getItemSimples();
+
 		itemComposto.addItemSimples(itemSimples);
 		itemComposto.addItemSimples(itemSimples);
 	}

@@ -76,9 +76,9 @@ public class GeradorDeAgendas {
 				.getAtidadeCompravel();
 
 		GregorianCalendar dataInicial5 = new GregorianCalendar();
-		dataInicial5.set(2016, 10, 13, 14, 00, 00);
+		dataInicial5.set(2016, 10, 12, 14, 00, 00);
 		Calendar dataFinal5 = Calendar.getInstance();
-		dataFinal5.set(2016, 10, 13, 17, 00, 00);
+		dataFinal5.set(2016, 10, 12, 17, 00, 00);
 		AtividadeCompravel atividade24 = AtividadeCompravelBuilder.builder().id(Long.valueOf(4)).nome("android")
 				.horarioInicio(dataInicial5).horarioFim(dataFinal5).evento(evento).espacoFisico(b3_sala10)
 				.getAtidadeCompravel();
@@ -93,7 +93,7 @@ public class GeradorDeAgendas {
 				.horarioInicio(dataInicial6).horarioFim(dataFinal6).evento(evento).espacoFisico(patio)
 				.getAtividadeNaoCompravel();
 
-		// b3_sala4.gerarAgenda();
+//		b3_sala4.gerarAgenda();
 
 		evento.gerarAgenda();
 

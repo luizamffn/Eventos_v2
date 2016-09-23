@@ -1,6 +1,7 @@
 package br.edu.ifpi.evento.modelo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -43,6 +44,6 @@ public class Instituicao {
 	}
 
 	public List<Evento> getEventos() {
-		return eventos;
+		return Collections.unmodifiableList(eventos);
 	}
 }

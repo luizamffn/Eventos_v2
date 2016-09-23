@@ -2,6 +2,7 @@ package br.edu.ifpi.evento.modelo.Atividade;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -25,17 +26,17 @@ import br.edu.ifpi.evento.exceptions.EspacoFisicoComAtividadesConflitantes;
 import br.edu.ifpi.evento.exceptions.EventoSateliteHorarioForaDoPeriodoDoEvento;
 import br.edu.ifpi.evento.exceptions.ResponsavelPrincipalNaoPodeSerSecudarioException;
 import br.edu.ifpi.evento.exceptions.ResponsavelSecundarioNaoPodeSerRepetido;
-import br.edu.ifpi.evento.modelo.Notificacao;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.Responsavel.Responsavel;
 import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.observer.Observable;
+import br.edu.ifpi.evento.util.Notificacao;
 import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo")
-public abstract class Atividade extends Observable {
+public abstract class Atividade extends Observable implements Comparable<Atividade> {
 
 	@Id
 	@GeneratedValue
@@ -77,22 +78,6 @@ public abstract class Atividade extends Observable {
 		}
 	}
 
-	public void limparEvento() {
-		evento = null;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public Calendar getHorarioInicio() {
-		return horarioInicio;
-	}
-
-	public Calendar getHorarioTermino() {
-		return horarioTermino;
-	}
-
 	public void setEspacoFisico(EspacoFisico espacoFisico) throws EspacoFisicoComAtividadesConflitantes {
 		this.espacoFisico = espacoFisico;
 		this.espacoFisico.adicionarAtividade(this);
@@ -101,7 +86,57 @@ public abstract class Atividade extends Observable {
 			Notificacao.notificarMudancaEspacoFisico(this);
 		}
 	}
+	
+	public void limparEvento() {
+		evento = null;
+	}
+	
+	public Long getId() {
+		return id;
+	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	
+	public Calendar getHorarioInicio() {
+		return horarioInicio;
+	}
+
+	public void setHorarioInicio(Calendar horarioInicio) {
+		this.horarioInicio = horarioInicio;
+	}
+	
+	public Calendar getHorarioTermino() {
+		return horarioTermino;
+	}
+
+	public void setHorarioTermino(Calendar horarioTermino) throws DataFimMenorQueDataInicioException {
+		Validacoes.verificarDataFim(this.horarioInicio, horarioTermino);
+		this.horarioTermino = horarioTermino;
+	}
+
+	public Evento getEvento() {
+		return evento;
+	}
+
+	public void setResponsavelPrincipal(Responsavel responsavelPrincipal) {
+		this.responsavelPrincipal = responsavelPrincipal;
+	}
+	
+	public List<Responsavel> getResponsaveisSecudarios() {
+		return Collections.unmodifiableList(responsaveisSecudarios);
+	}
+
+	
 	@Override
 	public String toString() {
 		return "Atividade [id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", evento=" + evento + ", espacoFisico="
@@ -134,10 +169,6 @@ public abstract class Atividade extends Observable {
 		return true;
 	}
 
-	public Evento getEvento() {
-		return evento;
-	}
-
 	public void setEvento(Evento evento)
 			throws AtividadeJaPossuiUmEvento, AtividadeException, EspacoFisicoComAtividadesConflitantes,
 			AtividadeHorarioForaDoPeriodoDoEvento, EventoSateliteHorarioForaDoPeriodoDoEvento {
@@ -147,35 +178,6 @@ public abstract class Atividade extends Observable {
 
 		this.evento = evento;
 		this.evento.adicionarAtividade(this);
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
-	}
-
-	public void setHorarioInicio(Calendar horarioInicio) {
-		this.horarioInicio = horarioInicio;
-	}
-
-	public void setHorarioTermino(Calendar horarioTermino) throws DataFimMenorQueDataInicioException {
-		Validacoes.verificarDataFim(this.horarioInicio, horarioTermino);
-		this.horarioTermino = horarioTermino;
-	}
-
-	public void setResponsavelPrincipal(Responsavel responsavelPrincipal) {
-		this.responsavelPrincipal = responsavelPrincipal;
-	}
-
-	public void setResponsaveisSecudarios(List<Responsavel> responsaveisSecudarios) {
-		this.responsaveisSecudarios = responsaveisSecudarios;
 	}
 
 }

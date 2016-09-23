@@ -1,6 +1,7 @@
 package br.edu.ifpi.evento.modelo.inscricao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -23,9 +24,9 @@ import br.edu.ifpi.evento.modelo.Pagamento;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;
 import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
-import br.edu.ifpi.evento.modelo.Atividade.Item;
-import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
-import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
+import br.edu.ifpi.evento.modelo.Item.Item;
+import br.edu.ifpi.evento.modelo.Item.ItemComposto;
+import br.edu.ifpi.evento.modelo.Item.ItemSimples;
 import br.edu.ifpi.evento.modelo.cupom.Cupom;
 import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.observer.Observable;
@@ -138,20 +139,67 @@ public class Inscricao extends Observable {
 		return valorTotal -= desconto;
 	}
 
-	public double getValorTotal() {
-		return calcularValorTotal();
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setPaga(boolean paga) {
+		this.paga = paga;
 	}
 
 	public boolean isPaga() {
 		return paga;
 	}
 
+	public void setValorTotal(double valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+
+	public double getValorTotal() {
+		return calcularValorTotal();
+	}
+
+	public void setDesconto(double desconto) {
+		this.desconto = desconto;
+	}
+
+	public void setEvento(Evento evento) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException,
+			AtividadeException, EventoNaoEstaRecebendoInscricaoException {
+		// this.evento = evento;
+		evento.adicionarIncricao(this);
+		this.evento = evento;
+		if (this.evento != null)
+			SeOEventoDaInscricaoForUnico();
+	}
+
 	public Evento getEvento() {
 		return evento;
+	}
+	
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+	
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+	
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+		if (this.usuario != null) {
+			usuario.adicionarInscricao(this);
+			addObserver(usuario);
+			setMensagem(usuario.getPessoa().getNome() + ", " + Constante.INSCRICAO_CONCLUIDA);
+			notifyUmObserver(usuario);
+		}
 	}
 
 	public Usuario getUsuario() {
 		return usuario;
+	}
+	
+	public List<Item> getItens() {
+		return Collections.unmodifiableList(itens);
 	}
 
 	@Override
@@ -177,57 +225,6 @@ public class Inscricao extends Observable {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public List<Item> getItens() {
-		return itens;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setPaga(boolean paga) {
-		this.paga = paga;
-	}
-
-	public void setValorTotal(double valorTotal) {
-		this.valorTotal = valorTotal;
-	}
-
-	public void setDesconto(double desconto) {
-		this.desconto = desconto;
-	}
-
-	public void setEvento(Evento evento) throws InscricaoPagaException, AtividadeNaoEstaNoEventoException,
-			AtividadeException, EventoNaoEstaRecebendoInscricaoException {
-//		this.evento = evento;
-		evento.adicionarIncricao(this);
-		this.evento = evento;
-		if (this.evento != null)
-			SeOEventoDaInscricaoForUnico();
-	}
-
-	public void setPagamento(Pagamento pagamento) {
-		this.pagamento = pagamento;
-	}
-
-	public void setItens(List<Item> itens) {
-		this.itens = itens;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-		if (this.usuario != null) {
-			usuario.adicionarInscricao(this);
-			addObserver(usuario);
-			setMensagem(usuario.getPessoa().getNome() + ", " + Constante.INSCRICAO_CONCLUIDA);
-			notifyUmObserver(usuario);
-		}
-	}
-
-	public Pagamento getPagamento() {
-		return pagamento;
 	}
 
 }

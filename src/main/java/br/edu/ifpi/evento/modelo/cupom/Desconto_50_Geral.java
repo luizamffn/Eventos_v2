@@ -5,8 +5,8 @@ import java.util.Calendar;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
-import br.edu.ifpi.evento.modelo.Atividade.Item;
-import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
+import br.edu.ifpi.evento.modelo.Item.Item;
+import br.edu.ifpi.evento.modelo.Item.ItemSimples;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 
 @Entity

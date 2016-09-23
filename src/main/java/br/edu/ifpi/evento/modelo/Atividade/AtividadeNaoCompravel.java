@@ -14,11 +14,21 @@ public class AtividadeNaoCompravel extends Atividade {
 	@Enumerated(EnumType.STRING)
 	private TipoNaoAtividadeCompravel tipoNaoCompravel;
 
-	public AtividadeNaoCompravel() {
+	public void setTipoNaoCompravel(TipoNaoAtividadeCompravel tipoNaoCompravel) {
+		this.tipoNaoCompravel = tipoNaoCompravel;
 	}
-
+	
 	public TipoNaoAtividadeCompravel getTipoNaoCompravel() {
 		return tipoNaoCompravel;
+	}
+
+	public int compareTo(Atividade o) {
+		if(this.getHorarioInicio().getTimeInMillis() < o.getHorarioInicio().getTimeInMillis()){
+			return -1;
+		}else if(this.getHorarioInicio().getTimeInMillis() > o.getHorarioInicio().getTimeInMillis()){
+			return 1;
+		}
+		return 0;
 	}
 
 }

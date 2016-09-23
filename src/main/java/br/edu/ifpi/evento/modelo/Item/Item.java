@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.modelo.Atividade;
+package br.edu.ifpi.evento.modelo.Item;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +51,22 @@ public abstract class Item {
 		}
 	}
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	
 	public List<Inscricao> getInscricoes() {
 		return Collections.unmodifiableList(inscricoes);
 	}
@@ -79,4 +95,5 @@ public abstract class Item {
 			return false;
 		return true;
 	}
+
 }

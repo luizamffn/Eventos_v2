@@ -35,7 +35,7 @@ public class Validacoes {
 		}
 	}
 	
-	public static void verificarHorariosEspacoSatelitesDoEvento(Calendar dataInicio1, Calendar dataFim1,
+	public static void verificarHorariosDoEventoSatelite(Calendar dataInicio1, Calendar dataFim1,
 			Calendar dataInicio2, Calendar dataFim2) throws EventoSateliteHorarioForaDoPeriodoDoEvento{
 		if (verificarDatas(dataInicio1, dataFim1, dataInicio2, dataFim2) == true) {
 			throw new EventoSateliteHorarioForaDoPeriodoDoEvento();

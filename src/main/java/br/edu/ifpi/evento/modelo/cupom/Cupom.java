@@ -43,12 +43,12 @@ public abstract class Cupom {
 		return validade.getTimeInMillis() > now.getTimeInMillis();
 	}
 
-	public Calendar getValidade() {
-		return validade;
-	}
-
 	public void setValidade(Calendar validade) {
 		this.validade = validade;
+	}
+	
+	public Calendar getValidade() {
+		return validade;
 	}
 
 	public void setEvento(Evento evento) {

@@ -30,6 +30,10 @@ public class EventoBuilder {
 		return this;
 	}
 	
+	public EventoBuilder status(StatusEvento status) {
+		this.evento.setStatus(status);
+		return this;
+	}
 	public EventoBuilder dataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
 		this.evento.setDataInicio(dataInicio);
 		return this;

@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import br.edu.ifpi.evento.enums.Sexo;
+import br.edu.ifpi.evento.enums.StatusEvento;
 import br.edu.ifpi.evento.enums.TipoUsuario;
 import br.edu.ifpi.evento.exceptions.AtividadeException;
 import br.edu.ifpi.evento.exceptions.AtividadeHorarioForaDoPeriodoDoEvento;
@@ -19,9 +20,10 @@ import br.edu.ifpi.evento.modelo.Pessoa;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravelBuilder;
-import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
+import br.edu.ifpi.evento.modelo.Item.ItemSimples;
+import br.edu.ifpi.evento.modelo.Item.ItemSimplesBuilder;
 import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.modelo.evento.EventoBuilder;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
@@ -50,6 +52,7 @@ public class EventosOrganizadoEInscrito {
 				.dataFim(dataFinal)
 				.organizador(organizador)
 				.nome("Evento1")
+				.status(StatusEvento.RECEBENDO_INSCRICAO)
 				.espacoFisico(predioA)
 				.getEvento();
 
@@ -59,6 +62,7 @@ public class EventosOrganizadoEInscrito {
 				.dataFim(dataFinal)
 				.organizador(organizador)
 				.nome("Aulão")
+				.status(StatusEvento.RECEBENDO_INSCRICAO)
 				.espacoFisico(predioA)
 				.getEvento();
 
@@ -81,9 +85,10 @@ public class EventosOrganizadoEInscrito {
 				.espacoFisico(b3_sala4)
 				.getAtidadeCompravel();
 
-		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 1)
+		ItemSimples itemSimples = ItemSimplesBuilder.builder()
+				.id((long) 1)
 				.atividadeCompravel(palestra)
-				.build();
+				.getItemSimples();
 
 		Inscricao inscricao = InscricaoBuilder.builder()
 				.evento(evento2)

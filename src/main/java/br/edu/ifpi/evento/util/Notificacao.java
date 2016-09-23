@@ -1,4 +1,4 @@
-package br.edu.ifpi.evento.modelo;
+package br.edu.ifpi.evento.util;
 
 import br.edu.ifpi.evento.constantes.Constante;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;

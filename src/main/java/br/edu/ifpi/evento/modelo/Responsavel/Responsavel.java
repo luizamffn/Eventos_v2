@@ -44,7 +44,4 @@ public class Responsavel{
 		this.curriculo = curriculo;
 	}
 
-	public void setAtividades(List<Atividade> atividades) {
-		this.atividades = atividades;
-	}
 }

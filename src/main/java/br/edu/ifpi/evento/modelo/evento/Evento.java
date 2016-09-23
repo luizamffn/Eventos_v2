@@ -32,13 +32,13 @@ import br.edu.ifpi.evento.exceptions.EventoSateliteException;
 import br.edu.ifpi.evento.exceptions.InstituicaoException;
 import br.edu.ifpi.evento.exceptions.UsuarioRepetidoException;
 import br.edu.ifpi.evento.modelo.Instituicao;
-import br.edu.ifpi.evento.modelo.Notificacao;
 import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.cupom.Cupom;
 import br.edu.ifpi.evento.modelo.inscricao.Inscricao;
 import br.edu.ifpi.evento.observer.Observable;
+import br.edu.ifpi.evento.util.Notificacao;
 import br.edu.ifpi.evento.util.Validacoes;
 
 @Entity
@@ -72,6 +72,8 @@ public class Evento extends Observable {
 	private List<Evento> eventosSatelites = new ArrayList<Evento>();
 	private Calendar dataInicio;
 	private Calendar dataFim;
+
+	@Enumerated(EnumType.STRING)
 	private StatusEvento status;
 
 	@ManyToOne
@@ -95,7 +97,7 @@ public class Evento extends Observable {
 	}
 
 	public void adicionarAtividade(Atividade atividade) throws AtividadeException,
- EspacoFisicoComAtividadesConflitantes, AtividadeJaPossuiUmEvento,AtividadeHorarioForaDoPeriodoDoEvento {
+			EspacoFisicoComAtividadesConflitantes, AtividadeJaPossuiUmEvento, AtividadeHorarioForaDoPeriodoDoEvento {
 		if (atividades.contains(atividade)) {
 			throw new AtividadeException();
 		}
@@ -148,8 +150,8 @@ public class Evento extends Observable {
 	}
 
 	private void verificarPeriodoEventoSatelite(Evento eventoSatelite)
-			throws EspacoFisicoComAtividadesConflitantes, EventoSateliteHorarioForaDoPeriodoDoEvento{
-		Validacoes.verificarHorariosEspacoSatelitesDoEvento(dataInicio, dataFim, eventoSatelite.dataInicio,
+			throws EspacoFisicoComAtividadesConflitantes, EventoSateliteHorarioForaDoPeriodoDoEvento {
+		Validacoes.verificarHorariosDoEventoSatelite(dataInicio, dataFim, eventoSatelite.dataInicio,
 				eventoSatelite.dataFim);
 	}
 
@@ -166,68 +168,12 @@ public class Evento extends Observable {
 		return dataFim.getTimeInMillis() < now.getTimeInMillis();
 	}
 
-	public List<Atividade> getAtividades() {
-		return Collections.unmodifiableList(atividades);
-	}
-
-	public List<Cupom> getCupons() {
-		return Collections.unmodifiableList(Cupons);
-	}
-
-	public EspacoFisico getEspacoFisico() {
-		return espacoFisico;
-	}
-
-	public List<Usuario> getEquipe() {
-		return Collections.unmodifiableList(equipe);
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Evento other = (Evento) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	public Usuario getOrganizador() {
-		return organizador;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public boolean isEventoUnico() {
-		return eventoUnico;
-	}
-
-	public void setEspacoFisico(EspacoFisico espacoFisico) {
-		this.espacoFisico = espacoFisico;
-		if (espacoFisico != null) {
-			Notificacao.notificarMudancaEspacoFisicoEvento(this);
-		}
-	}
-
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public void setTipoEvento(TipoEvento tipoEvento) {
@@ -238,28 +184,12 @@ public class Evento extends Observable {
 		this.nome = nome;
 	}
 
-	public void setAtividades(List<Atividade> atividades) {
-		this.atividades = atividades;
-	}
-
-	public void setInscricoes(List<Inscricao> inscricoes) {
-		this.inscricoes = inscricoes;
-	}
-
-	public void setCupons(List<Cupom> cupons) {
-		Cupons = cupons;
-	}
-
-	public void setInstituicoes(List<Instituicao> instituicoes) {
-		this.instituicoes = instituicoes;
+	public String getNome() {
+		return nome;
 	}
 
 	public void setEventoPai(Evento eventoPai) {
 		this.eventoPai = eventoPai;
-	}
-
-	public void setEventosSatelites(List<Evento> eventosSatelites) {
-		this.eventosSatelites = eventosSatelites;
 	}
 
 	public void setDataInicio(Calendar dataInicio) throws DataMenorQueAtualException {
@@ -289,34 +219,82 @@ public class Evento extends Observable {
 		}
 	}
 
+	public StatusEvento getStatus() {
+		return status;
+	}
+
+	public void setEspacoFisico(EspacoFisico espacoFisico) {
+		this.espacoFisico = espacoFisico;
+		if (espacoFisico != null) {
+			Notificacao.notificarMudancaEspacoFisicoEvento(this);
+		}
+	}
+
+	public EspacoFisico getEspacoFisico() {
+		return espacoFisico;
+	}
+
 	public void setOrganizador(Usuario organizador) {
 		this.organizador = organizador;
 		if (organizador != null)
 			organizador.adicionarevento(this);
 	}
 
-	public void setEquipe(List<Usuario> equipe) {
-		this.equipe = equipe;
+	public Usuario getOrganizador() {
+		return organizador;
 	}
 
 	public void setEventoUnico(boolean eventoUnico) {
 		this.eventoUnico = eventoUnico;
 	}
 
+	public boolean isEventoUnico() {
+		return eventoUnico;
+	}
+
 	public List<Instituicao> getInstituicoes() {
-		return instituicoes;
+		return Collections.unmodifiableList(instituicoes);
 	}
 
 	public List<Inscricao> getInscricoes() {
-		return inscricoes;
+		return Collections.unmodifiableList(inscricoes);
 	}
 
-	public StatusEvento getStatus() {
-		return status;
+	public List<Atividade> getAtividades() {
+		return Collections.unmodifiableList(atividades);
 	}
 
-	public Long getId() {
-		return id;
+	public List<Cupom> getCupons() {
+		return Collections.unmodifiableList(Cupons);
+	}
+
+	public List<Usuario> getEquipe() {
+		return Collections.unmodifiableList(equipe);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Evento other = (Evento) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 }

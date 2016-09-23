@@ -27,11 +27,12 @@ import br.edu.ifpi.evento.modelo.Usuario;
 import br.edu.ifpi.evento.modelo.Atividade.Atividade;
 import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravel;
 import br.edu.ifpi.evento.modelo.Atividade.AtividadeCompravelBuilder;
-import br.edu.ifpi.evento.modelo.Atividade.Item;
-import br.edu.ifpi.evento.modelo.Atividade.ItemComposto;
-import br.edu.ifpi.evento.modelo.Atividade.ItemSimples;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisico;
 import br.edu.ifpi.evento.modelo.EspacoFisico.EspacoFisicoBuilder;
+import br.edu.ifpi.evento.modelo.Item.Item;
+import br.edu.ifpi.evento.modelo.Item.ItemComposto;
+import br.edu.ifpi.evento.modelo.Item.ItemSimples;
+import br.edu.ifpi.evento.modelo.Item.ItemSimplesBuilder;
 import br.edu.ifpi.evento.modelo.cupom.Palestras_50;
 import br.edu.ifpi.evento.modelo.evento.Evento;
 import br.edu.ifpi.evento.modelo.evento.EventoBuilder;
@@ -100,9 +101,11 @@ public class IncricaoTest {
 				.usuario(organizador)
 				.getInscricao();
 		
-		itemSimples = new ItemSimples.ItemSimplesBuilder((long) 1)
+		itemSimples = ItemSimplesBuilder.builder()
+				.id((long) 1)
 				.atividadeCompravel(atividade)
-				.build();
+				.getItemSimples();
+		
 		inscricao.adicionarItem(itemSimples);
 
 		Palestras_50 palestras_50 = new Palestras_50("p50", validadePalestra);
@@ -126,9 +129,10 @@ public class IncricaoTest {
 				.valor(40.00)
 				.getAtidadeCompravel();
 				
-		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 2)
+		ItemSimples itemSimples = ItemSimplesBuilder.builder()
+				.id((long) 2)
 				.atividadeCompravel(atividade)
-				.build();
+				.getItemSimples();
 
 		inscricao.adicionarItem(itemSimples);
 		System.out.println("valor" + inscricao.getValorTotal());
@@ -188,9 +192,10 @@ public class IncricaoTest {
 				.espacoFisico(espacoFisico)
 				.getAtidadeCompravel();
 				
-		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 2)
+		ItemSimples itemSimples = ItemSimplesBuilder.builder()
+				.id((long) 2)
 				.atividadeCompravel(palestra)
-				.build();
+				.getItemSimples();
 		inscricao.adicionarItem(itemSimples);
 	}
 
@@ -235,9 +240,11 @@ public class IncricaoTest {
 				.espacoFisico(espacoFisico)
 				.getAtidadeCompravel();
 				
-		ItemSimples itemSimples = new ItemSimples.ItemSimplesBuilder((long) 2)
+		ItemSimples itemSimples = ItemSimplesBuilder.builder()
+				.id((long) 2)
 				.atividadeCompravel(palestra)
-				.build();;
+				.getItemSimples();
+		
 		inscricao.adicionarItem(itemSimples);
 	}
 
@@ -299,5 +306,9 @@ public class IncricaoTest {
 			}
 		}
 		assertEquals(true, compravel.equals(atividadesInscricao));
+	}
+	
+	public void somente_usuario_participante_podera_realizar_inscricao(){
+		
 	}
 }
